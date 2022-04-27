@@ -12,3 +12,7 @@ web-build/
 
 # macOS
 .DS_Store
+
+#Server
+server/node_modules
+server/.env
