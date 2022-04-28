@@ -11,7 +11,7 @@ const LabelInput: React.FC<LabelInputType> = ({ icon, style, ...props }) => {
   return (
     <View style={[style, styles.container]}>
       {icon && <View style={styles.icon}>{icon}</View>}
-      <TextInput style={styles.input} {...props} />
+      <TextInput style={styles.input} autoCapitalize="none" {...props} />
     </View>
   );
 };
@@ -32,7 +32,8 @@ const styles = StyleSheet.create({
   },
   input: {
     paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingVertical: 10,
     flex: 1,
+    fontSize: 15,
   },
 });
