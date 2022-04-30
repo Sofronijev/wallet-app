@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { FetchStatus } from "../../modules/types";
 import { RootStateType } from "../store";
 
-type AuthStateType = {
+type UserType = {
   id: number;
   name: string;
   surname: string;
@@ -10,24 +11,29 @@ type AuthStateType = {
   accessToken: string;
 };
 
-const initialAuthState: AuthStateType = {
-  id: 0,
-  name: "",
-  surname: "",
-  username: "",
-  refreshToken: "",
-  accessToken: "",
+type UserStateType = {
+  user: UserType | null;
+  userFetchStatus: FetchStatus;
+};
+
+const initialUserState: UserStateType = {
+  user: null,
+  userFetchStatus: FetchStatus.success,
 };
 
 export const userSlice = createSlice({
   name: "user",
-  initialState: initialAuthState,
+  initialState: initialUserState,
   reducers: {
-    setUserData: (state, action: PayloadAction<AuthStateType>) => {
-      return action.payload;
+    setUserData: (state, action: PayloadAction<UserType>) => {
+      state.user = action.payload;
+      state.userFetchStatus = FetchStatus.success;
     },
-    clearUserData: (state) => {
-      state = initialAuthState;
+    setUserFetchingStatus: (state, action: PayloadAction<FetchStatus>) => {
+      state.userFetchStatus = action.payload;
+    },
+    clearUserData: () => {
+      return initialUserState;
     },
   },
   extraReducers: (builder) => {
