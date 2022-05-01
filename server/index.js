@@ -1,6 +1,5 @@
 const express = require("express");
 const config = require("./config/config");
-const pool = require("./config/database");
 
 const app = express();
 

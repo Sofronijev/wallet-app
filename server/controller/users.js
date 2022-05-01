@@ -35,3 +35,17 @@ exports.login = (req, res) => {
     }
   });
 };
+
+exports.test = (req, res) => {
+  const selectQuery = "SELECT * FROM users";
+
+  pool.query(selectQuery, async (error, results) => {
+    if (error) return handleLoginError(res);
+
+    return res.status(200).send({
+      ok: true,
+      data: results,
+      message: "Success",
+    });
+  });
+};
