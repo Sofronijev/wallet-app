@@ -2,14 +2,15 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-import Label from "../components/Label";
-import LabelInput from "../components/LabelInput";
-import colors from "../constants/colors";
-import CustomButton from "../components/CustomButton";
-import { RootParamList } from "../navigation/routes";
-import { useLoginUserMutation } from "../api/apiSlice";
-import AppActivityIndicator from "../components/AppActivityIndicator";
 import { StackNavigationProp } from "@react-navigation/stack";
+import Label from "components/Label";
+import LabelInput from "components/LabelInput";
+import colors from "constants/colors";
+import CustomButton from "components/CustomButton";
+import { RootParamList } from "navigation/routes";
+import { useLoginUserMutation } from "api/apiSlice";
+import AppActivityIndicator from "components/AppActivityIndicator";
+
 
 type Props = {
   navigation: StackNavigationProp<RootParamList, "Login">;

@@ -1,6 +1,6 @@
 import { ActivityIndicator, StyleSheet } from "react-native";
 import React from "react";
-import colors from "../constants/colors";
+import colors from "constants/colors";
 
 type AppActivitiIndicatorProps = {};
 

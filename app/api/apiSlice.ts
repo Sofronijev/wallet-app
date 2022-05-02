@@ -1,6 +1,6 @@
 //https://redux.js.org/tutorials/essentials/part-7-rtk-query-basics
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { UserStoreType } from "../redux/reducers/userSlice";
+import { UserStoreType } from "redux/reducers/userSlice";
 
 type LoginRequest = {
   email: string;

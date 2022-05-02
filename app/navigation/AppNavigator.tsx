@@ -1,10 +1,10 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import MainScreen from "../screens/MainScreen";
-import DetailsScreen from "../screens/DetailsScreen";
+import MainScreen from "screens/MainScreen";
+import DetailsScreen from "screens/DetailsScreen";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import colors from "../constants/colors";
+import colors from "constants/colors";
 
 const Tab = createBottomTabNavigator();
 

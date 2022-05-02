@@ -1,6 +1,6 @@
 import React from "react";
-import { useAppSelector } from "../redux/hooks";
-import { getUserData, isUserLoggedIn } from "../redux/reducers/userSlice";
+import { useAppSelector } from "redux/hooks";
+import { getUserData, isUserLoggedIn } from "redux/reducers/userSlice";
 import AppNavigator from "./AppNavigator";
 import AuthNavigator from "./AuthNavigator";
 

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { apiSlice } from "../../api/apiSlice";
+import { apiSlice } from "api/apiSlice";
 import { RootStateType } from "../store";
 
 type UserDataType = {

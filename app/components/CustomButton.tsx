@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, ViewStyle } from "react-native";
 import React from "react";
-import colors from "../constants/colors";
+import colors from "constants/colors";
 
 type CustomButtonType = {
   onPress: () => void;
