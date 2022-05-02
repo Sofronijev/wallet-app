@@ -8,8 +8,6 @@ exports.createAccessToken = (queryResult) => {
             userData: {
                 id: queryResult.id,
                 name: queryResult.name,
-                surname: queryResult.surname,
-                username: queryResult.username,
                 email: queryResult.email
             }
         },
@@ -24,7 +22,9 @@ exports.createRefreshToken = (queryResult) => {
     return jwt.sign(
         {
             userData: {
-                username: queryResult.username,
+                id: queryResult.id,
+                name: queryResult.name,
+                email: queryResult.email
             }
         },
         config.jwt_refresh,

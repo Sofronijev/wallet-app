@@ -1,17 +1,121 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { StyleSheet, View } from "react-native";
+import React, { useState } from "react";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import Label from "components/Label";
+import LabelInput from "components/LabelInput";
+import CustomButton from "components/CustomButton";
+import AppActivityIndicator from "components/AppActivityIndicator";
+import colors from "constants/colors";
+import { useLoginUserMutation } from "api/apiSlice";
+import InputErrorLabel from "components/InputErrorLabel";
+import ButtonText from "components/ButtonText";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootParamList } from "navigation/routes";
 
-type Props = {};
+type Props = {
+  navigation: StackNavigationProp<RootParamList>;
+};
 
-const LoginForm = (props: Props) => {
+const LoginForm: React.FC<Props> = ({ navigation }) => {
+  const [tryLoginUser, { isLoading, isError }] = useLoginUserMutation();
+  // Want to validateOnChange only if user already tryed to subbmit
+  const [hasSubmitedForm, setHasSubmitedForm] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+
+  const onLogin = async ({ email, password }: { email: string; password: string }) => {
+    try {
+      await tryLoginUser({ email, password }).unwrap();
+    } catch (err) {
+      setSubmitError(err?.data?.message ?? "Unknown error occurred");
+    }
+  };
+
+  const loginValidationSchema = Yup.object({
+    email: Yup.string().email().required().label("Email"),
+    password: Yup.string().required().label("Password"),
+  });
   return (
-    <View>
-      <Label></Label>
-    </View>
+    <Formik
+      initialValues={{ email: "", password: "" }}
+      onSubmit={onLogin}
+      validationSchema={loginValidationSchema}
+      validateOnChange={hasSubmitedForm}
+    >
+      {({ handleChange, handleSubmit, values, errors }) => (
+        <View style={styles.container}>
+          <Label style={styles.text}>Welcome</Label>
+          <LabelInput
+            icon={<FontAwesome name='user-o' size={24} color={colors.greenMint} />}
+            placeholder='Email'
+            keyboardType='email-address'
+            value={values.email}
+            onChangeText={handleChange("email")}
+          />
+          <InputErrorLabel text={errors.email} isVisible={!!errors.email} />
+          <LabelInput
+            style={styles.input}
+            icon={<Ionicons name='ios-key-outline' size={24} color={colors.greenMint} />}
+            placeholder='Password'
+            secureTextEntry
+            value={values.password}
+            onChangeText={handleChange("password")}
+          />
+          <InputErrorLabel text={errors.password} isVisible={!!errors.password} />
+          <CustomButton
+            title='Log in'
+            style={styles.button}
+            onPress={() => {
+              setHasSubmitedForm(true);
+              handleSubmit();
+            }}
+          />
+          <View style={styles.submitError}>
+            <InputErrorLabel text={submitError} isVisible={isError && !!submitError} />
+          </View>
+          <ButtonText title='Register' onPress={() => navigation.navigate('Register')} style={styles.register} />
+          {isLoading && <AppActivityIndicator />}
+        </View>
+      )}
+    </Formik>
   );
 };
 
 export default LoginForm;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    paddingHorizontal: 50,
+    backgroundColor: colors.white,
+  },
+  text: {
+    fontSize: 40,
+    fontWeight: "bold",
+    textAlign: "center",
+    paddingBottom: 30,
+    letterSpacing: 1,
+    color: colors.greenMint,
+  },
+  input: {
+    marginTop: 10,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 30,
+  },
+  button: {
+    marginTop: 40,
+  },
+  register: {
+    alignSelf: "center",
+    marginTop: 30,
+  },
+  submitError: {
+    alignItems: "center",
+  },
+});

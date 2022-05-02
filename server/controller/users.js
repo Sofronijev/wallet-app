@@ -3,15 +3,14 @@ const mysql = require("mysql");
 const bcrypt = require("bcrypt");
 const { createAccessToken, createRefreshToken } = require("../auth/signToken");
 
-const handleLoginError = (res) => res.status(401).send("Wrong email or password");
+const handleLoginError = (res) => res.status(401).send({ message: "Wrong email or password" });
 
 exports.login = (req, res) => {
-  const selectQuery =
-    "SELECT id, name, password, email FROM users WHERE email=?";
+  const selectQuery = "SELECT id, name, password, email FROM users WHERE email=?";
   const formatQuery = mysql.format(selectQuery, [req.body.email]);
 
   pool.query(formatQuery, async (error, results) => {
-    if (error) return handleLoginError(res);
+    if (error) return res.status(500).send({ message: "Something went wrong" });
 
     if (!results.length) {
       return handleLoginError(res);
@@ -30,4 +29,3 @@ exports.login = (req, res) => {
     }
   });
 };
-

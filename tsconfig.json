@@ -2,6 +2,8 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+    //  changes the type of the error in a catch from unknown to any 
+    "useUnknownInCatchVariables": false,
     "baseUrl": "./",
     "paths": {
       "components/*": ["app/components/*"],
