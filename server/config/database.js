@@ -15,13 +15,13 @@ const pool = mysql.createPool(serverConfig);
 pool.getConnection((err, connection) => {
   if (err) {
     if (err.code === "PROTOCOL_CONNECTION_LOST") {
-      console.error("[Server]: Database connection was closed.");
+      console.error("[Server]: Database connection was closed. ⛔");
     }
     if (err.code === "ER_CON_COUNT_ERROR") {
-      console.error("[Server]: Database has too many connections.");
+      console.error("[Server]: Database has too many connections. ⛔");
     }
     if (err.code === "ECONNREFUSED") {
-      console.error("[Server]: Database connection was refused.");
+      console.error("[Server]: Database connection was refused. ⛔");
     }
   }
 
@@ -37,10 +37,10 @@ pool.on("connection", function (connection) {
   console.log("[Server]: Connected to MySQL server ✅");
 
   connection.on("error", function (err) {
-    console.error("[Server]: ", new Date(), "MySQL error", err.code);
+    console.error("[Server]: ", new Date(), "MySQL error ❌", err.code);
   });
   connection.on("close", function (err) {
-    console.error("[Server]: ", new Date(), "MySQL close", err);
+    console.error("[Server]: ", new Date(), "MySQL close ❌", err);
   });
 });
 
