@@ -9,6 +9,9 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+# Created when used andorid emulator
+.idea
+.vscode
 
 # macOS
 .DS_Store

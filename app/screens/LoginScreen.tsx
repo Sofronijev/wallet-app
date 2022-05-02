@@ -2,20 +2,33 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-import { NavigationProp } from "@react-navigation/native";
 import Label from "../components/Label";
 import LabelInput from "../components/LabelInput";
 import colors from "../constants/colors";
 import CustomButton from "../components/CustomButton";
-import { RootStackParamList } from "../navigation/routes";
+import { RootParamList } from "../navigation/routes";
+import { useLoginUserMutation } from "../api/apiSlice";
+import AppActivityIndicator from "../components/AppActivityIndicator";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 type Props = {
-  navigation: NavigationProp<RootStackParamList, "Login">;
+  navigation: StackNavigationProp<RootParamList, "Login">;
 };
 
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [tryLoginUser, { isLoading, isError, error }] = useLoginUserMutation();
+
+  const onLogin = async () => {
+    try {
+      await tryLoginUser({ email, password }).unwrap();
+    } catch (err) {
+      const u = err as { data: string };
+      console.log(u.data);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Label style={styles.text}>Welcome</Label>
@@ -24,8 +37,8 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
         icon={<FontAwesome name='user-o' size={24} color={colors.greenMint} />}
         placeholder='Email'
         keyboardType='email-address'
-        value={username}
-        onChangeText={setUsername}
+        value={email}
+        onChangeText={setEmail}
       />
       <LabelInput
         icon={<Ionicons name='ios-key-outline' size={24} color={colors.greenMint} />}
@@ -34,16 +47,12 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
         value={password}
         onChangeText={setPassword}
       />
-      <CustomButton
-        title='Log in'
-        style={styles.button}
-        onPress={() => {
-          console.log(username, password);
-        }}
-      />
+      {/* <Label>{error}</Label> */}
+      <CustomButton title='Log in' style={styles.button} onPress={onLogin} />
       <TouchableOpacity onPress={() => navigation.navigate("Register")}>
         <Label style={styles.register}>Register</Label>
       </TouchableOpacity>
+      {isLoading && <AppActivityIndicator />}
     </View>
   );
 };
