@@ -3,13 +3,12 @@ const mysql = require("mysql");
 const bcrypt = require("bcrypt");
 const { createAccessToken, createRefreshToken } = require("../auth/signToken");
 
-const handleLoginError = (res) =>
-  res.status(401).send({ ok: false, data: [], message: "Wrong username or password" });
+const handleLoginError = (res) => res.status(401).send("Wrong email or password");
 
 exports.login = (req, res) => {
   const selectQuery =
-    "SELECT id, name, surname, password, username, email FROM users WHERE username=?";
-  const formatQuery = mysql.format(selectQuery, [req.body.username]);
+    "SELECT id, name, password, email FROM users WHERE email=?";
+  const formatQuery = mysql.format(selectQuery, [req.body.email]);
 
   pool.query(formatQuery, async (error, results) => {
     if (error) return handleLoginError(res);
@@ -25,13 +24,10 @@ exports.login = (req, res) => {
       const refreshToken = createRefreshToken(data);
       const accessToken = createAccessToken(data);
 
-      return res.status(200).send({
-        ok: true,
-        data: { ...data, refreshToken, accessToken },
-        message: "Successful login",
-      });
+      return res.status(200).send({ data, token: { refreshToken, accessToken } });
     } else {
       return handleLoginError(res);
     }
   });
 };
+
