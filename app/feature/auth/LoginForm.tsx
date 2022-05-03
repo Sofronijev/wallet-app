@@ -4,6 +4,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
+import { StackNavigationProp } from "@react-navigation/stack";
 import Label from "components/Label";
 import LabelInput from "components/LabelInput";
 import CustomButton from "components/CustomButton";
@@ -12,8 +13,8 @@ import colors from "constants/colors";
 import { useLoginUserMutation } from "api/apiSlice";
 import InputErrorLabel from "components/InputErrorLabel";
 import ButtonText from "components/ButtonText";
-import { StackNavigationProp } from "@react-navigation/stack";
 import { RootParamList } from "navigation/routes";
+import authStorage from "modules/authStorage";
 
 type Props = {
   navigation: StackNavigationProp<RootParamList>;
@@ -27,7 +28,10 @@ const LoginForm: React.FC<Props> = ({ navigation }) => {
 
   const onLogin = async ({ email, password }: { email: string; password: string }) => {
     try {
-      await tryLoginUser({ email, password }).unwrap();
+      const data = await tryLoginUser({ email, password }).unwrap();
+      if (data.token) {
+        authStorage.storeToken(data.token?.accessToken);
+      }
     } catch (err) {
       setSubmitError(err?.data?.message ?? "Unknown error occurred");
     }
@@ -75,7 +79,11 @@ const LoginForm: React.FC<Props> = ({ navigation }) => {
           <View style={styles.submitError}>
             <InputErrorLabel text={submitError} isVisible={isError && !!submitError} />
           </View>
-          <ButtonText title='Register' onPress={() => navigation.navigate('Register')} style={styles.register} />
+          <ButtonText
+            title='Register'
+            onPress={() => navigation.navigate("Register")}
+            style={styles.register}
+          />
           {isLoading && <AppActivityIndicator />}
         </View>
       )}

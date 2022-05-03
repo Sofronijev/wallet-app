@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { apiSlice } from "api/apiSlice";
 import { RootStateType } from "../store";
 
-type UserDataType = {
+export type UserDataType = {
   id: number;
   name: string;
   email: string;
@@ -27,6 +27,9 @@ export const userSlice = createSlice({
   name: "user",
   initialState: initialUserState,
   reducers: {
+    setUserData: (state, action: PayloadAction<UserDataType>) => {
+      state.data = action.payload;
+    },
     clearUserData: () => {
       return initialUserState;
     },
@@ -35,7 +38,7 @@ export const userSlice = createSlice({
     builder.addMatcher(
       apiSlice.endpoints.loginUser.matchFulfilled,
       (state, action: PayloadAction<UserStoreType>) => {
-        return action.payload;
+        state.data = action.payload.data;
       }
     );
     builder.addDefaultCase((state) => {
@@ -44,10 +47,9 @@ export const userSlice = createSlice({
   },
 });
 
-export const { clearUserData } = userSlice.actions;
+export const { setUserData, clearUserData } = userSlice.actions;
 
-export const getUserData = (state: RootStateType) => state.user;
+export const getUserData = (state: RootStateType): UserDataType | null => state.user?.data ?? null;
 export const getUserToken = (state: RootStateType) => state.user?.token;
-export const isUserLoggedIn = (state: RootStateType): boolean => (!!state.user?.token && !!state.user?.data) ?? false;
 
 export default userSlice.reducer;

@@ -33,3 +33,7 @@ exports.createRefreshToken = (queryResult) => {
         }
     );
 };
+
+// TODO add token validation
+// You should validate the token in your server-side logic by using something like express-jwt, koa-jwt, Owin Bearer JWT, etc.
+// https://www.npmjs.com/package/jwt-decode
