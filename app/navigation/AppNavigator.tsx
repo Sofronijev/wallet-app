@@ -2,8 +2,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MainScreen from "screens/MainScreen";
 import DetailsScreen from "screens/DetailsScreen";
-import { AntDesign } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import colors from "constants/colors";
 
 const Tab = createBottomTabNavigator();
@@ -24,7 +23,7 @@ const AppNavigator: React.FC = () => (
       name='Main'
       component={MainScreen}
       options={{
-        tabBarIcon: ({ color, size }) => <AntDesign name='home' color={color} size={size} />,
+        tabBarIcon: ({ color, size }) => <FontAwesome5 name='home' color={color} size={size} />,
       }}
     />
     <Tab.Screen
@@ -32,7 +31,7 @@ const AppNavigator: React.FC = () => (
       component={DetailsScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name='account-details' color={color} size={size} />
+          <FontAwesome5 name='clipboard-list' color={color} size={size} />
         ),
       }}
     />
