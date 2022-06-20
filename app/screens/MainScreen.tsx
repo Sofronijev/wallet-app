@@ -1,7 +1,10 @@
-import { Button, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import React from "react";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { RootTabParamList } from "navigation/routes";
+import ThisMonthBalance from "feature/main/ThisMonthBalance";
+import RecentTransactions from "feature/main/RecentTransactions";
+import colors from "constants/colors";
 
 type Props = {
   navigation: BottomTabNavigationProp<RootTabParamList, "Main">;
@@ -9,13 +12,17 @@ type Props = {
 
 const MainScreen: React.FC<Props> = ({ navigation }) => {
   return (
-    <View>
-      <Text>MainScreen</Text>
-      <Button title='Go to Details' />
-    </View>
+    <ScrollView style={styles.container}>
+      <ThisMonthBalance />
+      <RecentTransactions />
+    </ScrollView>
   );
 };
 
 export default MainScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.white,
+  },
+});
