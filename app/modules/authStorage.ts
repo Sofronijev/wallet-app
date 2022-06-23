@@ -1,7 +1,7 @@
 import * as SecureStore from "expo-secure-store";
 import jwtDecode from "jwt-decode";
 import { Alert } from "react-native";
-import { UserDataType } from "redux/reducers/userSlice";
+import { UserDataType } from "store/reducers/userSlice";
 
 type UserTokenType = {
   exp: number,
