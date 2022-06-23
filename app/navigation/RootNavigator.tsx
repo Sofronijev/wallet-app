@@ -1,10 +1,11 @@
+
+import React, { useState } from "react";
 import AppLoading from "expo-app-loading";
 import authStorage from "modules/authStorage";
-import React, { useState } from "react";
-import { useAppDispatch, useAppSelector } from "redux/hooks";
-import { getUserData, setUserData } from "redux/reducers/userSlice";
 import AppNavigator from "./AppNavigator";
 import AuthNavigator from "./AuthNavigator";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { getUserData, setUserData } from "store/reducers/userSlice";
 
 const RootNavigator = () => {
   const user = useAppSelector(getUserData);

@@ -16,7 +16,7 @@ module.exports = function (api) {
             screens: "./app/screens",
             api: "./app/api",
             navigation: "./app/navigation",
-            redux: "./app/redux",
+            store: "./app/store",
           },
         },
       ],

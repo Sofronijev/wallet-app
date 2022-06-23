@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { apiSlice } from "api/apiSlice";
-import { RootStateType } from "../store";
+import { RootStateType } from "../index";
 
 export type UserDataType = {
   id: number;
