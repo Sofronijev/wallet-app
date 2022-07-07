@@ -25,12 +25,11 @@ export default ThisMonthBalance;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.grey3,
-    marginHorizontal: 16,
-    marginVertical: 20,
+    marginTop: 20,
     paddingHorizontal: 10,
     paddingVertical: 20,
     borderRadius: 10,
+    borderWidth: 1,
   },
   title: {
     fontSize: 25,

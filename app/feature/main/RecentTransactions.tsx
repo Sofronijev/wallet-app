@@ -8,7 +8,7 @@ type Props = {};
 
 const RecentTransactions: React.FC = () => {
   return (
-    <View style={styles.container}>
+    <View>
       <Label style={styles.title}>Recent transactions</Label>
       <TransactionsRow />
       <TransactionsRow />
@@ -20,9 +20,6 @@ const RecentTransactions: React.FC = () => {
 export default RecentTransactions;
 
 const styles = StyleSheet.create({
-  container: {
-    marginHorizontal: 16,
-  },
   title: {
     color: colors.grey2,
     fontSize: 18,

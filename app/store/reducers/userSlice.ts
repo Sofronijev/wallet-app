@@ -4,7 +4,7 @@ import { RootStateType } from "../index";
 
 export type UserDataType = {
   id: number;
-  name: string;
+  username: string;
   email: string;
 };
 
