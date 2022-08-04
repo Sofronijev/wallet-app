@@ -1,9 +1,14 @@
-export type RootParamList = {
-  Login: undefined;
-  Register: undefined;
-};
+export type AuthStackParamList = {
+  Login: undefined,
+  Register: undefined,
+}
 
-export type RootTabParamList = {
-  Main: undefined;
-  Details: undefined;
+export type HomeStackParamList = {
+  Main: undefined,
+  Details: undefined,
+}
+
+export type AppStackParamList = {
+  Home: undefined;
+  Expense: undefined;
 };

@@ -13,11 +13,11 @@ import colors from "constants/colors";
 import { useLoginUserMutation } from "api/apiSlice";
 import InputErrorLabel from "components/InputErrorLabel";
 import ButtonText from "components/ButtonText";
-import { RootParamList } from "navigation/routes";
+import { AuthStackParamList } from "navigation/routes";
 import authStorage from "modules/authStorage";
 
 type Props = {
-  navigation: StackNavigationProp<RootParamList>;
+  navigation: StackNavigationProp<AuthStackParamList>;
 };
 
 const LoginForm: React.FC<Props> = ({ navigation }) => {
