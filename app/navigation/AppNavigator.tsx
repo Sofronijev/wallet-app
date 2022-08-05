@@ -1,9 +1,9 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomeNavigator from "./HomeHavigator";
-import ExpenseFormScreen from "screens/ExpenseFormScreen";
+import HomeNavigator from "./HomeNavigator";
 import colors from "constants/colors";
 import { AppStackParamList } from "./routes";
+import TransactionForm from "feature/transaction/TransactionForm";
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
 
@@ -22,10 +22,11 @@ const AppNavigator: React.FC = () => {
     >
       <Stack.Screen name='Home' component={HomeNavigator} options={{ headerShown: false }} />
       <Stack.Screen
-        name='Expense'
-        component={ExpenseFormScreen}
+        name='Transaction'
+        component={TransactionForm}
         options={{
           animation: "slide_from_bottom",
+          title: "Add transaction",
         }}
       />
     </Stack.Navigator>

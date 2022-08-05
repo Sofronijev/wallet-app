@@ -18,7 +18,7 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
       <CustomButton
         style={styles.button}
         title='New transaction'
-        onPress={() => navigation.navigate("Expense")}
+        onPress={() => navigation.navigate("Transaction")}
       />
       <RecentTransactions />
     </ScrollView>

@@ -23,7 +23,7 @@ type Props = {
 const LoginForm: React.FC<Props> = ({ navigation }) => {
   const [tryLoginUser, { isLoading, isError }] = useLoginUserMutation();
   // Want to validateOnChange only if user already tryed to subbmit
-  const [hasSubmitedForm, setHasSubmitedForm] = useState(false);
+  const [hasSubmittedForm, setHasSubmittedForm] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
   const onLogin = async ({ email, password }: { email: string; password: string }) => {
@@ -46,7 +46,7 @@ const LoginForm: React.FC<Props> = ({ navigation }) => {
       initialValues={{ email: "", password: "" }}
       onSubmit={onLogin}
       validationSchema={loginValidationSchema}
-      validateOnChange={hasSubmitedForm}
+      validateOnChange={hasSubmittedForm}
     >
       {({ handleChange, handleSubmit, values, errors }) => (
         <View style={styles.container}>
@@ -72,7 +72,7 @@ const LoginForm: React.FC<Props> = ({ navigation }) => {
             title='Log in'
             style={styles.button}
             onPress={() => {
-              setHasSubmitedForm(true);
+              setHasSubmittedForm(true);
               handleSubmit();
             }}
           />

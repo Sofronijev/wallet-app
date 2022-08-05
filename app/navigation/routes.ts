@@ -10,5 +10,5 @@ export type HomeStackParamList = {
 
 export type AppStackParamList = {
   Home: undefined;
-  Expense: undefined;
+  Transaction: undefined;
 };
