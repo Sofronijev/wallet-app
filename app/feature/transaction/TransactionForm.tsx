@@ -1,6 +1,5 @@
-import { StyleProp, StyleSheet, TextStyle, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
-import Label from "components/Label";
 import TransactionSwitch, { TransactionType } from "./TransactionSwitch";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -11,7 +10,6 @@ import CustomButton from "components/CustomButton";
 
 const initialFormValues = {
   amount: "",
-  date: new Date(),
   category: "",
   type: "",
 };
@@ -20,7 +18,7 @@ type Props = {};
 
 const TransactionForm: React.FC<Props> = () => {
   const [transactionType, setTransactionType] = useState(TransactionType.Expense);
-
+  const [date, setDate] = useState(new Date());
   const onTypeChange = (type: TransactionType) => {
     setTransactionType(type);
   };
@@ -31,7 +29,6 @@ const TransactionForm: React.FC<Props> = () => {
 
   const loginValidationSchema = Yup.object({
     amount: Yup.number().required().label("Amount"),
-    date: Yup.date().required().label("Date"),
     category: Yup.string().required().label("Category"),
     type: Yup.string().required().label("Type"),
   });
@@ -39,22 +36,18 @@ const TransactionForm: React.FC<Props> = () => {
   return (
     <View style={styles.container}>
       <TransactionSwitch value={transactionType} onPress={onTypeChange} />
+      <View style={styles.input}>
+        <DatePickerInput date={date} maximumDate={new Date()} onDateSelect={setDate} />
+      </View>
       <Formik
         initialValues={initialFormValues}
         onSubmit={onAdd}
         validationSchema={loginValidationSchema}
+        validateOnChange={false}
       >
-        {({ handleChange, handleSubmit, values, errors, setFieldValue }) => {
-          const setDate = (date: Date) => setFieldValue("date", date);
+        {({ handleChange, handleSubmit, values, errors }) => {
           return (
             <View>
-              <View style={styles.input}>
-                <DatePickerInput
-                  date={values.date}
-                  maximumDate={new Date()}
-                  onDateSelect={setDate}
-                />
-              </View>
               <LabelInput
                 placeholder='Enter amount'
                 value={values.amount}
