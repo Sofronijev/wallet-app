@@ -6,7 +6,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import LabelInput from "components/LabelInput";
 import InputErrorLabel from "components/InputErrorLabel";
-import DatePickerInput from "components/DatePickerInput";
+import DatePickerInput from "feature/transaction/DatePickerInput";
 import CustomButton from "components/CustomButton";
 
 const initialFormValues = {

@@ -8,6 +8,7 @@ const colors = {
   greenMint: "#3EB489",
   error: "#ff0033",
   redDark: '#B5533E',
+  hyperlink: '#0896FF',
 };
 
 export default colors;
