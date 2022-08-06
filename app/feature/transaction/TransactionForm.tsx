@@ -6,10 +6,12 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import LabelInput from "components/LabelInput";
 import InputErrorLabel from "components/InputErrorLabel";
+import DatePickerInput from "components/DatePickerInput";
+import CustomButton from "components/CustomButton";
 
 const initialFormValues = {
   amount: "",
-  date: "",
+  date: new Date(),
   category: "",
   type: "",
 };
@@ -23,7 +25,9 @@ const TransactionForm: React.FC<Props> = () => {
     setTransactionType(type);
   };
 
-  const onAdd = () => {};
+  const onAdd = (data: any) => {
+    console.log(data);
+  };
 
   const loginValidationSchema = Yup.object({
     amount: Yup.number().required().label("Amount"),
@@ -40,16 +44,29 @@ const TransactionForm: React.FC<Props> = () => {
         onSubmit={onAdd}
         validationSchema={loginValidationSchema}
       >
-        {({ handleChange, handleSubmit, values, errors }) => (
-          <View>
-            <LabelInput
-              placeholder='date'
-              value={values.date}
-              onChangeText={handleChange("date")}
-            />
-            <InputErrorLabel text={errors.date} isVisible={!!errors.date} />
-          </View>
-        )}
+        {({ handleChange, handleSubmit, values, errors, setFieldValue }) => {
+          const setDate = (date: Date) => setFieldValue("date", date);
+          return (
+            <View>
+              <View style={styles.input}>
+                <DatePickerInput
+                  date={values.date}
+                  maximumDate={new Date()}
+                  onDateSelect={setDate}
+                />
+              </View>
+              <LabelInput
+                placeholder='Enter amount'
+                value={values.amount}
+                onChangeText={handleChange("amount")}
+                keyboardType='decimal-pad'
+                style={styles.input}
+              />
+              <InputErrorLabel text={errors.amount} isVisible={!!errors.amount} />
+              <CustomButton title='Submit' onPress={handleSubmit} />
+            </View>
+          );
+        }}
       </Formik>
     </View>
   );
@@ -61,5 +78,8 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     paddingTop: 20,
+  },
+  input: {
+    marginTop: 20,
   },
 });

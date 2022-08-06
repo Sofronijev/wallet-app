@@ -14,30 +14,30 @@ type Props = {
 };
 
 const bubbleSharedStyle: StyleProp<TextStyle> = {
-  fontSize: 22,
+  flex: 1,
   borderWidth: 1,
   borderColor: colors.grey,
   paddingHorizontal: 12,
   paddingVertical: 5,
-  textAlign: "center",
-  color: colors.grey,
-  textTransform: 'capitalize',
 };
 
 const TransactionSwitch: React.FC<Props> = ({ value, onPress }) => {
+  const isExpense = value === TransactionType.Expense;
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.flex} onPress={() => onPress(TransactionType.Income)}>
-        <Label
-          style={[styles.incomeBubble, value === TransactionType.Income && styles.activeBubble]}
-        >
+      <TouchableOpacity
+        style={[styles.incomeBubble, !isExpense && styles.activeBubble]}
+        onPress={() => onPress(TransactionType.Income)}
+      >
+        <Label style={[styles.bubble, !isExpense && styles.activeText]}>
           {TransactionType.Income}
         </Label>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.flex} onPress={() => onPress(TransactionType.Expense)}>
-        <Label
-          style={[styles.expenseBubble, value === TransactionType.Expense && styles.activeBubble]}
-        >
+      <TouchableOpacity
+        style={[styles.expenseBubble, isExpense && styles.activeBubble]}
+        onPress={() => onPress(TransactionType.Expense)}
+      >
+        <Label style={[styles.bubble, isExpense && styles.activeText]}>
           {TransactionType.Expense}
         </Label>
       </TouchableOpacity>
@@ -65,12 +65,17 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 20,
     borderLeftWidth: 0,
   },
-  flex: {
-    flex: 1,
+  bubble: {
+    fontSize: 22,
+    color: colors.grey,
+    textAlign: "center",
+    textTransform: "capitalize",
   },
   activeBubble: {
-    color: colors.white,
     backgroundColor: colors.greenMint,
     borderColor: colors.greenMint,
+  },
+  activeText: {
+    color: colors.white,
   },
 });
