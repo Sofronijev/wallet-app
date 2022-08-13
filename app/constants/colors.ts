@@ -9,6 +9,19 @@ const colors = {
   error: "#ff0033",
   redDark: '#B5533E',
   hyperlink: '#0896FF',
+  money: '#118C4F',
+  saving: '#58AF84',
+  gift: '#AF7AB3',
+  housing: '#EF5B0C',
+  utilities: '#3AB4F2',
+  food: '#FD5D5D',
+  transportation: '#002B5B',
+  health: '#FF9F29',
+  children: '#FBA1A1',
+  dailyLiving: '#A27B5C',
+  entertainment: '#D75281',
+  otherCategory: '#C8C6C6',
+  obligations: '#E6B325',
 };
 
 export default colors;

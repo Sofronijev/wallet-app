@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 0,
   },
   bubble: {
-    fontSize: 22,
+    fontSize: 18,
     color: colors.grey,
     textAlign: "center",
     textTransform: "capitalize",

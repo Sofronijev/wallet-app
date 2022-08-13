@@ -3,7 +3,7 @@ import React from "react";
 import colors from "constants/colors";
 
 type CustomButtonType = {
-  onPress: () => void;
+  onPress?: () => void;
   title: string;
   style?: ViewStyle;
 };

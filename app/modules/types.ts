@@ -1,6 +1,6 @@
 export enum FetchStatus {
   success = "success",
   loading = "loading",
-  loadginMore = "loadingMore",
+  loadingMore = "loadingMore",
   error = "error",
 }
