@@ -7,7 +7,7 @@ type TextBoxProps = TextInputProps & { style?: ViewStyle };
 const TextBox: React.FC<TextBoxProps> = ({ style, ...props }) => {
   return (
     <View style={style}>
-      <LabelInput {...props} multiline numberOfLines={5} textAlignVertical='top' />
+      <LabelInput {...props} multiline textAlignVertical='top' />
     </View>
   );
 };

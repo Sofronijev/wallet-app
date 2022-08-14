@@ -5,13 +5,15 @@ import colors from "constants/colors";
 type LabelInputType = TextInputProps & {
   icon?: React.ReactElement;
   style?: StyleProp<TextStyle>;
+  inputStyle?: StyleProp<TextStyle>;
+  disabled?: boolean;
 };
 
-const LabelInput: React.FC<LabelInputType> = ({ icon, style, ...props }) => {
+const LabelInput: React.FC<LabelInputType> = ({ icon, style, inputStyle, disabled, ...props }) => {
   return (
-    <View style={[style, styles.container]}>
+    <View style={[styles.container, style]} pointerEvents={disabled ? 'none' : 'auto'}>
       {icon && <View style={styles.icon}>{icon}</View>}
-      <TextInput style={styles.input} autoCapitalize="none" {...props} />
+      <TextInput style={[styles.input, inputStyle]} editable={!disabled}  {...props} />
     </View>
   );
 };

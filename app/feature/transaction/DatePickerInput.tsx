@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Platform, StyleSheet, TextStyle, TouchableOpacity, View } from "react-native";
 import DateTimePicker, { Event } from "@react-native-community/datetimepicker";
-import Label from "components/Label";
 import { getFormattedDate } from "modules/timeAndDate";
 import colors from "constants/colors";
-
+import LabelInput from "components/LabelInput";
+import { FontAwesome } from "@expo/vector-icons";
 
 const isIosDevice = Platform.OS === "ios";
 
@@ -13,6 +13,7 @@ type DatePickerInputProps = {
   maximumDate?: Date;
   minimumDate?: Date;
   onDateSelect?: (selectedDate: Date) => void;
+  style?: TextStyle;
 };
 
 const DatePickerInput: React.FC<DatePickerInputProps> = ({
@@ -20,6 +21,7 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
   maximumDate,
   minimumDate,
   onDateSelect,
+  style,
 }) => {
   const value = date || new Date();
   const [show, setShow] = useState(isIosDevice);
@@ -32,29 +34,30 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
   const showCalendar = () => {
     setShow(true);
   };
-
+  // TODO - IOS BUG - Calendar for IOS doesn't look good
   return (
     <View>
-      <View style={styles.container}>
-        <Label style={styles.label}>Date</Label>
-        {!isIosDevice && (
-          <TouchableOpacity onPress={showCalendar}>
-            <Label style={styles.dateLabel}>{getFormattedDate(value)}</Label>
-          </TouchableOpacity>
-        )}
-        {show && (
-          <DateTimePicker
-            testID='dateTimePicker'
-            value={value}
-            mode='date'
-            is24Hour={true}
-            onChange={onChange}
-            maximumDate={maximumDate}
-            minimumDate={minimumDate}
-            style={[isIosDevice && styles.calendar]}
+      {!isIosDevice && (
+        <TouchableOpacity onPress={showCalendar}>
+          <LabelInput
+            value={getFormattedDate(value)}
+            icon={<FontAwesome name='calendar' size={24} color={colors.black} />}
+            editable={false}
+            inputStyle={styles.dateLabel}
           />
-        )}
-      </View>
+        </TouchableOpacity>
+      )}
+      {show && (
+        <DateTimePicker
+          testID='dateTimePicker'
+          value={value}
+          mode='date'
+          is24Hour={true}
+          onChange={onChange}
+          maximumDate={maximumDate}
+          minimumDate={minimumDate}
+        />
+      )}
     </View>
   );
 };
@@ -62,19 +65,7 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
 export default DatePickerInput;
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  label: {
-    fontSize: 16,
-  },
   dateLabel: {
-    fontSize: 16,
-    color: colors.hyperlink,
-  },
-  calendar: {
-    flex: 1,
+    color: colors.black,
   },
 });

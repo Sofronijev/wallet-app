@@ -1,5 +1,5 @@
-import React, { Ref, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
-import { StyleSheet, View, Button } from "react-native";
+import React, { useCallback, useImperativeHandle, useRef, useState } from "react";
+import { StyleSheet, View } from "react-native";
 import BottomSheet, { BottomSheetBackdrop, BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import Label from "components/Label";
 import colors from "constants/colors";
@@ -21,9 +21,9 @@ type Props = {
 
 type refProps = {
   openSheet: () => void;
-}
+};
 
-const TransactionBottomSheet: React.ForwardRefRenderFunction<refProps, Props> = ((props, ref) => {
+const TransactionBottomSheet: React.ForwardRefRenderFunction<refProps, Props> = (props, ref) => {
   const { onSelect } = props;
   const sheetRef = useRef<BottomSheet>(null);
   const [data, setData] = useState<Transaction[]>(categoriesData);
@@ -73,9 +73,8 @@ const TransactionBottomSheet: React.ForwardRefRenderFunction<refProps, Props> = 
     (props) => <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} />,
     []
   );
-
+  // TODO - IOS BUG - On first render, clicking on category will close sheet and not show the types (looks like it disappears), after that it will work normally
   return (
-    <View style={styles.container}>
       <BottomSheet
         ref={sheetRef}
         snapPoints={snapPoints}
@@ -98,14 +97,10 @@ const TransactionBottomSheet: React.ForwardRefRenderFunction<refProps, Props> = 
           contentContainerStyle={styles.contentContainer}
         />
       </BottomSheet>
-    </View>
   );
-});
+};
 
 const styles = StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject,
-  },
   contentContainer: {
     backgroundColor: "white",
   },

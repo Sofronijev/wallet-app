@@ -1,6 +1,5 @@
 import { Keyboard, StyleSheet, View } from "react-native";
 import React, { useRef, useState } from "react";
-import TransactionSwitch, { TransactionType } from "./TransactionSwitch";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import LabelInput from "components/LabelInput";
@@ -10,10 +9,10 @@ import CustomButton from "components/CustomButton";
 import TransactionBottomSheet from "./ui/TransactionBottomSheet";
 import { Category, Transaction } from "modules/transactionCategories";
 import { TransactionBottomSheetType } from "./modules/transactionBottomSheet";
-import Label from "components/Label";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import colors from "constants/colors";
 import TextBox from "components/TextBox";
+import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 
 const initialFormValues = {
   amount: "",
@@ -26,19 +25,14 @@ type Props = {};
 export type TransactionBottomSheet = React.ElementRef<typeof TransactionBottomSheet>;
 
 const TransactionForm: React.FC<Props> = () => {
-  const [transactionType, setTransactionType] = useState(TransactionType.Expense);
   const [date, setDate] = useState(new Date());
   const sheetRef = useRef<TransactionBottomSheetType>(null);
   const [category, setCategory] = useState<Category | null>(null);
   const [type, setType] = useState<Transaction | null>(null);
-  const [amount, setAmount] = useState('');
-
-  const onTypeChange = (type: TransactionType) => {
-    setTransactionType(type);
-  };
+  const [amount, setAmount] = useState("");
 
   const onAdd = () => {
-    console.log('ADD');
+    console.log("ADD");
   };
 
   const onSelectCategory = (category: Category, type: Transaction) => {
@@ -48,7 +42,7 @@ const TransactionForm: React.FC<Props> = () => {
 
   const setCategoryText = () => {
     if (!category && !type) {
-      return "Select";
+      return "";
     }
     return `${category?.label}, ${type?.label}`;
   };
@@ -66,28 +60,34 @@ const TransactionForm: React.FC<Props> = () => {
 
   return (
     <View style={styles.container}>
-      <TransactionSwitch value={transactionType} onPress={onTypeChange} />
-      <View style={styles.input}>
-        <DatePickerInput date={date} maximumDate={new Date()} onDateSelect={setDate} />
-      </View>
-      <View>
-        <View style={styles.categoryContainer}>
-          <Label style={styles.text}>Category</Label>
-          <TouchableOpacity onPress={openSheet}>
-            <Label style={[styles.text, styles.hyperlink]}>{setCategoryText()}</Label>
-          </TouchableOpacity>
-        </View>
+      <DatePickerInput date={date} maximumDate={new Date()} onDateSelect={setDate} />
+      <LabelInput
+        value={amount}
+        placeholder='Amount'
+        onChangeText={setAmount}
+        keyboardType='decimal-pad'
+        style={styles.marginTop}
+        icon={<FontAwesome5 name='coins' size={24} color={colors.black} />}
+        autoFocus
+      />
+      {/* <InputErrorLabel text={errors.amount} isVisible={!!errors.amount} /> */}
+      <TouchableOpacity onPress={openSheet}>
         <LabelInput
-          placeholder='Enter amount'
-          value={amount}
-          onChangeText={setAmount}
-          keyboardType='decimal-pad'
-          style={styles.input}
+          value={setCategoryText()}
+          icon={<MaterialIcons name='category' size={24} color={colors.black} />}
+          disabled
+          placeholder='Category'
+          style={styles.marginTop}
+          inputStyle={styles.category}
         />
-        {/* <InputErrorLabel text={errors.amount} isVisible={!!errors.amount} /> */}
-        <TextBox placeholder="Transaction comment" style={styles.input}/>
-        <CustomButton title='Submit' onPress={onAdd} style={styles.input}/>
-      </View>
+      </TouchableOpacity>
+      <TextBox
+        placeholder='Transaction comment'
+        style={styles.marginTop}
+        numberOfLines={6}
+        maxLength={300}
+      />
+      <CustomButton title='Submit' onPress={onAdd} style={styles.marginTop} />
       <TransactionBottomSheet ref={sheetRef} onSelect={onSelectCategory} />
     </View>
   );
@@ -101,18 +101,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 20,
   },
-  input: {
-    marginTop: 20,
+  marginTop: {
+    marginTop: 30,
   },
-  categoryContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 20,
-  },
-  text: {
-    fontSize: 16,
-  },
-  hyperlink: {
-    color: colors.hyperlink,
+  category: {
+    color: colors.black,
   },
 });

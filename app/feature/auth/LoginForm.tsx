@@ -57,6 +57,7 @@ const LoginForm: React.FC<Props> = ({ navigation }) => {
             keyboardType='email-address'
             value={values.email}
             onChangeText={handleChange("email")}
+            autoCapitalize="none"
           />
           <InputErrorLabel text={errors.email} isVisible={!!errors.email} />
           <LabelInput
@@ -66,6 +67,7 @@ const LoginForm: React.FC<Props> = ({ navigation }) => {
             secureTextEntry
             value={values.password}
             onChangeText={handleChange("password")}
+            autoCapitalize="none"
           />
           <InputErrorLabel text={errors.password} isVisible={!!errors.password} />
           <CustomButton
