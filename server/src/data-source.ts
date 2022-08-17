@@ -4,6 +4,7 @@ import { configDB } from "./config";
 import { Category } from "./entities/Category";
 import { Expense } from "./entities/Expense";
 import { Income } from "./entities/Income";
+import { Transaction } from "./entities/Transaction";
 import { Type } from "./entities/Type";
 import { User } from "./entities/User";
 
@@ -17,7 +18,7 @@ export const AppDataSource = new DataSource({
   charset: "utf8_general_ci",
   synchronize: true,
   logging: false,
-  entities: [User, Category, Type, Expense, Income],
+  entities: [User, Category, Type, Transaction],
   migrations: [],
   subscribers: [],
 });

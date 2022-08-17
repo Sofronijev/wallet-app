@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Transaction } from "./Transaction";
 
-@Entity('users')
+@Entity("users")
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -17,4 +18,7 @@ export class User {
     unique: true,
   })
   email: string;
+
+  @OneToMany(() => Transaction, (transaction) => transaction.user)
+  transactions: Transaction[];
 }
