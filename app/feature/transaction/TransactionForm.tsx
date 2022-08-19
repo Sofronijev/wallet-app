@@ -13,6 +13,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import colors from "constants/colors";
 import TextBox from "components/TextBox";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import { useGetAllUserTransactionsMutation } from "api/apiSlice";
 
 const initialFormValues = {
   amount: "",
@@ -30,7 +31,16 @@ const TransactionForm: React.FC<Props> = () => {
   const [category, setCategory] = useState<Category | null>(null);
   const [type, setType] = useState<Transaction | null>(null);
   const [amount, setAmount] = useState("");
-
+  const [tryGetAllTransactions, { isLoading, isError }] = useGetAllUserTransactionsMutation();
+  const getTransactions = async (id: number) => {
+    try {
+      const data = await tryGetAllTransactions(id).unwrap();
+      console.log({data})
+    } catch (err) {
+      console.log({err})
+    }
+  };
+  console.log(isLoading, isError)
   const onAdd = () => {
     console.log("ADD");
   };
@@ -88,6 +98,8 @@ const TransactionForm: React.FC<Props> = () => {
         maxLength={300}
       />
       <CustomButton title='Submit' onPress={onAdd} style={styles.marginTop} />
+      <CustomButton title='get' onPress={() => getTransactions(1)} style={styles.marginTop} />
+
       <TransactionBottomSheet ref={sheetRef} onSelect={onSelectCategory} />
     </View>
   );

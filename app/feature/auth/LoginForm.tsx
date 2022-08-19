@@ -22,7 +22,7 @@ type Props = {
 
 const LoginForm: React.FC<Props> = ({ navigation }) => {
   const [tryLoginUser, { isLoading, isError }] = useLoginUserMutation();
-  // Want to validateOnChange only if user already tryed to subbmit
+  // Want to validateOnChange only if user already tried to submit
   const [hasSubmittedForm, setHasSubmittedForm] = useState(false);
   const [submitError, setSubmitError] = useState("");
 

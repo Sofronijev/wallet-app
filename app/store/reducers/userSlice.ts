@@ -13,14 +13,17 @@ type TokenType = {
   accessToken: string;
 };
 
-export type UserStoreType = {
+export type LoginResponseType = {
   data: UserDataType | null;
   token: TokenType | null;
+}
+
+export type UserStoreType = {
+  data: UserDataType | null;
 };
 
 const initialUserState: UserStoreType = {
   data: null,
-  token: null,
 };
 
 export const userSlice = createSlice({
@@ -37,7 +40,7 @@ export const userSlice = createSlice({
   extraReducers: (builder) => {
     builder.addMatcher(
       apiSlice.endpoints.loginUser.matchFulfilled,
-      (state, action: PayloadAction<UserStoreType>) => {
+      (state, action: PayloadAction<LoginResponseType>) => {
         state.data = action.payload.data;
       }
     );
@@ -50,6 +53,6 @@ export const userSlice = createSlice({
 export const { setUserData, clearUserData } = userSlice.actions;
 
 export const getUserData = (state: RootStateType): UserDataType | null => state.user?.data ?? null;
-export const getUserToken = (state: RootStateType) => state.user?.token;
+
 
 export default userSlice.reducer;
