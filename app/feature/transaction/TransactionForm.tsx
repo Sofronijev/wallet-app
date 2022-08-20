@@ -13,11 +13,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import colors from "constants/colors";
 import TextBox from "components/TextBox";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
-import {
-  CreateTransactionRequest,
-  useCreateNewTransactionMutation,
-  useGetAllUserTransactionsMutation,
-} from "api/apiSlice";
+import { useCreateNewTransactionMutation } from "api/apiSlice";
+import { formatIsoDate } from "modules/timeAndDate";
 
 const initialFormValues = {
   amount: "",
@@ -38,24 +35,19 @@ const TransactionForm: React.FC<Props> = () => {
   const [description, setDescription] = useState("");
 
   const [tryCreateNewTransaction, { isLoading, isError }] = useCreateNewTransactionMutation();
-  const createNewTransaction = async (data: CreateTransactionRequest) => {
-    try {
-      const res = await tryCreateNewTransaction(data).unwrap();
-      console.log({ res });
-    } catch (err) {
-      console.log({ err });
-    }
-  };
+  console.log(isLoading, isError);
 
   const onAdd = () => {
-    createNewTransaction({
-      amount: Number(amount),
-      description,
-      date,
-      user_id: 1,
-      type_id: type?.id,
-      category_id: category?.id,
-    });
+    if (type && category) {
+      tryCreateNewTransaction({
+        amount: Number(amount),
+        description,
+        date: formatIsoDate(date),
+        user_id: 1,
+        type_id: type.id,
+        category_id: category.id,
+      });
+    }
   };
 
   const onSelectCategory = (category: Category, type: Transaction) => {
@@ -91,7 +83,7 @@ const TransactionForm: React.FC<Props> = () => {
         keyboardType='decimal-pad'
         style={styles.marginTop}
         icon={<FontAwesome5 name='coins' size={24} color={colors.black} />}
-        autoFocus
+        // autoFocus
       />
       {/* <InputErrorLabel text={errors.amount} isVisible={!!errors.amount} /> */}
       <TouchableOpacity onPress={openSheet}>

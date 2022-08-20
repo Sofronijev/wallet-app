@@ -16,4 +16,5 @@ export type getTransactionsRequest = {
     user_id: number;
     start: number;
     count: number;
+    date: string;
 }

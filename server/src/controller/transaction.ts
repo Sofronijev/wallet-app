@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import {
   createTransaction,
-  getAllTransactionData,
-  getTransactionsSums,
+  getMonthlyTransactionData,
+  getMonthlyTransactionsSums,
 } from "../logic/helperFunctions/transactions";
 import { getTransactionsRequest, TransactionType } from "../logic/types/transactions";
 
@@ -15,12 +15,11 @@ export const addTransaction = async (req: Request, res: Response) => {
   }
 };
 
-export const getAllTransactionsForUser = async (req: Request, res: Response) => {
-  const { user_id, start, count } = req.body as getTransactionsRequest;
+export const getMonthlyTransactionsForUser = async (req: Request, res: Response) => {
+  const { user_id, start, count, date } = req.body as getTransactionsRequest;
   try {
-    const transactionSums = await getTransactionsSums(user_id);
-    const transactions = await getAllTransactionData(user_id, start, count);
-
+    const transactionSums = await getMonthlyTransactionsSums(user_id, date);
+    const transactions = await getMonthlyTransactionData(user_id, date, count, start);
     return res
       .status(200)
       .send({ transactions: transactions[0], count: transactions[1], ...transactionSums });

@@ -1,6 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import MainScreen from "screens/MainScreen";
+import MainScreen from "feature/mainScreen";
 import DetailsScreen from "screens/DetailsScreen";
 import { FontAwesome5 } from "@expo/vector-icons";
 import colors from "constants/colors";

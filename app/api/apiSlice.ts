@@ -15,7 +15,7 @@ type CreateTransactionResponse = {
 export type CreateTransactionRequest = {
   amount: number;
   description: string;
-  date: Date;
+  date: string;
   user_id: number;
   type_id: number;
   category_id: number;
@@ -50,9 +50,9 @@ export const apiSlice = createApi({
       }),
     }),
     // TODO - fix this request
-    getAllUserTransactions: builder.mutation<any, number>({
+    getMonthlyUserTransactions: builder.mutation<any, number>({
       query: (userId) => ({
-        url: "/transaction/getAllUserTransactions",
+        url: "/transaction/getMonthlyUserTransactions",
         method: "POST",
         body: { userId },
       }),
@@ -63,6 +63,6 @@ export const apiSlice = createApi({
 // Export the auto-generated hook for the `getPosts` query endpoint
 export const {
   useLoginUserMutation,
-  useGetAllUserTransactionsMutation,
+  useGetMonthlyUserTransactionsMutation,
   useCreateNewTransactionMutation,
 } = apiSlice;

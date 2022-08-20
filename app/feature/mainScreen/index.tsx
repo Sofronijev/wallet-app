@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet } from "react-native";
 import React from "react";
-import ThisMonthBalance from "feature/main/ThisMonthBalance";
-import RecentTransactions from "feature/main/RecentTransactions";
+import ThisMonthBalance from "feature/mainScreen/ui/ThisMonthBalance";
+import RecentTransactions from "feature/mainScreen/ui/RecentTransactions";
 import colors from "constants/colors";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { AppStackParamList } from "navigation/routes";

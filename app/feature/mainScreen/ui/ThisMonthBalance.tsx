@@ -15,7 +15,7 @@ const ThisMonthBalance: React.FC = () => {
       </View>
       <View style={styles.row}>
         <Label style={styles.label}>Expenses:</Label>
-        <Label style={styles.expences}>-30.150,00</Label>
+        <Label style={styles.expenses}>-30.150,00</Label>
       </View>
     </View>
   );
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: colors.grey2,
   },
-  expences: {
+  expenses: {
     fontSize: 30,
     textAlign: "right",
   },
