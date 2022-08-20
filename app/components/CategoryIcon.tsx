@@ -88,11 +88,11 @@ const getIcon = (type: string) => {
 };
 
 type Props = {
-  type: string;
+  categoryName: string;
 };
 
-const CategoryIcon: React.FC<Props> = ({ type }) => {
-  const { icon, backgroundColor } = getIcon(type);
+const CategoryIcon: React.FC<Props> = ({ categoryName }) => {
+  const { icon, backgroundColor } = getIcon(categoryName);
 
   return <View style={[styles.container, { backgroundColor }]}>{icon}</View>;
 };

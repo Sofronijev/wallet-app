@@ -3,15 +3,16 @@ import React from "react";
 import Label from "components/Label";
 import colors from "constants/colors";
 import TransactionsRow from "./TransactionsRow";
+import { useAppSelector } from "store/hooks";
+import { getMonthlyTransactions } from "store/reducers/transactionsSlice";
 
-type Props = { data?: any[] };
-
-const RecentTransactions: React.FC<Props> = ({ data }) => {
+const RecentTransactions: React.FC = () => {
+  const transactions = useAppSelector(getMonthlyTransactions);
   return (
     <View>
       <Label style={styles.title}>Recent transactions</Label>
-      {data?.map((transaction) => (
-        <TransactionsRow key={transaction.id} transaction={transaction}/>
+      {transactions?.map((transaction) => (
+        <TransactionsRow key={transaction.id} transaction={transaction} />
       ))}
     </View>
   );

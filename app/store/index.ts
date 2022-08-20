@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "api/apiSlice";
+import transactionsSlice from "./reducers/transactionsSlice";
 import userReducer from "./reducers/userSlice";
 
 const rootReducer = {
   user: userReducer,
+  transactions: transactionsSlice,
   [apiSlice.reducerPath]: apiSlice.reducer,
 };
 

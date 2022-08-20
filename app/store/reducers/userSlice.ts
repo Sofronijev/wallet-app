@@ -53,6 +53,7 @@ export const userSlice = createSlice({
 export const { setUserData, clearUserData } = userSlice.actions;
 
 export const getUserData = (state: RootStateType): UserDataType | null => state.user?.data;
+export const getUserId = (state: RootStateType): number | undefined => state.user?.data?.id;
 
 
 export default userSlice.reducer;

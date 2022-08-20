@@ -86,7 +86,7 @@ const LoginForm: React.FC<Props> = ({ navigation }) => {
             onPress={() => navigation.navigate("Register")}
             style={styles.register}
           />
-          {isLoading && <AppActivityIndicator />}
+          <AppActivityIndicator isLoading={isLoading}/>
         </View>
       )}
     </Formik>

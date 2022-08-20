@@ -1,24 +1,30 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React from "react";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "constants/colors";
 import Label from "components/Label";
+import CategoryIcon from "components/CategoryIcon";
+import { formatDecimalDigits } from "modules/numbers";
+import { transactionCategories } from "modules/transactionCategories";
+import { TransactionType } from "store/reducers/transactionsSlice";
+import { formatDayString } from "modules/timeAndDate";
 
 type Props = {
-  transaction: any;
+  transaction: TransactionType;
 };
 
 const TransactionsRow: React.FC<Props> = ({ transaction }) => {
+  const category = transactionCategories[transaction.categoryId];
+  const { label } = category.types[transaction.typeId];
   return (
     <View style={styles.container}>
       <View style={styles.icon}>
-        <MaterialCommunityIcons name='food-apple-outline' size={40} color={colors.grey2} />
+        <CategoryIcon categoryName={category.name} />
       </View>
-      <View>
-        <Label>{`${transaction.date} - Groceries`}</Label>
-        <Label>{transaction.description}</Label>
+      <View style={styles.descriptionContainer}>
+        <Label numberOfLines={2} style={styles.label}>{`${formatDayString(transaction.date)} - ${label}`}</Label>
+        <Label numberOfLines={1} style={styles.descriptionText}>{transaction.description}</Label>
       </View>
-      <Label style={styles.price}>{transaction.amount}</Label>
+      <Label style={styles.price}>{formatDecimalDigits(transaction.amount)}</Label>
     </View>
   );
 };
@@ -33,11 +39,26 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 15,
-    paddingVertical: 5,
-    justifyContent: "space-around",
+    paddingVertical: 10,
+    justifyContent: "space-between",
+    flex: 1,
   },
-  icon: {},
+  icon: {
+    paddingHorizontal: 20,
+  },
   price: {
     fontSize: 20,
+    paddingHorizontal: 20,
+    fontWeight: 'bold',
+  },
+  descriptionContainer: {
+    flex: 1,
+  },
+  label: {
+    fontSize: 17,
+    fontWeight: 'bold',
+  },
+  descriptionText:{
+    fontSize: 16,
   },
 });

@@ -12,7 +12,7 @@ type Props = {
 const TransactionRowSelect: React.FC<Props> = ({ item, onPress, hideIcon }) => {
   return (
     <TouchableOpacity style={styles.container} onPress={() => onPress(item)}>
-      {!hideIcon && <CategoryIcon type={item.name} />}
+      {!hideIcon && <CategoryIcon categoryName={item.name} />}
       <Text style={styles.label}>{item.label}</Text>
     </TouchableOpacity>
   );

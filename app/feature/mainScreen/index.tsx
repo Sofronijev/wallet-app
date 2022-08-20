@@ -8,33 +8,39 @@ import { AppStackParamList } from "navigation/routes";
 import CustomButton from "components/CustomButton";
 import { useGetMonthlyUserTransactionsMutation } from "api/apiSlice";
 import { formatIsoDate } from "modules/timeAndDate";
+import { useAppSelector } from "store/hooks";
+import { getUserId } from "store/reducers/userSlice";
+import AppActivityIndicator from "components/AppActivityIndicator";
 
 type MainScreenProps = {
   navigation: StackNavigationProp<AppStackParamList>;
 };
 
 const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
-  const [tryGetTransactions, { isLoading, isError, data }] = useGetMonthlyUserTransactionsMutation();
-  // TODO - fix this component and its children
-  const request = {
-    user_id: 1,
-    start: 0,
-    count: 10,
-    date: formatIsoDate(new Date()),
-  };
+  const user_id = useAppSelector(getUserId);
+  const [tryGetTransactions, { isLoading, isError }] = useGetMonthlyUserTransactionsMutation();
+
   useEffect(() => {
-    tryGetTransactions(request);
-  }, []);
-  console.log(request, data)
+    if (user_id) {
+      tryGetTransactions({
+        user_id,
+        start: 0,
+        count: 10,
+        date: formatIsoDate(new Date()),
+      });
+    }
+  }, [user_id]);
+
   return (
     <ScrollView style={styles.container}>
-      <ThisMonthBalance income={data?.income} expense={data?.expense} />
+      <ThisMonthBalance />
       <CustomButton
         style={styles.button}
         title='New transaction'
         onPress={() => navigation.navigate("Transaction")}
       />
-      <RecentTransactions data={data?.transactions}/>
+      <RecentTransactions />
+      <AppActivityIndicator isLoading={isLoading} hideScreen />
     </ScrollView>
   );
 };
