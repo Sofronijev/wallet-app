@@ -2,7 +2,7 @@ import { verify } from "jsonwebtoken";
 import { configDB } from "../config";
 
 
-export const tokenAuthroziation = (req, res, next) => {
+export const tokenAuthorization = (req, res, next) => {
   try {
     //"Bearer [token]"
     const token = req.headers.authorization.split(" ")[1];
@@ -12,7 +12,7 @@ export const tokenAuthroziation = (req, res, next) => {
     next();
   } catch (error) {
     return res.status(401).json({
-      message: "Nedozvoljen pristup!",
+      message: "Unauthorized access!",
     });
   }
 };

@@ -15,8 +15,9 @@ export const AppDataSource = new DataSource({
   database: configDB.database,
   charset: "utf8_general_ci",
   synchronize: true,
-  logging: false,
+  logging: true,
   entities: [User, Category, Type, Transaction],
   migrations: [],
   subscribers: [],
+  bigNumberStrings: false,
 });

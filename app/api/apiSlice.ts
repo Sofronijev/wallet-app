@@ -1,11 +1,24 @@
 //https://redux.js.org/tutorials/essentials/part-7-rtk-query-basics
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { LoginResponseType, UserStoreType } from "store/reducers/userSlice";
-import Auth from 'modules/authStorage';
+import Auth from "modules/authStorage";
 
 type LoginRequest = {
   email: string;
   password: string;
+};
+
+type CreateTransactionResponse = {
+  id: number;
+};
+
+export type CreateTransactionRequest = {
+  amount: number;
+  description: string;
+  date: Date;
+  user_id: number;
+  type_id: number;
+  category_id: number;
 };
 
 export const apiSlice = createApi({
@@ -29,11 +42,18 @@ export const apiSlice = createApi({
         body: loginData,
       }),
     }),
+    createNewTransaction: builder.mutation<CreateTransactionResponse, CreateTransactionRequest>({
+      query: (transactionData) => ({
+        url: "/transaction/addTransaction",
+        method: "POST",
+        body: transactionData,
+      }),
+    }),
     // TODO - fix this request
-    getAllUserTransactions: builder.mutation<UserStoreType, number>({
+    getAllUserTransactions: builder.mutation<any, number>({
       query: (userId) => ({
         url: "/transaction/getAllUserTransactions",
-        method: "Post",
+        method: "POST",
         body: { userId },
       }),
     }),
@@ -41,4 +61,8 @@ export const apiSlice = createApi({
 });
 
 // Export the auto-generated hook for the `getPosts` query endpoint
-export const { useLoginUserMutation, useGetAllUserTransactionsMutation } = apiSlice;
+export const {
+  useLoginUserMutation,
+  useGetAllUserTransactionsMutation,
+  useCreateNewTransactionMutation,
+} = apiSlice;

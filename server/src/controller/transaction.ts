@@ -1,22 +1,14 @@
 import { Request, Response } from "express";
-import { AppDataSource } from "../data-source";
-import { Transaction } from "../entities/Transaction";
-
-const transactionRepository = AppDataSource.getRepository(Transaction);
+import {
+  createTransaction,
+  getAllTransactionData,
+  getTransactionsSums,
+} from "../logic/helperFunctions/transactions";
+import { getTransactionsRequest, TransactionType } from "../logic/types/transactions";
 
 export const addTransaction = async (req: Request, res: Response) => {
-  const { amount, description, date, user_id, category_id, type_id } = req.body;
-
-  const transaction = new Transaction();
-  transaction.amount = amount;
-  transaction.description = description;
-  transaction.date = date;
-  transaction.userId = user_id;
-  transaction.categoryId = category_id;
-  transaction.typeId = type_id;
-
   try {
-    const savedTransaction = await transactionRepository.save(transaction);
+    const savedTransaction = await createTransaction(req.body as TransactionType);
     return res.status(200).send({ id: savedTransaction.id });
   } catch (error) {
     return res.status(500).send({ message: "Error adding transaction" });
@@ -24,22 +16,15 @@ export const addTransaction = async (req: Request, res: Response) => {
 };
 
 export const getAllTransactionsForUser = async (req: Request, res: Response) => {
-  const { user_id } = req.body;
-
+  const { user_id, start, count } = req.body as getTransactionsRequest;
   try {
-    const allTransactions = await transactionRepository.findOne({
-      select: {
-        id: true,
-        date: true,
-        amount: true,
-        categoryId: true,
-        typeId: true,
-        description: true,
-      },
-      where: { id: user_id },
-    });
-    return res.status(200).send({ transactions: allTransactions });
+    const transactionSums = await getTransactionsSums(user_id);
+    const transactions = await getAllTransactionData(user_id, start, count);
+
+    return res
+      .status(200)
+      .send({ transactions: transactions[0], count: transactions[1], ...transactionSums });
   } catch (error) {
-    return res.status(500).send({ message: "Error getting transactions" });
+    return res.status(500).send({ message: "Error getting transactions", error });
   }
 };
