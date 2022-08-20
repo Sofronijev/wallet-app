@@ -21,6 +21,21 @@ export type CreateTransactionRequest = {
   category_id: number;
 };
 
+type getMonthlyTransactionsRequest = {
+  user_id: number;
+  start: number;
+  count: number;
+  date: string;
+};
+
+type getMonthlyTransactionsResponse = {
+  // TODO - fix type
+  transactions: any[];
+  count: number;
+  expense: number | null;
+  income: number | null;
+};
+
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
@@ -49,12 +64,14 @@ export const apiSlice = createApi({
         body: transactionData,
       }),
     }),
-    // TODO - fix this request
-    getMonthlyUserTransactions: builder.mutation<any, number>({
-      query: (userId) => ({
+    getMonthlyUserTransactions: builder.mutation<
+      getMonthlyTransactionsResponse,
+      getMonthlyTransactionsRequest
+    >({
+      query: (data) => ({
         url: "/transaction/getMonthlyUserTransactions",
         method: "POST",
-        body: { userId },
+        body: data,
       }),
     }),
   }),

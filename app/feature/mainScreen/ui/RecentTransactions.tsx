@@ -4,15 +4,15 @@ import Label from "components/Label";
 import colors from "constants/colors";
 import TransactionsRow from "./TransactionsRow";
 
-type Props = {};
+type Props = { data?: any[] };
 
-const RecentTransactions: React.FC = () => {
+const RecentTransactions: React.FC<Props> = ({ data }) => {
   return (
     <View>
       <Label style={styles.title}>Recent transactions</Label>
-      <TransactionsRow />
-      <TransactionsRow />
-      <TransactionsRow />
+      {data?.map((transaction) => (
+        <TransactionsRow key={transaction.id} transaction={transaction}/>
+      ))}
     </View>
   );
 };

@@ -4,19 +4,21 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "constants/colors";
 import Label from "components/Label";
 
-type Props = {};
+type Props = {
+  transaction: any;
+};
 
-const TransactionsRow: React.FC = () => {
+const TransactionsRow: React.FC<Props> = ({ transaction }) => {
   return (
     <View style={styles.container}>
       <View style={styles.icon}>
         <MaterialCommunityIcons name='food-apple-outline' size={40} color={colors.grey2} />
       </View>
       <View>
-        <Label>05.05.2022. - Groceries</Label>
-        <Label>Maxi</Label>
+        <Label>{`${transaction.date} - Groceries`}</Label>
+        <Label>{transaction.description}</Label>
       </View>
-      <Label style={styles.price}>-5.000,00</Label>
+      <Label style={styles.price}>{transaction.amount}</Label>
     </View>
   );
 };

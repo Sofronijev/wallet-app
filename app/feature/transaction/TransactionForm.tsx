@@ -36,7 +36,7 @@ const TransactionForm: React.FC<Props> = () => {
 
   const [tryCreateNewTransaction, { isLoading, isError }] = useCreateNewTransactionMutation();
   console.log(isLoading, isError);
-
+  // TODO - LOADING, error handler
   const onAdd = () => {
     if (type && category) {
       tryCreateNewTransaction({
