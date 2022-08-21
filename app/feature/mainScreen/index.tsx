@@ -1,12 +1,13 @@
 import { ScrollView, StyleSheet } from "react-native";
-import React, { useEffect } from "react";
+import React from "react";
+import { skipToken } from "@reduxjs/toolkit/query/react";
+import { StackNavigationProp } from "@react-navigation/stack";
 import ThisMonthBalance from "feature/mainScreen/ui/ThisMonthBalance";
 import RecentTransactions from "feature/mainScreen/ui/RecentTransactions";
 import colors from "constants/colors";
-import { StackNavigationProp } from "@react-navigation/stack";
 import { AppStackParamList } from "navigation/routes";
 import CustomButton from "components/CustomButton";
-import { useGetMonthlyUserTransactionsMutation } from "api/apiSlice";
+import { useGetMonthlyUserTransactionsQuery } from "api/apiSlice";
 import { formatIsoDate } from "modules/timeAndDate";
 import { useAppSelector } from "store/hooks";
 import { getUserId } from "store/reducers/userSlice";
@@ -18,18 +19,16 @@ type MainScreenProps = {
 
 const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
   const user_id = useAppSelector(getUserId);
-  const [tryGetTransactions, { isLoading, isError }] = useGetMonthlyUserTransactionsMutation();
-
-  useEffect(() => {
-    if (user_id) {
-      tryGetTransactions({
-        user_id,
-        start: 0,
-        count: 10,
-        date: formatIsoDate(new Date()),
-      });
-    }
-  }, [user_id]);
+  const { isLoading, isError } = useGetMonthlyUserTransactionsQuery(
+    user_id
+      ? {
+          user_id,
+          start: 0,
+          count: 10,
+          date: formatIsoDate(new Date()),
+        }
+      : skipToken
+  );
 
   return (
     <ScrollView style={styles.container}>

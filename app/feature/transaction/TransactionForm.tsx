@@ -15,6 +15,7 @@ import TextBox from "components/TextBox";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import { useCreateNewTransactionMutation } from "api/apiSlice";
 import { formatIsoDate } from "modules/timeAndDate";
+import AppActivityIndicator from "components/AppActivityIndicator";
 
 const initialFormValues = {
   amount: "",
@@ -104,6 +105,7 @@ const TransactionForm: React.FC<Props> = () => {
         onChangeText={setDescription}
       />
       <CustomButton title='Submit' onPress={onAdd} style={styles.marginTop} />
+      <AppActivityIndicator isLoading={isLoading} />
       <TransactionBottomSheet ref={sheetRef} onSelect={onSelectCategory} />
     </View>
   );

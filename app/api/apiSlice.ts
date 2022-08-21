@@ -2,15 +2,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { LoginResponseType, UserStoreType } from "store/reducers/userSlice";
 import Auth from "modules/authStorage";
+import { TransactionType } from "store/reducers/transactionsSlice";
 
 type LoginRequest = {
   email: string;
   password: string;
 };
 
-type CreateTransactionResponse = {
-  id: number;
-};
+export type CreateTransactionResponse = TransactionType;
 
 export type CreateTransactionRequest = {
   amount: number;
@@ -48,6 +47,7 @@ export const apiSlice = createApi({
       return headers;
     },
   }),
+  tagTypes: ["Transactions", "Users"],
   endpoints: (builder) => ({
     // builder.query<ReturnValueHere, ArgumentTypeHere>. If there is no argument, use void
     loginUser: builder.mutation<LoginResponseType, LoginRequest>({
@@ -63,8 +63,9 @@ export const apiSlice = createApi({
         method: "POST",
         body: transactionData,
       }),
+      invalidatesTags: ["Transactions"], // Used to refetch transactions, connected to providesTags
     }),
-    getMonthlyUserTransactions: builder.mutation<
+    getMonthlyUserTransactions: builder.query<
       getMonthlyTransactionsResponse,
       getMonthlyTransactionsRequest
     >({
@@ -73,6 +74,7 @@ export const apiSlice = createApi({
         method: "POST",
         body: data,
       }),
+      providesTags: ["Transactions"],
     }),
   }),
 });
@@ -80,6 +82,6 @@ export const apiSlice = createApi({
 // Export the auto-generated hook for the `getPosts` query endpoint
 export const {
   useLoginUserMutation,
-  useGetMonthlyUserTransactionsMutation,
+  useGetMonthlyUserTransactionsQuery,
   useCreateNewTransactionMutation,
 } = apiSlice;

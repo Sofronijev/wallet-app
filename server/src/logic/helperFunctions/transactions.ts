@@ -32,7 +32,7 @@ export const getMonthlyTransactionData = async (
   user_id: number,
   date: string,
   take: number,
-  skip = 0,
+  skip = 0
 ) =>
   await transactionRepository
     .createQueryBuilder("transaction")
@@ -41,6 +41,8 @@ export const getMonthlyTransactionData = async (
     .andWhere("MONTH(transaction.date) = MONTH(:date)", { date })
     .skip(skip)
     .take(take)
+    .orderBy("date", "DESC")
+    .addOrderBy("id", "DESC")
     .getManyAndCount();
 
 export const createTransaction = async (data: TransactionType) => {

@@ -9,7 +9,7 @@ import { getTransactionsRequest, TransactionType } from "../logic/types/transact
 export const addTransaction = async (req: Request, res: Response) => {
   try {
     const savedTransaction = await createTransaction(req.body as TransactionType);
-    return res.status(200).send({ id: savedTransaction.id });
+    return res.status(200).send(savedTransaction);
   } catch (error) {
     return res.status(500).send({ message: "Error adding transaction" });
   }

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { apiSlice } from "api/apiSlice";
+import { apiSlice, CreateTransactionResponse } from "api/apiSlice";
 import { RootStateType } from "../index";
 
 export type TransactionType = {
@@ -52,7 +52,7 @@ export const transactionSlice = createSlice({
 
 export const { setTransactionData, clearTransactionData } = transactionSlice.actions;
 
-export const getMonthlyTransactions = (state: RootStateType): TransactionType[] =>
+export const getMonthlyTransactions = (state: RootStateType): CreateTransactionResponse[] =>
   state.transactions?.transactions ?? [];
 
 export const getMonthlyBalance = (

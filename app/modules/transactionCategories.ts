@@ -128,3 +128,5 @@ export const transactionCategories: CategoriesType = {
   12: { name: "entertainment", id: 12, label: "Entertainment", types: entertainment },
   13: { name: "other", id: 13, label: "Other", types: other },
 };
+
+export const INCOME_CATEGORY_ID = 1;
