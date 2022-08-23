@@ -21,8 +21,14 @@ const TransactionsRow: React.FC<Props> = ({ transaction }) => {
         <CategoryIcon categoryName={category.name} />
       </View>
       <View style={styles.descriptionContainer}>
-        <Label numberOfLines={2} style={styles.label}>{`${formatDayString(transaction.date)} - ${label}`}</Label>
-        <Label numberOfLines={1} style={styles.descriptionText}>{transaction.description}</Label>
+        <Label numberOfLines={2} style={styles.label}>
+          {`${formatDayString(transaction.date)} - ${label}`}
+        </Label>
+        {!!transaction.description && (
+          <Label numberOfLines={1} style={styles.descriptionText}>
+            {transaction.description}
+          </Label>
+        )}
       </View>
       <Label style={styles.price}>{formatDecimalDigits(transaction.amount)}</Label>
     </View>
@@ -49,16 +55,16 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 20,
     paddingHorizontal: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   descriptionContainer: {
     flex: 1,
   },
   label: {
     fontSize: 17,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
-  descriptionText:{
+  descriptionText: {
     fontSize: 16,
   },
 });

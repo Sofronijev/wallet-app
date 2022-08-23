@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { apiSlice, CreateTransactionResponse } from "api/apiSlice";
+import { apiSlice } from "api/apiSlice";
 import { RootStateType } from "../index";
 
 export type TransactionType = {
@@ -12,12 +12,12 @@ export type TransactionType = {
   categoryId: number;
 };
 
+type AccountBalance = { expense: number | null; income: number | null };
+
 export type TransactionStoreType = {
   transactions: TransactionType[];
   count: number;
-  expense: number | null;
-  income: number | null;
-};
+} & AccountBalance;
 
 const initialTransactionState: TransactionStoreType = {
   transactions: [],
@@ -52,12 +52,10 @@ export const transactionSlice = createSlice({
 
 export const { setTransactionData, clearTransactionData } = transactionSlice.actions;
 
-export const getMonthlyTransactions = (state: RootStateType): CreateTransactionResponse[] =>
-  state.transactions?.transactions ?? [];
+export const getMonthlyTransactions = (state: RootStateType): TransactionType[] =>
+  state.transactions?.transactions;
 
-export const getMonthlyBalance = (
-  state: RootStateType
-): { expense: number | null; income: number | null } => {
+export const getMonthlyBalance = (state: RootStateType): AccountBalance => {
   const { income, expense } = state.transactions;
   return {
     income,

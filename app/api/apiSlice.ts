@@ -2,38 +2,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { LoginResponseType, UserStoreType } from "store/reducers/userSlice";
 import Auth from "modules/authStorage";
-import { TransactionType } from "store/reducers/transactionsSlice";
-
-type LoginRequest = {
-  email: string;
-  password: string;
-};
-
-export type CreateTransactionResponse = TransactionType;
-
-export type CreateTransactionRequest = {
-  amount: number;
-  description: string;
-  date: string;
-  user_id: number;
-  type_id: number;
-  category_id: number;
-};
-
-type getMonthlyTransactionsRequest = {
-  user_id: number;
-  start: number;
-  count: number;
-  date: string;
-};
-
-type getMonthlyTransactionsResponse = {
-  // TODO - fix type
-  transactions: any[];
-  count: number;
-  expense: number | null;
-  income: number | null;
-};
+import { TransactionStoreType, TransactionType } from "store/reducers/transactionsSlice";
+import {
+  createNewTransactionQuery,
+  CreateTransactionReq,
+  getMonthlyTransactionsQuery,
+  MonthlyTransactionsReq,
+} from "app/middleware/transactions";
+import { LoginRequest, loginUserQuery } from "app/middleware/auth";
 
 export const apiSlice = createApi({
   reducerPath: "api",
@@ -51,35 +27,19 @@ export const apiSlice = createApi({
   endpoints: (builder) => ({
     // builder.query<ReturnValueHere, ArgumentTypeHere>. If there is no argument, use void
     loginUser: builder.mutation<LoginResponseType, LoginRequest>({
-      query: (loginData) => ({
-        url: "/users/login",
-        method: "POST",
-        body: loginData,
-      }),
+      query: loginUserQuery,
     }),
-    createNewTransaction: builder.mutation<CreateTransactionResponse, CreateTransactionRequest>({
-      query: (transactionData) => ({
-        url: "/transaction/addTransaction",
-        method: "POST",
-        body: transactionData,
-      }),
-      invalidatesTags: ["Transactions"], // Used to refetch transactions, connected to providesTags
-    }),
-    getMonthlyUserTransactions: builder.query<
-      getMonthlyTransactionsResponse,
-      getMonthlyTransactionsRequest
-    >({
-      query: (data) => ({
-        url: "/transaction/getMonthlyUserTransactions",
-        method: "POST",
-        body: data,
-      }),
+    getMonthlyUserTransactions: builder.query<TransactionStoreType, MonthlyTransactionsReq>({
+      query: getMonthlyTransactionsQuery,
       providesTags: ["Transactions"],
+    }),
+    createNewTransaction: builder.mutation<TransactionType, CreateTransactionReq>({
+      query: createNewTransactionQuery,
+      invalidatesTags: ["Transactions"], // Used to refetch transactions, connected to providesTags
     }),
   }),
 });
 
-// Export the auto-generated hook for the `getPosts` query endpoint
 export const {
   useLoginUserMutation,
   useGetMonthlyUserTransactionsQuery,

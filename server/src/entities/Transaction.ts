@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "t
 import { Category } from "./Category";
 import { Type } from "./Type";
 import { User } from "./User";
-
+// TODO -  ADD indexes
 @Entity("transactions")
 export class Transaction {
   @PrimaryGeneratedColumn()
