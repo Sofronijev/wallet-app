@@ -7,7 +7,7 @@ import RecentTransactions from "feature/mainScreen/ui/RecentTransactions";
 import colors from "constants/colors";
 import { AppStackParamList } from "navigation/routes";
 import CustomButton from "components/CustomButton";
-import { useGetMonthlyUserTransactionsQuery } from "api/apiSlice";
+import { useGetMonthlyUserTransactionsQuery } from "app/middleware/apiSlice";
 import { formatIsoDate } from "modules/timeAndDate";
 import { useAppSelector } from "store/hooks";
 import { getUserId } from "store/reducers/userSlice";

@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { apiSlice } from "api/apiSlice";
+import { apiSlice } from "app/middleware/apiSlice";
 import transactionsSlice from "./reducers/transactionsSlice";
 import userReducer from "./reducers/userSlice";
 

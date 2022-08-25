@@ -13,7 +13,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import colors from "constants/colors";
 import TextBox from "components/TextBox";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
-import { useCreateNewTransactionMutation } from "api/apiSlice";
+import { useCreateNewTransactionMutation } from "app/middleware/apiSlice";
 import { formatIsoDate } from "modules/timeAndDate";
 import AppActivityIndicator from "components/AppActivityIndicator";
 
@@ -82,14 +82,14 @@ const TransactionForm: React.FC<Props> = () => {
         onChangeText={setAmount}
         keyboardType='decimal-pad'
         style={styles.marginTop}
-        icon={<FontAwesome5 name='coins' size={24} color={colors.black} />}
+        icon={<FontAwesome5 name='coins' size={24} color={colors.greenMint} />}
         // autoFocus
       />
       {/* <InputErrorLabel text={errors.amount} isVisible={!!errors.amount} /> */}
       <TouchableOpacity onPress={openSheet}>
         <LabelInput
           value={setCategoryText()}
-          icon={<MaterialIcons name='category' size={24} color={colors.black} />}
+          icon={<MaterialIcons name='category' size={24} color={colors.greenMint} />}
           disabled
           placeholder='Category'
           style={styles.marginTop}

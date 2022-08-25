@@ -1,6 +1,6 @@
 //https://redux.js.org/tutorials/essentials/part-7-rtk-query-basics
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { LoginResponseType, UserStoreType } from "store/reducers/userSlice";
+import { LoginResponseType } from "store/reducers/userSlice";
 import Auth from "modules/authStorage";
 import { TransactionStoreType, TransactionType } from "store/reducers/transactionsSlice";
 import {
