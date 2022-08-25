@@ -10,11 +10,11 @@ import LabelInput from "components/LabelInput";
 import CustomButton from "components/CustomButton";
 import AppActivityIndicator from "components/AppActivityIndicator";
 import colors from "constants/colors";
-import { useLoginUserMutation } from "app/middleware/apiSlice";
 import InputErrorLabel from "components/InputErrorLabel";
 import ButtonText from "components/ButtonText";
 import { AuthStackParamList } from "navigation/routes";
 import authStorage from "modules/authStorage";
+import { useLoginUserMutation } from "app/middleware/auth";
 
 type Props = {
   navigation: StackNavigationProp<AuthStackParamList>;

@@ -17,7 +17,7 @@ const RootNavigator = () => {
     const user = await authStorage.getUser();
     if (user) dispatch(setUserData(user.userData));
   };
-
+  
   if (!isReady)
     return (
       <AppLoading

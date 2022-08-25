@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { apiSlice } from "app/middleware/apiSlice";
+import { transactionsApi } from "app/middleware/transactions";
 import { RootStateType } from "../index";
 
 export type TransactionType = {
@@ -39,7 +39,7 @@ export const transactionSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(
-      apiSlice.endpoints.getMonthlyUserTransactions.matchFulfilled,
+      transactionsApi.endpoints.getMonthlyUserTransactions.matchFulfilled,
       (state, action: PayloadAction<TransactionStoreType>) => {
         return action.payload;
       }

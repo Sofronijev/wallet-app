@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { apiSlice } from "app/middleware/apiSlice";
+import { authApi } from "app/middleware/auth";
 import { RootStateType } from "../index";
 
 export type UserDataType = {
@@ -39,7 +39,7 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(
-      apiSlice.endpoints.loginUser.matchFulfilled,
+      authApi.endpoints.loginUser.matchFulfilled,
       (state, action: PayloadAction<LoginResponseType>) => {
         state.data = action.payload.data;
       }

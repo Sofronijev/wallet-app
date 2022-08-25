@@ -13,9 +13,9 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import colors from "constants/colors";
 import TextBox from "components/TextBox";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
-import { useCreateNewTransactionMutation } from "app/middleware/apiSlice";
 import { formatIsoDate } from "modules/timeAndDate";
 import AppActivityIndicator from "components/AppActivityIndicator";
+import { useCreateNewTransactionMutation } from "app/middleware/transactions";
 
 const initialFormValues = {
   amount: "",
