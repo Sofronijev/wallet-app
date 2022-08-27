@@ -15,6 +15,8 @@ import ButtonText from "components/ButtonText";
 import { AuthStackParamList } from "navigation/routes";
 import authStorage from "modules/authStorage";
 import { useLoginUserMutation } from "app/middleware/auth";
+import { setUserData } from "store/reducers/userSlice";
+import { useAppDispatch } from "store/hooks";
 
 type Props = {
   navigation: StackNavigationProp<AuthStackParamList>;
@@ -25,12 +27,17 @@ const LoginForm: React.FC<Props> = ({ navigation }) => {
   // Want to validateOnChange only if user already tried to submit
   const [hasSubmittedForm, setHasSubmittedForm] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const dispatch = useAppDispatch();
 
   const onLogin = async ({ email, password }: { email: string; password: string }) => {
     try {
-      const data = await tryLoginUser({ email, password }).unwrap();
-      if (data.token) {
-        authStorage.storeToken(data.token?.accessToken);
+      const userData = await tryLoginUser({ email, password }).unwrap();
+      if (userData) {
+        authStorage.storeRefreshToken(userData.token.refreshToken);
+        authStorage.storeAccessToken(userData.token.accessToken);
+        // Had to manually dispatch action because addMatcher in userSlice was causing some issues with require circle
+        //https://stackoverflow.com/questions/55664673/require-cycles-are-allowed-but-can-result-in-uninitialized-values-consider-ref
+        dispatch(setUserData(userData.data));
       }
     } catch (err) {
       setSubmitError(err?.data?.message ?? "Unknown error occurred");
@@ -57,7 +64,7 @@ const LoginForm: React.FC<Props> = ({ navigation }) => {
             keyboardType='email-address'
             value={values.email}
             onChangeText={handleChange("email")}
-            autoCapitalize="none"
+            autoCapitalize='none'
           />
           <InputErrorLabel text={errors.email} isVisible={!!errors.email} />
           <LabelInput
@@ -67,7 +74,7 @@ const LoginForm: React.FC<Props> = ({ navigation }) => {
             secureTextEntry
             value={values.password}
             onChangeText={handleChange("password")}
-            autoCapitalize="none"
+            autoCapitalize='none'
           />
           <InputErrorLabel text={errors.password} isVisible={!!errors.password} />
           <CustomButton
@@ -86,7 +93,7 @@ const LoginForm: React.FC<Props> = ({ navigation }) => {
             onPress={() => navigation.navigate("Register")}
             style={styles.register}
           />
-          <AppActivityIndicator isLoading={isLoading}/>
+          <AppActivityIndicator isLoading={isLoading} />
         </View>
       )}
     </Formik>

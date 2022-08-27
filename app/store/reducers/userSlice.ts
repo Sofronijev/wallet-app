@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { authApi } from "app/middleware/auth";
 import { RootStateType } from "../index";
 
 export type UserDataType = {
@@ -14,8 +13,8 @@ type TokenType = {
 };
 
 export type LoginResponseType = {
-  data: UserDataType | null;
-  token: TokenType | null;
+  data: UserDataType;
+  token: TokenType;
 }
 
 export type UserStoreType = {
@@ -36,17 +35,6 @@ export const userSlice = createSlice({
     clearUserData: () => {
       return initialUserState;
     },
-  },
-  extraReducers: (builder) => {
-    builder.addMatcher(
-      authApi.endpoints.loginUser.matchFulfilled,
-      (state, action: PayloadAction<LoginResponseType>) => {
-        state.data = action.payload.data;
-      }
-    );
-    builder.addDefaultCase((state) => {
-      return state;
-    });
   },
 });
 

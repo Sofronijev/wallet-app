@@ -1,32 +1,32 @@
 import { sign } from "jsonwebtoken";
 import { configDB } from "../config";
 
-type QueryResultType = {
+export type UserDataType = {
   id: number;
   username: string;
   email: string;
 };
 
-export const createAccessToken = (queryResult: QueryResultType) => {
+export const createAccessToken = (queryResult: UserDataType) => {
   return sign(
     {
       userData: queryResult,
     },
     configDB.jwt_token,
     {
-      expiresIn: "4h",
+      expiresIn: "30d",
     }
   );
 };
 
-export const createRefreshToken = (queryResult: QueryResultType) => {
+export const createRefreshToken = (queryResult: UserDataType) => {
   return sign(
     {
       userData: queryResult,
     },
     configDB.jwt_refresh,
     {
-      expiresIn: "30d",
+      expiresIn: "180d",
     }
   );
 };

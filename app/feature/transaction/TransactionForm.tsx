@@ -35,9 +35,10 @@ const TransactionForm: React.FC<Props> = () => {
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
 
-  const [tryCreateNewTransaction, { isLoading, isError }] = useCreateNewTransactionMutation();
-  // TODO - LOADING, error handler
+  const [tryCreateNewTransaction, { isLoading, isError, isSuccess }] = useCreateNewTransactionMutation();
+  // TODO - LOADING, error handler, close screen on add
   const onAdd = () => {
+    Keyboard.dismiss();
     if (type && category) {
       tryCreateNewTransaction({
         amount: Number(amount),
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   marginTop: {
-    marginTop: 30,
+    marginTop: 20,
   },
   category: {
     color: colors.black,

@@ -8,20 +8,21 @@ import {
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
 import Auth from "modules/authStorage";
+import { Alert } from "react-native";
+import { clearUserData } from "store/reducers/userSlice";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://192.168.0.13:5000",
   credentials: "include",
   prepareHeaders: async (headers) => {
-    const token = await Auth.getToken();
-    if (token) {
-      headers.set("authorization", `Bearer ${token}`);
+    const accessToken = await Auth.getAccessToken();
+    if (accessToken) {
+      headers.set("authorization", `Bearer ${accessToken}`);
     }
     return headers;
   },
 });
 
-// TODO - finish this
 const baseQueryWithReAuth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
   args,
   api,
@@ -30,21 +31,26 @@ const baseQueryWithReAuth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
   let result = await baseQuery(args, api, extraOptions);
 
   if (result?.error?.status === 401) {
-    console.log("sending refresh token");
-    // send refresh token to get new access token
-    const refreshResult = await baseQuery("/refresh", api, extraOptions);
-    console.log({ api, extraOptions });
-    console.log(refreshResult);
+    const refreshToken = await Auth.getRefreshToken();
+    const refreshResult = await baseQuery(
+      {
+        url: "/refreshToken",
+        method: "POST",
+        body: {
+          refreshToken,
+        },
+      },
+      api,
+      extraOptions
+    );
     if (refreshResult?.data) {
-      const state = api.getState();
-      console.log(state);
-      // store the new token
-      // api.dispatch(setCredentials({ ...refreshResult.data, user }));
-      // retry the original query with new access token
+      const { accessToken } = refreshResult.data as { accessToken: string };
+      Auth.storeAccessToken(accessToken);
       result = await baseQuery(args, api, extraOptions);
     } else {
-      // api.dispatch(logOut());
-      console.log("refresh Failed");
+      await Auth.removeRefreshToken();
+      api.dispatch(clearUserData());
+      Alert.alert("An error was encountered while trying to authenticate", "Please login again");
     }
   }
 

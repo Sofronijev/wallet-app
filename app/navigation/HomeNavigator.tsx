@@ -17,7 +17,7 @@ const HomeNavigator = () => {
 
   const logout = async () => {
     dispatch(clearUserData());
-    await authStorage.removeToken();
+    await authStorage.removeRefreshToken();
   };
 
   return (

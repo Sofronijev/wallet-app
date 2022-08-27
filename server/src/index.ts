@@ -35,6 +35,8 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 app.use(router);
 
+// TODO Handle unknown routes
+
 // start express server
 app.listen(PORT, () => {
   console.log(`[Server]: Server is running on port ${PORT} 👍`);
