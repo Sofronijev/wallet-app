@@ -6,13 +6,19 @@ import { getCurrentMonthYear } from "modules/timeAndDate";
 import { formatDecimalDigits } from "modules/numbers";
 import { getMonthlyBalance } from "store/reducers/transactionsSlice";
 import { useAppSelector } from "store/hooks";
+import AppActivityIndicator from "components/AppActivityIndicator";
 
-const ThisMonthBalance: React.FC = () => {
+type ThisMonthBalanceProps = {
+  isLoading: boolean;
+};
+
+const ThisMonthBalance: React.FC<ThisMonthBalanceProps> = ({ isLoading }) => {
   const { income, expense } = useAppSelector(getMonthlyBalance);
   const month = getCurrentMonthYear();
   const getIncome = income ?? 0;
   const getExpense = expense ?? 0;
   const available = getIncome - getExpense;
+
   return (
     <View style={styles.container}>
       <Label style={styles.title}>{month}</Label>
@@ -30,6 +36,7 @@ const ThisMonthBalance: React.FC = () => {
         <Label style={styles.label}>Expenses:</Label>
         <Label style={styles.transactions}>{formatDecimalDigits(getExpense)}</Label>
       </View>
+      <AppActivityIndicator isLoading={isLoading} hideScreen />
     </View>
   );
 };
@@ -39,10 +46,10 @@ export default ThisMonthBalance;
 const styles = StyleSheet.create({
   container: {
     marginTop: 20,
-    paddingHorizontal: 10,
     paddingVertical: 20,
     borderRadius: 10,
     borderWidth: 1,
+    overflow: "hidden",
   },
   title: {
     fontSize: 30,

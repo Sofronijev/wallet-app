@@ -15,16 +15,17 @@ type Props = {
 const TransactionsRow: React.FC<Props> = ({ transaction }) => {
   const category = transactionCategories[transaction.categoryId];
   const { label } = category.types[transaction.typeId];
+  const hasDescription = !!transaction.description;
   return (
     <View style={styles.container}>
       <View style={styles.icon}>
         <CategoryIcon categoryName={category.name} />
       </View>
       <View style={styles.descriptionContainer}>
-        <Label numberOfLines={2} style={styles.label}>
+        <Label numberOfLines={hasDescription ? 1 : 2} style={styles.label}>
           {`${formatDayString(transaction.date)} - ${label}`}
         </Label>
-        {!!transaction.description && (
+        {hasDescription && (
           <Label numberOfLines={1} style={styles.descriptionText}>
             {transaction.description}
           </Label>
@@ -50,11 +51,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   icon: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
   },
   price: {
     fontSize: 20,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     fontWeight: "bold",
   },
   descriptionContainer: {

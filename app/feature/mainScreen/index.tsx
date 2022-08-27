@@ -10,7 +10,6 @@ import CustomButton from "components/CustomButton";
 import { formatIsoDate } from "modules/timeAndDate";
 import { useAppSelector } from "store/hooks";
 import { getUserId } from "store/reducers/userSlice";
-import AppActivityIndicator from "components/AppActivityIndicator";
 import { useGetMonthlyUserTransactionsQuery } from "app/middleware/transactions";
 
 type MainScreenProps = {
@@ -19,7 +18,8 @@ type MainScreenProps = {
 
 const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
   const user_id = useAppSelector(getUserId);
-  const { isLoading, isError } = useGetMonthlyUserTransactionsQuery(
+  // TODO - isError
+  const { isLoading, isError, isFetching } = useGetMonthlyUserTransactionsQuery(
     user_id
       ? {
           user_id,
@@ -29,17 +29,17 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
         }
       : skipToken
   );
+  const transactionLoading = isLoading || isFetching;
 
   return (
     <ScrollView style={styles.container}>
-      <ThisMonthBalance />
+      <ThisMonthBalance isLoading={transactionLoading} />
       <CustomButton
         style={styles.button}
         title='New transaction'
         onPress={() => navigation.navigate("Transaction")}
       />
-      <RecentTransactions />
-      <AppActivityIndicator isLoading={isLoading} hideScreen />
+      <RecentTransactions isLoading={transactionLoading} />
     </ScrollView>
   );
 };
