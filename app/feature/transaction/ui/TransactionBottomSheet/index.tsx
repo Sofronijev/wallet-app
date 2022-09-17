@@ -74,7 +74,7 @@ const TransactionBottomSheet: React.ForwardRefRenderFunction<refProps, Props> = 
     []
   );
   // TODO - IOS BUG - On first render, clicking on category will close sheet and not show the types (looks like it disappears), after that it will work normally
-  // TODO - BUG - when there is textInput with autofocus prop the bottom sheet will open
+  // BUG - when there is textInput with autofocus prop the bottom sheet will open - FIXED with setting "softwareKeyboardLayoutMode": "pan" in app.json
   return (
     <BottomSheet
       ref={sheetRef}
