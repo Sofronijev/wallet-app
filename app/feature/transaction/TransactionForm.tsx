@@ -92,7 +92,7 @@ const TransactionForm: React.FC<Props> = ({ navigation }) => {
         keyboardType='decimal-pad'
         style={styles.marginTop}
         icon={<FontAwesome5 name='coins' size={24} color={colors.greenMint} />}
-        autoFocus
+        // autoFocus - don't use it because of the bug that opens bottom sheet if this is enabled
       />
       {/* <InputErrorLabel text={errors.amount} isVisible={!!errors.amount} /> */}
       <TouchableOpacity onPress={openSheet}>

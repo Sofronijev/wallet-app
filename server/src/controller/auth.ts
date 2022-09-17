@@ -15,7 +15,7 @@ export const getUserData = async (req: Request, res: Response) => {
     });
 
     if (!user) {
-      return res.status(401).send({ message: "Wrong email or password" });
+      return res.status(403).send({ message: "Wrong email or password" });
     }
 
     const passwordMatched = await compare(req.body.password, user.password);
@@ -27,7 +27,7 @@ export const getUserData = async (req: Request, res: Response) => {
 
       return res.status(200).send({ data: restData, token: { refreshToken, accessToken } });
     }
-    return res.status(401).send({ message: "Wrong email or password" });
+    return res.status(403).send({ message: "Wrong email or password" });
   } catch (error) {
     return res.status(500).send({ message: "Error getting user data" });
   }

@@ -1,5 +1,5 @@
 import React, { useCallback, useImperativeHandle, useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import BottomSheet, { BottomSheetBackdrop, BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import Label from "components/Label";
 import colors from "constants/colors";
@@ -13,7 +13,7 @@ const categoriesData = Object.values(transactionCategories).map((item) => ({
   label: item.label,
 }));
 
-const snapPoints = ["60%"];
+const snapPoints = ["50%"];
 
 type Props = {
   onSelect: (category: Category, type: Transaction) => void;
@@ -74,43 +74,45 @@ const TransactionBottomSheet: React.ForwardRefRenderFunction<refProps, Props> = 
     []
   );
   // TODO - IOS BUG - On first render, clicking on category will close sheet and not show the types (looks like it disappears), after that it will work normally
+  // TODO - BUG - when there is textInput with autofocus prop the bottom sheet will open
   return (
-      <BottomSheet
-        ref={sheetRef}
-        snapPoints={snapPoints}
-        enablePanDownToClose
-        index={-1}
-        onClose={onClose}
-        backdropComponent={renderBackdrop}
-      >
-        <Label style={styles.title}>{"Pick category"}</Label>
-        {!!selectedCategory && (
-          <>
-            <TransactionRowSelect item={selectedCategory} onPress={clearCategory} />
-            <Separator />
-          </>
-        )}
-        <BottomSheetFlatList
-          data={data}
-          keyExtractor={(item) => `${item.id}`}
-          renderItem={renderItem}
-          contentContainerStyle={styles.contentContainer}
-        />
-      </BottomSheet>
+    <BottomSheet
+      ref={sheetRef}
+      snapPoints={snapPoints}
+      enablePanDownToClose
+      index={-1}
+      onClose={onClose}
+      backdropComponent={renderBackdrop}
+      handleStyle={styles.handle}
+    >
+      <Label style={styles.title}>{"Pick category"}</Label>
+      {!!selectedCategory && (
+        <>
+          <TransactionRowSelect item={selectedCategory} onPress={clearCategory} />
+          <Separator />
+        </>
+      )}
+      <BottomSheetFlatList
+        data={data}
+        keyExtractor={(item) => `${item.id}`}
+        renderItem={renderItem}
+      />
+    </BottomSheet>
   );
 };
 
 const styles = StyleSheet.create({
-  contentContainer: {
-    backgroundColor: "white",
-  },
   title: {
     textAlign: "center",
     fontSize: 16,
     fontWeight: "bold",
-    borderBottomWidth: 1,
-    borderColor: colors.grey,
     paddingBottom: 10,
+    backgroundColor: colors.grey3,
+  },
+  handle: {
+    backgroundColor: colors.grey3,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
 });
 
