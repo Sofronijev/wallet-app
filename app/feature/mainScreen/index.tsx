@@ -1,5 +1,5 @@
-import { ScrollView, StyleSheet } from "react-native";
-import React from "react";
+import { Alert, ScrollView, StyleSheet } from "react-native";
+import React, { useEffect } from "react";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import { StackNavigationProp } from "@react-navigation/stack";
 import ThisMonthBalance from "feature/mainScreen/ui/ThisMonthBalance";
@@ -18,8 +18,7 @@ type MainScreenProps = {
 
 const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
   const user_id = useAppSelector(getUserId);
-  // TODO - isError
-  const { isLoading, isError, isFetching } = useGetMonthlyUserTransactionsQuery(
+  const { isLoading, isError, isFetching, error } = useGetMonthlyUserTransactionsQuery(
     user_id
       ? {
           user_id,
@@ -30,6 +29,12 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
       : skipToken
   );
   const transactionLoading = isLoading || isFetching;
+
+  useEffect(() => {
+    if (isError) {
+      Alert.alert("An error occurred while getting data", "Please try again");
+    }
+  }, [isError]);
 
   return (
     <ScrollView style={styles.container}>
