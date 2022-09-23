@@ -1,10 +1,9 @@
 import { Alert, Keyboard, StyleSheet, View } from "react-native";
 import React, { useRef, useState } from "react";
-import { Formik } from "formik";
-import * as Yup from "yup";
+import { useFormik } from "formik";
 import LabelInput from "components/LabelInput";
 import InputErrorLabel from "components/InputErrorLabel";
-import DatePickerInput from "feature/transaction/DatePickerInput";
+import DatePickerInput from "feature/transaction/ui/DatePickerInput";
 import CustomButton from "components/CustomButton";
 import TransactionBottomSheet from "./ui/TransactionBottomSheet";
 import { Category, Transaction } from "modules/transactionCategories";
@@ -18,57 +17,35 @@ import AppActivityIndicator from "components/AppActivityIndicator";
 import { useCreateNewTransactionMutation } from "app/middleware/transactions";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { AppStackParamList } from "navigation/routes";
-
-const initialFormValues = {
-  amount: "",
-  category: "",
-  type: "",
-};
+import { initialTransactionFormValues, TransactionFromInputs, transactionValidationSchema } from "./modules/formValidation";
 
 type Props = {
   navigation: StackNavigationProp<AppStackParamList>;
 };
 
-export type TransactionBottomSheet = React.ElementRef<typeof TransactionBottomSheet>;
-
 const TransactionForm: React.FC<Props> = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
   const sheetRef = useRef<TransactionBottomSheetType>(null);
-  const [category, setCategory] = useState<Category | null>(null);
-  const [type, setType] = useState<Transaction | null>(null);
-  const [amount, setAmount] = useState("");
-  const [description, setDescription] = useState("");
-
+  const [hasSubmittedForm, setHasSubmittedForm] = useState(false);
   const [tryCreateNewTransaction, { isLoading }] = useCreateNewTransactionMutation();
-  const onAdd = async () => {
+
+  const onTransactionAdd = async (values: TransactionFromInputs) => {
     Keyboard.dismiss();
     try {
-      if (type && category) {
+      if (values.type && values.category) {
         await tryCreateNewTransaction({
-          amount: Number(amount),
-          description,
-          date: formatIsoDate(date),
+          amount: Number(values.amount),
+          description: values.description,
+          date: formatIsoDate(values.date),
           user_id: 1,
-          type_id: type.id,
-          category_id: category.id,
+          type_id: values.type.id,
+          category_id: values.category.id,
         }).unwrap();
         navigation.goBack();
       }
     } catch (error) {
       Alert.alert("An error occurred while adding transaction", "Please try again");
     }
-  };
-
-  const onSelectCategory = (category: Category, type: Transaction) => {
-    setCategory(category);
-    setType(type);
-  };
-
-  const setCategoryText = () => {
-    if (!category && !type) {
-      return "";
-    }
-    return `${category?.label}, ${type?.label}`;
   };
 
   const openSheet = () => {
@@ -78,23 +55,43 @@ const TransactionForm: React.FC<Props> = ({ navigation }) => {
     }
   };
 
-  // const loginValidationSchema = Yup.object({
-  //   amount: Yup.number().required().label("Amount"),
-  // });
+  const formik = useFormik<TransactionFromInputs>({
+    initialValues: initialTransactionFormValues,
+    validationSchema: transactionValidationSchema,
+    validateOnChange: hasSubmittedForm,
+    onSubmit: (values) => onTransactionAdd(values),
+  });
+
+  const onSelectCategory = (category: Category, type: Transaction) => {
+    formik.setFieldValue("category", category);
+    formik.setFieldValue("type", type);
+  };
+
+  const setCategoryText = () => {
+    if (!formik.values.category && !formik.values.type) {
+      return "";
+    }
+    return `${formik.values.category?.label}, ${formik.values.type?.label}`;
+  };
+
+  const onSubmit = () => {
+    setHasSubmittedForm(true);
+    formik.handleSubmit();
+  };
 
   return (
     <View style={styles.container}>
       <DatePickerInput date={date} maximumDate={new Date()} onDateSelect={setDate} />
       <LabelInput
-        value={amount}
+        value={formik.values.amount}
         placeholder='Amount'
-        onChangeText={setAmount}
+        onChangeText={formik.handleChange("amount")}
         keyboardType='decimal-pad'
         style={styles.marginTop}
         icon={<FontAwesome5 name='coins' size={24} color={colors.greenMint} />}
         autoFocus
       />
-      {/* <InputErrorLabel text={errors.amount} isVisible={!!errors.amount} /> */}
+      <InputErrorLabel text={formik.errors.amount} isVisible={!!formik.errors.amount} />
       <TouchableOpacity onPress={openSheet}>
         <LabelInput
           value={setCategoryText()}
@@ -105,15 +102,19 @@ const TransactionForm: React.FC<Props> = ({ navigation }) => {
           inputStyle={styles.category}
         />
       </TouchableOpacity>
+      <InputErrorLabel
+        text={formik.errors.category}
+        isVisible={!!formik.errors.category || !!formik.errors.type}
+      />
       <TextBox
         placeholder='Transaction comment'
         style={styles.marginTop}
         numberOfLines={6}
         maxLength={300}
-        value={description}
-        onChangeText={setDescription}
+        value={formik.values.description}
+        onChangeText={formik.handleChange("description")}
       />
-      <CustomButton title='Submit' onPress={onAdd} style={styles.marginTop} />
+      <CustomButton title='Submit' onPress={onSubmit} style={styles.marginTop} />
       <AppActivityIndicator isLoading={isLoading} />
       <TransactionBottomSheet ref={sheetRef} onSelect={onSelectCategory} />
     </View>
