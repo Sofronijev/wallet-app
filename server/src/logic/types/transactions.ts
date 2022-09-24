@@ -7,6 +7,8 @@ export type TransactionType = {
   type_id: number;
 };
 
+export type EditTransactionType =  Omit<TransactionType, 'user_id'> & {id: number};
+
 export type TransactionSumType = {
   income: number;
   expense: number;

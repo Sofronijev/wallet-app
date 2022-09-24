@@ -18,7 +18,7 @@ type MainScreenProps = {
 
 const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
   const user_id = useAppSelector(getUserId);
-  const { isLoading, isError, isFetching, error } = useGetMonthlyUserTransactionsQuery(
+  const { isLoading, isError, isFetching } = useGetMonthlyUserTransactionsQuery(
     user_id
       ? {
           user_id,

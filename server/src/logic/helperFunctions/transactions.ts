@@ -1,6 +1,6 @@
 import { AppDataSource } from "../../data-source";
 import { Transaction } from "../../entities/Transaction";
-import { TransactionSumType, TransactionType } from "../types/transactions";
+import { EditTransactionType, TransactionSumType, TransactionType } from "../types/transactions";
 
 const INCOME_CATEGORY = 1;
 
@@ -56,3 +56,17 @@ export const createTransaction = async (data: TransactionType) => {
 
   return await transactionRepository.save(transaction);
 };
+
+export const setTransaction = async (data: EditTransactionType) => await transactionRepository
+  .createQueryBuilder()
+  .update(Transaction)
+  .set(data)
+  .where("id = :id", { id: data.id })
+  .execute();
+
+export const deleteTransaction = async (id: number) => await transactionRepository
+  .createQueryBuilder()
+  .delete()
+  .from(Transaction)
+  .where("id = :id", { id })
+  .execute();
