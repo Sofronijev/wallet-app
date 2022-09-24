@@ -113,20 +113,34 @@ const other = {
   67: { name: "expenses_other", id: 67, label: "Other" },
 };
 
-export const transactionCategories: CategoriesType = {
-  1: { name: "income", id: 1, label: "Income", types: income },
-  2: { name: "saving", id: 2, label: "Saving", types: saving },
-  3: { name: "gifts", id: 3, label: "Gifts/Charity", types: gifts },
-  4: { name: "housing", id: 4, label: "Housing", types: housing },
-  5: { name: "utilities", id: 5, label: "Utilities", types: utilities },
-  6: { name: "food", id: 6, label: "Food", types: food },
-  7: { name: "transportation", id: 7, label: "Transportation", types: transportation },
-  8: { name: "health", id: 8, label: "Health", types: health },
-  9: { name: "dailyLiving", id: 9, label: "Daily living", types: dailyLiving },
-  10: { name: "children", id: 10, label: "Children", types: children },
-  11: { name: "obligation", id: 11, label: "Obligation", types: obligation },
-  12: { name: "entertainment", id: 12, label: "Entertainment", types: entertainment },
-  13: { name: "other", id: 13, label: "Other", types: other },
-};
+export enum CategoryNumber {
+  "income" = 1,
+  "saving" = 2,
+  "gifts" = 3,
+  "housing" = 4,
+  "utilities" = 5,
+  "food" = 6,
+  "transportation" = 7,
+  "health" = 8,
+  "dailyLiving" = 9,
+  "children" = 10,
+  "obligation" = 11,
+  "entertainment" = 12,
+  "other" = 13,
+}
 
-export const INCOME_CATEGORY_ID = 1;
+export const transactionCategories: CategoriesType = {
+  [CategoryNumber.income]: { name: "income", id: CategoryNumber.income, label: "Income", types: income },
+  [CategoryNumber.saving]: { name: "saving", id: CategoryNumber.saving, label: "Saving", types: saving },
+  [CategoryNumber.gifts]: { name: "gifts", id: CategoryNumber.gifts, label: "Gifts/Charity", types: gifts },
+  [CategoryNumber.housing]: { name: "housing", id: CategoryNumber.housing, label: "Housing", types: housing },
+  [CategoryNumber.utilities]: { name: "utilities", id: CategoryNumber.utilities, label: "Utilities", types: utilities },
+  [CategoryNumber.food]: { name: "food", id: CategoryNumber.food, label: "Food", types: food },
+  [CategoryNumber.transportation]: { name: "transportation", id: CategoryNumber.transportation, label: "Transportation", types: transportation },
+  [CategoryNumber.health]: { name: "health", id: CategoryNumber.health, label: "Health", types: health },
+  [CategoryNumber.dailyLiving]: { name: "dailyLiving", id: CategoryNumber.dailyLiving, label: "Daily living", types: dailyLiving },
+  [CategoryNumber.children]: { name: "children", id: CategoryNumber.children, label: "Children", types: children },
+  [CategoryNumber.obligation]: { name: "obligation", id: CategoryNumber.obligation, label: "Obligation", types: obligation },
+  [CategoryNumber.entertainment]: { name: "entertainment", id: CategoryNumber.entertainment, label: "Entertainment", types: entertainment },
+  [CategoryNumber.other]: { name: "other", id: CategoryNumber.other, label: "Other", types: other },
+};

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Platform, StyleSheet, TextStyle, TouchableOpacity, View } from "react-native";
 import DateTimePicker, { Event } from "@react-native-community/datetimepicker";
-import { getFormattedDate } from "modules/timeAndDate";
+import { formatIsoDate, getFormattedDate } from "modules/timeAndDate";
 import colors from "constants/colors";
 import LabelInput from "components/LabelInput";
 import { FontAwesome } from "@expo/vector-icons";
@@ -12,7 +12,7 @@ type DatePickerInputProps = {
   date: Date;
   maximumDate?: Date;
   minimumDate?: Date;
-  onDateSelect?: (selectedDate: Date) => void;
+  onDateSelect?: (selectedDate: string) => void;
   style?: TextStyle;
 };
 
@@ -29,7 +29,7 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
   const onChange = (event: Event, selectedDate?: Date) => {
     const currentDate = selectedDate ?? new Date();
     setShow(isIosDevice);
-    if (typeof onDateSelect === "function") onDateSelect(currentDate);
+    if (typeof onDateSelect === "function") onDateSelect(formatIsoDate(currentDate));
   };
   const showCalendar = () => {
     setShow(true);

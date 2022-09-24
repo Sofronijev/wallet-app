@@ -1,5 +1,5 @@
 import { Alert, Keyboard, StyleSheet, View } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import LabelInput from "components/LabelInput";
 import InputErrorLabel from "components/InputErrorLabel";
@@ -14,38 +14,78 @@ import TextBox from "components/TextBox";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import { formatIsoDate } from "modules/timeAndDate";
 import AppActivityIndicator from "components/AppActivityIndicator";
-import { useCreateNewTransactionMutation } from "app/middleware/transactions";
+import {
+  useCreateNewTransactionMutation,
+  useDeleteTransactionMutation,
+  useEditTransactionMutation,
+} from "app/middleware/transactions";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { AppStackParamList } from "navigation/routes";
-import { initialTransactionFormValues, TransactionFromInputs, transactionValidationSchema } from "./modules/formValidation";
+import {
+  initialTransactionFormValues,
+  TransactionFromInputs,
+  transactionValidationSchema,
+} from "./modules/formValidation";
+import { RouteProp } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import HeaderIcon from "components/HeaderIcon";
+import { deleteTransactionAlert, handleTransactionError } from "./modules";
 
 type Props = {
   navigation: StackNavigationProp<AppStackParamList>;
+  route: RouteProp<AppStackParamList, "Transaction">;
 };
 
-const TransactionForm: React.FC<Props> = ({ navigation }) => {
-  const [date, setDate] = useState(new Date());
+const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
+  const editData = route.params?.editData;
   const sheetRef = useRef<TransactionBottomSheetType>(null);
   const [hasSubmittedForm, setHasSubmittedForm] = useState(false);
   const [tryCreateNewTransaction, { isLoading }] = useCreateNewTransactionMutation();
+  const [tryEditNewTransaction, { isLoading: editLoading }] = useEditTransactionMutation();
+  const [tryDeleteNewTransaction, { isLoading: deleteLoading }] = useDeleteTransactionMutation();
 
-  const onTransactionAdd = async (values: TransactionFromInputs) => {
+  const onTransactionSubmit = async (values: TransactionFromInputs) => {
     Keyboard.dismiss();
     try {
       if (values.type && values.category) {
-        await tryCreateNewTransaction({
-          amount: Number(values.amount),
-          description: values.description,
-          date: formatIsoDate(values.date),
-          user_id: 1,
-          type_id: values.type.id,
-          category_id: values.category.id,
-        }).unwrap();
+        if (editData) {
+          await tryEditNewTransaction({
+            id: editData.id,
+            amount: Number(values.amount),
+            description: values.description,
+            date: formatIsoDate(values.date),
+            type_id: values.type.id,
+            category_id: values.category.id,
+          }).unwrap();
+        } else {
+          await tryCreateNewTransaction({
+            amount: Number(values.amount),
+            description: values.description,
+            date: formatIsoDate(values.date),
+            user_id: 1,
+            type_id: values.type.id,
+            category_id: values.category.id,
+          }).unwrap();
+        }
         navigation.goBack();
       }
     } catch (error) {
-      Alert.alert("An error occurred while adding transaction", "Please try again");
+      handleTransactionError(error);
     }
+  };
+
+  const onDeleteTransaction = async () => {
+    try {
+      if (editData) await tryDeleteNewTransaction({ id: editData.id }).unwrap();
+      navigation.goBack();
+    } catch (error) {
+      handleTransactionError(error);
+    }
+  };
+
+  const onDelete = () => {
+    Keyboard.dismiss();
+    deleteTransactionAlert(onDeleteTransaction);
   };
 
   const openSheet = () => {
@@ -59,8 +99,23 @@ const TransactionForm: React.FC<Props> = ({ navigation }) => {
     initialValues: initialTransactionFormValues,
     validationSchema: transactionValidationSchema,
     validateOnChange: hasSubmittedForm,
-    onSubmit: (values) => onTransactionAdd(values),
+    onSubmit: (values) => onTransactionSubmit(values),
   });
+
+  useEffect(() => {
+    if (editData) {
+      const { id, ...data } = editData;
+      formik.setValues(data);
+      navigation.setOptions({
+        title: "Edit transaction",
+        headerRight: () => (
+          <HeaderIcon onPress={onDelete}>
+            <Ionicons name='trash-sharp' size={24} color={colors.white} />
+          </HeaderIcon>
+        ),
+      });
+    }
+  }, [editData]);
 
   const onSelectCategory = (category: Category, type: Transaction) => {
     formik.setFieldValue("category", category);
@@ -74,6 +129,10 @@ const TransactionForm: React.FC<Props> = ({ navigation }) => {
     return `${formik.values.category?.label}, ${formik.values.type?.label}`;
   };
 
+  const onDateChange = (date: string) => {
+    formik.setFieldValue("date", date);
+  };
+
   const onSubmit = () => {
     setHasSubmittedForm(true);
     formik.handleSubmit();
@@ -81,7 +140,11 @@ const TransactionForm: React.FC<Props> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <DatePickerInput date={date} maximumDate={new Date()} onDateSelect={setDate} />
+      <DatePickerInput
+        date={new Date(formik.values.date)}
+        maximumDate={new Date()}
+        onDateSelect={onDateChange}
+      />
       <LabelInput
         value={formik.values.amount}
         placeholder='Amount'
@@ -89,7 +152,7 @@ const TransactionForm: React.FC<Props> = ({ navigation }) => {
         keyboardType='decimal-pad'
         style={styles.marginTop}
         icon={<FontAwesome5 name='coins' size={24} color={colors.greenMint} />}
-        autoFocus
+        autoFocus={!editData}
       />
       <InputErrorLabel text={formik.errors.amount} isVisible={!!formik.errors.amount} />
       <TouchableOpacity onPress={openSheet}>
@@ -115,7 +178,7 @@ const TransactionForm: React.FC<Props> = ({ navigation }) => {
         onChangeText={formik.handleChange("description")}
       />
       <CustomButton title='Submit' onPress={onSubmit} style={styles.marginTop} />
-      <AppActivityIndicator isLoading={isLoading} />
+      <AppActivityIndicator isLoading={isLoading || editLoading || deleteLoading} />
       <TransactionBottomSheet ref={sheetRef} onSelect={onSelectCategory} />
     </View>
   );

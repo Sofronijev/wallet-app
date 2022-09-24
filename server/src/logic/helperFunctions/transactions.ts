@@ -44,7 +44,7 @@ export const getMonthlyTransactionData = async (
     .orderBy("date", "DESC")
     .addOrderBy("id", "DESC")
     .getManyAndCount();
-
+// TODO - mozda promeniti sa fronta da se salje categoryId umesto category_id, pogledati sta se vraca sa servera
 export const createTransaction = async (data: TransactionType) => {
   const transaction = new Transaction();
   transaction.amount = data.amount;
@@ -57,16 +57,24 @@ export const createTransaction = async (data: TransactionType) => {
   return await transactionRepository.save(transaction);
 };
 
-export const setTransaction = async (data: EditTransactionType) => await transactionRepository
-  .createQueryBuilder()
-  .update(Transaction)
-  .set(data)
-  .where("id = :id", { id: data.id })
-  .execute();
+export const setTransaction = async (data: EditTransactionType) =>
+  await transactionRepository
+    .createQueryBuilder()
+    .update(Transaction)
+    .set({
+      amount: data.amount,
+      description: data.description,
+      date: data.date,
+      categoryId: data.category_id,
+      typeId: data.type_id,
+    })
+    .where("id = :id", { id: data.id })
+    .execute();
 
-export const deleteTransaction = async (id: number) => await transactionRepository
-  .createQueryBuilder()
-  .delete()
-  .from(Transaction)
-  .where("id = :id", { id })
-  .execute();
+export const deleteTransaction = async (id: number) =>
+  await transactionRepository
+    .createQueryBuilder()
+    .delete()
+    .from(Transaction)
+    .where("id = :id", { id })
+    .execute();

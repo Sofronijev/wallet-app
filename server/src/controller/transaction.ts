@@ -28,7 +28,7 @@ export const editTransaction = async (req: Request, res: Response) => {
     if (response.affected) {
       return res.status(200).send({ message: "Transaction updated" });
     }
-    return res.status(422).send({ message: "Transaction ID not found" });
+    return res.status(422).send({ message: "Failed to edit transaction" });
   } catch (error) {
     return res.status(500).send({ message: "Error while editing transaction" });
   }
@@ -40,7 +40,7 @@ export const removeTransaction = async (req: Request, res: Response) => {
     if (response.affected) {
       return res.status(200).send({ message: "Transaction deleted" });
     }
-    return res.status(422).send({ message: "Transaction ID not found" });
+    return res.status(422).send({ message: "Failed to delete transaction" });
   } catch (error) {
     return res.status(500).send({ message: "Error while editing transaction" });
   }
@@ -55,6 +55,6 @@ export const getMonthlyTransactionsForUser = async (req: Request, res: Response)
       .status(200)
       .send({ transactions: transactions[0], count: transactions[1], ...transactionSums });
   } catch (error) {
-    return res.status(500).send({ message: "Error getting transactions", error });
+    return res.status(500).send({ message: "Error getting transactions" });
   }
 };
