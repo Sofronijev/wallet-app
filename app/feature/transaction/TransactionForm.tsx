@@ -30,6 +30,8 @@ import { RouteProp } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import HeaderIcon from "components/HeaderIcon";
 import { deleteTransactionAlert, handleTransactionError } from "./modules";
+import { useAppSelector } from "store/hooks";
+import { getUserId } from "store/reducers/userSlice";
 
 type Props = {
   navigation: StackNavigationProp<AppStackParamList>;
@@ -43,6 +45,7 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
   const [tryCreateNewTransaction, { isLoading }] = useCreateNewTransactionMutation();
   const [tryEditNewTransaction, { isLoading: editLoading }] = useEditTransactionMutation();
   const [tryDeleteNewTransaction, { isLoading: deleteLoading }] = useDeleteTransactionMutation();
+  const user_id = useAppSelector(getUserId);
 
   const onTransactionSubmit = async (values: TransactionFromInputs) => {
     Keyboard.dismiss();
@@ -62,7 +65,7 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
             amount: Number(values.amount),
             description: values.description,
             date: formatIsoDate(values.date),
-            user_id: 1,
+            user_id,
             type_id: values.type.id,
             category_id: values.category.id,
           }).unwrap();

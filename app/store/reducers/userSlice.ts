@@ -15,14 +15,14 @@ type TokenType = {
 export type LoginResponseType = {
   data: UserDataType;
   token: TokenType;
-}
+};
 
 export type UserStoreType = {
-  data: UserDataType | null;
+  data: UserDataType;
 };
 
 const initialUserState: UserStoreType = {
-  data: null,
+  data: { id: 0, username: "", email: "" },
 };
 
 export const userSlice = createSlice({
@@ -40,8 +40,7 @@ export const userSlice = createSlice({
 
 export const { setUserData, clearUserData } = userSlice.actions;
 
-export const getUserData = (state: RootStateType): UserDataType | null => state.user?.data;
-export const getUserId = (state: RootStateType): number | undefined => state.user?.data?.id;
-
+export const getUserData = (state: RootStateType): UserDataType => state.user.data;
+export const getUserId = (state: RootStateType): number => state.user.data.id;
 
 export default userSlice.reducer;

@@ -27,7 +27,7 @@ const RootNavigator = () => {
       />
     );
 
-  if (user) {
+  if (user.id) {
     return <AppNavigator />;
   }
   return <AuthNavigator />;
