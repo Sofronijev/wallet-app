@@ -9,6 +9,7 @@ import { useAppDispatch } from "store/hooks";
 import { clearUserData } from "store/reducers/userSlice";
 import authStorage from "modules/authStorage";
 import { HomeStackParamList } from "./routes";
+import { Ionicons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator<HomeStackParamList>();
 
@@ -22,7 +23,7 @@ const HomeNavigator = () => {
 
   return (
     <Tab.Navigator
-      initialRouteName='Main'
+      initialRouteName='Balance'
       screenOptions={{
         tabBarActiveTintColor: colors.greenMint,
         headerStyle: {
@@ -33,10 +34,10 @@ const HomeNavigator = () => {
       }}
     >
       <Tab.Screen
-        name='Main'
+        name='Balance'
         component={MainScreen}
         options={{
-          tabBarIcon: ({ color, size }) => <FontAwesome5 name='home' color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => <Ionicons name="md-wallet-sharp" size={size} color={color} />,
           headerLeft: () => (
             <HeaderIcon onPress={logout}>
               <FontAwesome5 name='power-off' size={24} color={colors.white} />

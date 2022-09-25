@@ -6,7 +6,7 @@ export type AuthStackParamList = {
 };
 
 export type HomeStackParamList = {
-  Main: undefined;
+  Balance: undefined;
   Details: undefined;
 };
 
