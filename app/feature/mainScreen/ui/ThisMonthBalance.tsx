@@ -45,7 +45,7 @@ const ThisMonthBalance: React.FC<ThisMonthBalanceProps> = ({
             <MaterialCommunityIcons name='calendar-today' size={25} color={colors.black} />
           </TouchableOpacity>
           <TouchableOpacity onPress={addMonth} style={styles.icon} disabled={disableAddMonth}>
-            <FontAwesome name='chevron-right' size={25} color={disableAddMonth ? colors.grey : colors.black} />
+            <FontAwesome name='chevron-right' size={25} color={disableAddMonth ? colors.disabled : colors.black} />
           </TouchableOpacity>
         </View>
       </View>

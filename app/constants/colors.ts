@@ -22,6 +22,8 @@ const colors = {
   entertainment: '#D75281',
   otherCategory: '#C8C6C6',
   obligations: '#E6B325',
+  greyNullScreen: '#DAE0E6',
+  disabled: '#EBEBE4',
 };
 
 export default colors;

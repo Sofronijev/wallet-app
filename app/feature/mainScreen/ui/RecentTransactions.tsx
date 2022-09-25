@@ -6,6 +6,7 @@ import TransactionsRow from "./TransactionsRow";
 import { useAppSelector } from "store/hooks";
 import { getMonthlyTransactions } from "store/reducers/transactionsSlice";
 import AppActivityIndicator from "components/AppActivityIndicator";
+import TransactionsNullScreen from "./TransactionsNullScreen";
 
 type RecentTransactionsProps = {
   isLoading: boolean;
@@ -13,10 +14,15 @@ type RecentTransactionsProps = {
 
 const RecentTransactions: React.FC<RecentTransactionsProps> = ({ isLoading }) => {
   const transactions = useAppSelector(getMonthlyTransactions);
+  const hasTransactions = !!transactions?.length;
 
-  const renderTransactions = transactions?.map((transaction) => (
-    <TransactionsRow key={transaction.id} transaction={transaction} />
-  ));
+  const renderTransactions = hasTransactions ? (
+    transactions?.map((transaction) => (
+      <TransactionsRow key={transaction.id} transaction={transaction} />
+    ))
+  ) : (
+    <TransactionsNullScreen isLoading={isLoading} />
+  );
 
   const renderLoading = (
     <View style={styles.loadingContainer}>
