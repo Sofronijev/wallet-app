@@ -45,7 +45,7 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
   const [tryCreateNewTransaction, { isLoading }] = useCreateNewTransactionMutation();
   const [tryEditNewTransaction, { isLoading: editLoading }] = useEditTransactionMutation();
   const [tryDeleteNewTransaction, { isLoading: deleteLoading }] = useDeleteTransactionMutation();
-  const user_id = useAppSelector(getUserId);
+  const userId = useAppSelector(getUserId);
 
   const onTransactionSubmit = async (values: TransactionFromInputs) => {
     Keyboard.dismiss();
@@ -57,17 +57,17 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
             amount: Number(values.amount),
             description: values.description,
             date: formatIsoDate(values.date),
-            type_id: values.type.id,
-            category_id: values.category.id,
+            typeId: values.type.id,
+            categoryId: values.category.id,
           }).unwrap();
         } else {
           await tryCreateNewTransaction({
             amount: Number(values.amount),
             description: values.description,
             date: formatIsoDate(values.date),
-            user_id,
-            type_id: values.type.id,
-            category_id: values.category.id,
+            userId,
+            typeId: values.type.id,
+            categoryId: values.category.id,
           }).unwrap();
         }
         navigation.goBack();

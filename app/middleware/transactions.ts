@@ -3,7 +3,7 @@ import { TransactionStoreType, TransactionType } from "store/reducers/transactio
 import { apiSlice } from "./apiSlice";
 
 export type MonthlyTransactionsReq = {
-  user_id: number;
+  userId: number;
   start: number;
   count: number;
   date: string;
@@ -13,9 +13,9 @@ export type CreateTransactionReq = {
   amount: number;
   description: string;
   date: string;
-  user_id: number;
-  type_id: number;
-  category_id: number;
+  userId: number;
+  typeId: number;
+  categoryId: number;
 };
 
 export type EditTransactionReq = {
@@ -23,8 +23,8 @@ export type EditTransactionReq = {
   amount: number;
   description: string;
   date: string;
-  type_id: number;
-  category_id: number;
+  typeId: number;
+  categoryId: number;
 };
 
 export type DeleteTransactionReq = {

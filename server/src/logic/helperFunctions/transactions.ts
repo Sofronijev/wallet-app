@@ -7,7 +7,7 @@ const INCOME_CATEGORY = 1;
 const transactionRepository = AppDataSource.getRepository(Transaction);
 
 export const getMonthlyTransactionsSums = async (
-  user_id: number,
+  userId: number,
   date: string
 ): Promise<TransactionSumType> =>
   await transactionRepository
@@ -17,26 +17,26 @@ export const getMonthlyTransactionsSums = async (
       return subQuery
         .select("SUM(amount)", "income")
         .from(Transaction, "t")
-        .where("t.user_id = :user_id", { user_id })
-        .andWhere("t.category_id = :income_category", { income_category: INCOME_CATEGORY })
+        .where("t.userId = :userId", { userId })
+        .andWhere("t.categoryId = :income_category", { income_category: INCOME_CATEGORY })
         .andWhere("YEAR(t.date) = YEAR(:date)", { date })
         .andWhere("MONTH(t.date) = MONTH(:date)", { date });
     }, "income")
-    .where("transaction.user_id = :user_id", { user_id })
-    .andWhere("transaction.category_id <> :income_category", { income_category: INCOME_CATEGORY })
+    .where("transaction.userId = :userId", { userId })
+    .andWhere("transaction.categoryId <> :income_category", { income_category: INCOME_CATEGORY })
     .andWhere("YEAR(transaction.date) = YEAR(:date)", { date })
     .andWhere("MONTH(transaction.date) = MONTH(:date)", { date })
     .getRawOne();
 
 export const getMonthlyTransactionData = async (
-  user_id: number,
+  userId: number,
   date: string,
   take: number,
   skip = 0
 ) =>
   await transactionRepository
     .createQueryBuilder("transaction")
-    .where("user_id = :user_id", { user_id })
+    .where("transaction.userId = :userId", { userId })
     .andWhere("YEAR(transaction.date) = YEAR(:date)", { date })
     .andWhere("MONTH(transaction.date) = MONTH(:date)", { date })
     .skip(skip)
@@ -44,15 +44,15 @@ export const getMonthlyTransactionData = async (
     .orderBy("date", "DESC")
     .addOrderBy("id", "DESC")
     .getManyAndCount();
-// TODO - mozda promeniti sa fronta da se salje categoryId umesto category_id, pogledati sta se vraca sa servera
+
 export const createTransaction = async (data: TransactionType) => {
   const transaction = new Transaction();
   transaction.amount = data.amount;
   transaction.description = data.description;
   transaction.date = data.date;
-  transaction.userId = data.user_id;
-  transaction.categoryId = data.category_id;
-  transaction.typeId = data.type_id;
+  transaction.userId = data.userId;
+  transaction.categoryId = data.categoryId;
+  transaction.typeId = data.typeId;
 
   return await transactionRepository.save(transaction);
 };
@@ -65,8 +65,8 @@ export const setTransaction = async (data: EditTransactionType) =>
       amount: data.amount,
       description: data.description,
       date: data.date,
-      categoryId: data.category_id,
-      typeId: data.type_id,
+      categoryId: data.categoryId,
+      typeId: data.typeId,
     })
     .where("id = :id", { id: data.id })
     .execute();

@@ -34,7 +34,7 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
   const showCalendar = () => {
     setShow(true);
   };
-  // TODO - IOS BUG - Calendar for IOS doesn't look good
+  // BUG - IOS BUG - Calendar for IOS doesn't look good
   return (
     <View>
       {!isIosDevice && (

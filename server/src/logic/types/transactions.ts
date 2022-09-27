@@ -2,12 +2,12 @@ export type TransactionType = {
   amount: number;
   description: string;
   date: string;
-  user_id: number;
-  category_id: number;
-  type_id: number;
+  userId: number;
+  categoryId: number;
+  typeId: number;
 };
 
-export type EditTransactionType =  Omit<TransactionType, 'user_id'> & {id: number};
+export type EditTransactionType =  Omit<TransactionType, 'userId'> & {id: number};
 
 export type TransactionSumType = {
   income: number;
@@ -15,7 +15,7 @@ export type TransactionSumType = {
 };
 
 export type getTransactionsRequest = {
-    user_id: number;
+    userId: number;
     start: number;
     count: number;
     date: string;

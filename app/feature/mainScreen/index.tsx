@@ -17,15 +17,15 @@ type MainScreenProps = {
 };
 
 const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
-  const user_id = useAppSelector(getUserId);
+  const userId = useAppSelector(getUserId);
   const [monthDifference, setMonthDifference] = useState(0);
   const today = new Date();
   const selectedMonth = addOrDeductMonth(today, monthDifference);
 
   const { isLoading, isError, isFetching, refetch } = useGetMonthlyUserTransactionsQuery(
-    user_id
+    userId
       ? {
-          user_id,
+          userId,
           start: 0,
           count: 10,
           date: formatIsoDate(selectedMonth),
