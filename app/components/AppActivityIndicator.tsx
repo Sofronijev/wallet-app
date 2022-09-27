@@ -10,7 +10,11 @@ type AppActivityIndicatorProps = {
 const AppActivityIndicator: React.FC<AppActivityIndicatorProps> = ({ isLoading, hideScreen }) => {
   if (!isLoading) return null;
   return (
-    <ActivityIndicator style={[styles.activityIndicator, hideScreen && styles.hideScreen]} size='large' color={colors.greenMint} />
+    <ActivityIndicator
+      style={[styles.activityIndicator, hideScreen && styles.hideScreen]}
+      size='large'
+      color={colors.greenMint}
+    />
   );
 };
 

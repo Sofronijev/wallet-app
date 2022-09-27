@@ -1,19 +1,20 @@
+import { alertButton, errors, transactions } from "constants/strings";
 import { ResponseError } from "modules/types";
 import { Alert } from "react-native";
 
 export const handleTransactionError = (error: ResponseError) => {
   if (error.status === 422) {
-    return Alert.alert(error.data.message, "Transaction does not exist");
+    return Alert.alert(error.data.message, transactions.noTransaction);
   }
-  Alert.alert("An error occurred while adding transaction", "Please try again");
+  Alert.alert(transactions.errorAdding, errors.tryAgain);
 };
 
 export const deleteTransactionAlert = (onPress: () => void) => {
-  Alert.alert("Are you sure you want to delete this transaction?", "", [
+  Alert.alert(transactions.deleteTransaction, "", [
     {
-      text: "Cancel",
+      text: alertButton.cancel,
       style: "cancel",
     },
-    { text: "Delete", onPress, style: "destructive" },
+    { text: alertButton.delete, onPress, style: "destructive" },
   ]);
 };

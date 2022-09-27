@@ -1,3 +1,4 @@
+import { userAuthError } from "constants/strings";
 import * as SecureStore from "expo-secure-store";
 import jwtDecode from "jwt-decode";
 import { Alert } from "react-native";
@@ -16,7 +17,7 @@ const storeRefreshToken = async (token: string) => {
   try {
     await SecureStore.setItemAsync(REFRESH_TOKEN_STORAGE_KEY, token);
   } catch (error) {
-    Alert.alert("Error with storing user data", JSON.stringify(error));
+    Alert.alert(userAuthError.storeData, JSON.stringify(error));
   }
 };
 
@@ -24,7 +25,7 @@ const getRefreshToken = async () => {
   try {
     return await SecureStore.getItemAsync(REFRESH_TOKEN_STORAGE_KEY);
   } catch (error) {
-    Alert.alert("Error with reading user data");
+    Alert.alert(userAuthError.readData);
   }
 };
 
@@ -37,7 +38,7 @@ const removeRefreshToken = async () => {
   try {
     await SecureStore.deleteItemAsync(REFRESH_TOKEN_STORAGE_KEY);
   } catch (error) {
-    Alert.alert("Error with removing user data");
+    Alert.alert(userAuthError.removeData);
   }
 };
 
@@ -45,7 +46,7 @@ const storeAccessToken = async (token: string) => {
   try {
     await SecureStore.setItemAsync(ACCESS_TOKEN_STORAGE_KEY, token);
   } catch (error) {
-    Alert.alert("Error with storing user data", JSON.stringify(error));
+    Alert.alert(userAuthError.storeData, JSON.stringify(error));
   }
 };
 
@@ -53,7 +54,7 @@ const getAccessToken = async () => {
   try {
     return await SecureStore.getItemAsync(ACCESS_TOKEN_STORAGE_KEY);
   } catch (error) {
-    Alert.alert("Error with reading user data");
+    Alert.alert(userAuthError.readData);
   }
 };
 

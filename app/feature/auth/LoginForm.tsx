@@ -17,6 +17,7 @@ import authStorage from "modules/authStorage";
 import { useLoginUserMutation } from "app/middleware/auth";
 import { setUserData } from "store/reducers/userSlice";
 import { useAppDispatch } from "store/hooks";
+import { errors, login } from "constants/strings";
 
 type Props = {
   navigation: StackNavigationProp<AuthStackParamList>;
@@ -40,7 +41,7 @@ const LoginForm: React.FC<Props> = ({ navigation }) => {
         dispatch(setUserData(userData.data));
       }
     } catch (err) {
-      setSubmitError(err?.data?.message ?? "Unknown error occurred");
+      setSubmitError(err?.data?.message ?? errors.unknown);
     }
   };
 
@@ -57,7 +58,7 @@ const LoginForm: React.FC<Props> = ({ navigation }) => {
     >
       {({ handleChange, handleSubmit, values, errors }) => (
         <View style={styles.container}>
-          <Label style={styles.text}>Welcome</Label>
+          <Label style={styles.text}>{login.title}</Label>
           <LabelInput
             icon={<FontAwesome name='user-o' size={24} color={colors.greenMint} />}
             placeholder='Email'

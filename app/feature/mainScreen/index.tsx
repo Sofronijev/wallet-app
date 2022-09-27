@@ -11,6 +11,7 @@ import { addOrDeductMonth, formatIsoDate } from "modules/timeAndDate";
 import { useAppSelector } from "store/hooks";
 import { getUserId } from "store/reducers/userSlice";
 import { useGetMonthlyUserTransactionsQuery } from "app/middleware/transactions";
+import { errors } from "constants/strings";
 
 type MainScreenProps = {
   navigation: StackNavigationProp<AppStackParamList>;
@@ -40,7 +41,7 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     if (isError) {
-      Alert.alert("An error occurred while getting data", "Please try again");
+      Alert.alert(errors.general, errors.tryAgain);
     }
   }, [isError]);
 

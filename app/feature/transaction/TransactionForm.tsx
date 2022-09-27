@@ -32,6 +32,7 @@ import HeaderIcon from "components/HeaderIcon";
 import { deleteTransactionAlert, handleTransactionError } from "./modules";
 import { useAppSelector } from "store/hooks";
 import { getUserId } from "store/reducers/userSlice";
+import { transactions } from "constants/strings";
 
 type Props = {
   navigation: StackNavigationProp<AppStackParamList>;
@@ -110,7 +111,7 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
       const { id, ...data } = editData;
       formik.setValues(data);
       navigation.setOptions({
-        title: "Edit transaction",
+        title: transactions.editTransaction,
         headerRight: () => (
           <HeaderIcon onPress={onDelete}>
             <Ionicons name='trash-sharp' size={24} color={colors.white} />
