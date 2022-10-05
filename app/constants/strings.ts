@@ -20,8 +20,11 @@ export const dateAndTime = {
   yesterday: "Yesterday",
 };
 
-export const login = {
-  title: "Welcome",
+export const auth = {
+  loginTitle: "Welcome",
+  registerTitle: "Create a new account",
+  logIn: "Log in",
+  signUp: "Sign up",
 };
 
 export const transactions = {
