@@ -1,17 +1,44 @@
 import { StyleSheet, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import colors from "constants/colors";
 import AppActivityIndicator from "components/AppActivityIndicator";
 import AuthForm from "./AuthForm";
+import { useRegisterUserMutation } from "app/middleware/auth";
+import authStorage from "modules/authStorage";
+import { setUserData } from "store/reducers/userSlice";
+import { errors } from "constants/strings";
+import { useAppDispatch } from "store/hooks";
 
 const RegisterForm: React.FC = () => {
+  const [tryRegisterUser, { isLoading, isError }] = useRegisterUserMutation();
+  const [submitError, setSubmitError] = useState("");
+  const dispatch = useAppDispatch();
+
+  // TODO - use some notification that account is created - because it immediately opens app
+  const onRegister = async ({ email, password }: { email: string; password: string }) => {
+    try {
+      const userData = await tryRegisterUser({ email, password }).unwrap();
+      if (userData) {
+        authStorage.storeRefreshToken(userData.token.refreshToken);
+        authStorage.storeAccessToken(userData.token.accessToken);
+        // Had to manually dispatch action because addMatcher in userSlice was causing some issues with require circle
+        //https://stackoverflow.com/questions/55664673/require-cycles-are-allowed-but-can-result-in-uninitialized-values-consider-ref
+        dispatch(setUserData(userData.data));
+      }
+    } catch (err) {
+      setSubmitError(err?.data?.message ?? errors.unknown);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <AuthForm
-        onSubmit={undefined}
+        onSubmit={onRegister}
         signUp
+        isError={isError}
+        errorText={submitError}
       />
-      <AppActivityIndicator isLoading={false} />
+      <AppActivityIndicator isLoading={isLoading} />
     </View>
   );
 };

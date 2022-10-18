@@ -17,6 +17,8 @@ export type LoginResponseType = {
   token: TokenType;
 };
 
+export type RegisterResponseType = LoginResponseType & { message: string };
+
 export type UserStoreType = {
   data: UserDataType;
 };

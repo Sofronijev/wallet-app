@@ -15,11 +15,9 @@ type AuthFormProps = {
   onSubmit: ({
     email,
     password,
-    passwordConfirm,
   }: {
     email: string;
     password: string;
-    passwordConfirm?: string;
   }) => Promise<void>;
   signUp?: boolean;
   isError?: boolean;
@@ -38,9 +36,11 @@ const AuthForm: React.FC<AuthFormProps> = ({
   const authValidationSchema = Yup.object({
     email: Yup.string().email().required().label("Email"),
     password: Yup.string().required().label("Password"),
-    passwordConfirm: signUp ? Yup.string().required("Required field") : Yup.string(),
+    passwordConfirm: signUp
+      ? Yup.string().oneOf([Yup.ref("password")], "Passwords must match")
+      : Yup.string(),
   });
-  
+
   return (
     <Formik
       initialValues={{ email: "", password: "", passwordConfirm: "" }}
