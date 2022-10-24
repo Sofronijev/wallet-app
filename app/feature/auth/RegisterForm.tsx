@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import colors from "constants/colors";
 import AppActivityIndicator from "components/AppActivityIndicator";
@@ -31,15 +31,14 @@ const RegisterForm: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <AuthForm
-        onSubmit={onRegister}
-        signUp
-        isError={isError}
-        errorText={submitError}
-      />
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={50}
+    >
+      <AuthForm onSubmit={onRegister} signUp isError={isError} errorText={submitError} />
       <AppActivityIndicator isLoading={isLoading} />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

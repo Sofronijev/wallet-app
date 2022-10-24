@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import { StackNavigationProp } from "@react-navigation/stack";
 import AppActivityIndicator from "components/AppActivityIndicator";
@@ -37,7 +37,10 @@ const LoginForm: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
       <AuthForm onSubmit={onLogin} isError={isError} errorText={submitError} />
       <ButtonText
         title='Register'
@@ -45,7 +48,7 @@ const LoginForm: React.FC<Props> = ({ navigation }) => {
         style={styles.register}
       />
       <AppActivityIndicator isLoading={isLoading} />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
