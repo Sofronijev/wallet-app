@@ -7,7 +7,7 @@ export type AuthStackParamList = {
 
 export type HomeStackParamList = {
   Balance: undefined;
-  Details: undefined;
+  Settings: undefined;
 };
 
 export type AppStackParamList = {

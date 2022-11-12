@@ -24,6 +24,7 @@ const colors = {
   obligations: '#E6B325',
   greyNullScreen: '#DAE0E6',
   disabled: '#EBEBE4',
+  danger: "#DB3545",
 };
 
 export default colors;

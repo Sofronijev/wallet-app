@@ -7,18 +7,6 @@ export type UserDataType = {
   email: string;
 };
 
-type TokenType = {
-  refreshToken: string;
-  accessToken: string;
-};
-
-export type LoginResponseType = {
-  data: UserDataType;
-  token: TokenType;
-};
-
-export type RegisterResponseType = LoginResponseType & { message: string };
-
 export type UserStoreType = {
   data: UserDataType;
 };

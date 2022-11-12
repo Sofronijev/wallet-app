@@ -1,10 +1,23 @@
-import { LoginResponseType, RegisterResponseType } from "store/reducers/userSlice";
+import { UserDataType } from "store/reducers/userSlice";
 import { apiSlice } from "./apiSlice";
 
 export type AuthRequest = {
   email: string;
   password: string;
 };
+
+type TokenType = {
+  refreshToken: string;
+  accessToken: string;
+};
+
+export type LoginResponseType = {
+  data: UserDataType;
+  token: TokenType;
+};
+
+export type RegisterResponseType = LoginResponseType & { message: string };
+export type DeleteUserResponseType = { message: string };
 
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -23,6 +36,13 @@ export const authApi = apiSlice.injectEndpoints({
         body: registerData,
       }),
     }),
+    deleteUser: builder.mutation<DeleteUserResponseType, number>({
+      query: (id: number) => ({
+        url: "/users/delete",
+        method: "POST",
+        body: id,
+      }),
+    }),
   }),
 });
-export const { useLoginUserMutation, useRegisterUserMutation } = authApi;
+export const { useLoginUserMutation, useRegisterUserMutation, useDeleteUserMutation } = authApi;

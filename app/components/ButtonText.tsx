@@ -1,26 +1,23 @@
-import { StyleSheet, TouchableOpacity, ViewStyle } from "react-native";
+import { TouchableOpacity, ViewStyle } from "react-native";
 import React from "react";
 import Label from "./Label";
-import colors from "constants/colors";
+import { buttonColor, ButtonType } from "modules/buttons";
 
 type ButtonTextProps = {
   onPress: () => void;
   title: string;
   style?: ViewStyle;
+  type?: ButtonType;
 };
 
-const ButtonText: React.FC<ButtonTextProps> = ({ onPress, title, style }) => {
+const ButtonText: React.FC<ButtonTextProps> = ({ onPress, title, style, type = "primary" }) => {
+  const color = buttonColor[type];
   return (
     <TouchableOpacity onPress={onPress} style={style}>
-      <Label style={styles.title}>{title}</Label>
+      <Label style={{ color }}>{title}</Label>
     </TouchableOpacity>
   );
 };
 
 export default ButtonText;
 
-const styles = StyleSheet.create({
-  title: {
-    color: colors.greenMint,
-  },
-});

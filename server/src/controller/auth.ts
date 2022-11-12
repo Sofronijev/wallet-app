@@ -70,6 +70,23 @@ export const registerUser = async (req: Request, res: Response) => {
   }
 };
 
+export const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const { id }: { id: number } = req.body;
+    const user = await userRepository.findOneBy({
+      id,
+    });
+    console.log(id)
+    if (!user) {
+      return res.status(403).send({ message: "Account does't exists" });
+    }
+    await userRepository.delete(user);
+    return res.status(200).send({ message: "Account deleted" });
+  } catch (error) {
+    return res.status(500).send({ message: "Error deleting account" });
+  }
+};
+
 type TokenType = {
   userData: UserDataType;
   iat: number;
