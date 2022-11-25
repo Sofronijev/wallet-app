@@ -38,3 +38,12 @@ export const transactions = {
   editTransaction: "Edit transaction",
   addTransaction: "Add transaction",
 };
+
+export const logoutAlertStrings = {
+  title: "Are you sure you want to log out?",
+};
+
+export const deleteUserDataStrings = {
+  title: "Are you sure you want to delete your data?",
+  subtitle: "All user data will permanently be deleted. This action cannot be undone.",
+}
