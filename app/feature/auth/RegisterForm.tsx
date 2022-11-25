@@ -6,7 +6,7 @@ import AuthForm from "./AuthForm";
 import { useRegisterUserMutation } from "app/middleware/auth";
 import authStorage from "modules/authStorage";
 import { setUserData } from "store/reducers/userSlice";
-import { errors } from "constants/strings";
+import { errorStrings } from "constants/strings";
 import { useAppDispatch } from "store/hooks";
 
 const RegisterForm: React.FC = () => {
@@ -26,7 +26,7 @@ const RegisterForm: React.FC = () => {
         dispatch(setUserData(userData.data));
       }
     } catch (err) {
-      setSubmitError(err?.data?.message ?? errors.unknown);
+      setSubmitError(err?.data?.message ?? errorStrings.unknown);
     }
   };
 

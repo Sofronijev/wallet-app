@@ -9,7 +9,7 @@ import authStorage from "modules/authStorage";
 import { useLoginUserMutation } from "app/middleware/auth";
 import { setUserData } from "store/reducers/userSlice";
 import { useAppDispatch } from "store/hooks";
-import { errors } from "constants/strings";
+import { errorStrings } from "constants/strings";
 import AuthForm from "./AuthForm";
 
 type Props = {
@@ -32,7 +32,7 @@ const LoginForm: React.FC<Props> = ({ navigation }) => {
         dispatch(setUserData(userData.data));
       }
     } catch (err) {
-      setSubmitError(err?.data?.message ?? errors.unknown);
+      setSubmitError(err?.data?.message ?? errorStrings.unknown);
     }
   };
 

@@ -1,4 +1,4 @@
-import { deleteUserDataStrings, logoutAlertStrings } from "constants/strings";
+import { alertButtonStrings, deleteUserDataStrings, logoutAlertStrings } from "constants/strings";
 import { Alert } from "react-native";
 
 export const showLogoutAlert = (onLogout: () => void) => {
@@ -7,10 +7,10 @@ export const showLogoutAlert = (onLogout: () => void) => {
     "",
     [
       {
-        text: "Cancel",
+        text: alertButtonStrings.cancel,
       },
       {
-        text: "Confirm",
+        text: alertButtonStrings.confirm,
         onPress: onLogout,
       },
     ],
@@ -26,10 +26,10 @@ export const showDeleteUserDataALert = (onDelete: () => void) => {
       deleteUserDataStrings.subtitle,
       [
         {
-          text: "Cancel",
+          text: alertButtonStrings.cancel,
         },
         {
-          text: "Delete",
+          text: alertButtonStrings.delete,
           onPress: onDelete,
           style: 'cancel',
         },

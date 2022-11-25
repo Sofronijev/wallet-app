@@ -3,6 +3,7 @@ import React, { ComponentType } from "react";
 
 type HeaderIconProps = {
   onPress: () => void;
+  children: React.ReactNode;
 };
 
 const HeaderIcon: React.FC<HeaderIconProps> = ({ onPress, children }) => {

@@ -9,7 +9,7 @@ import LabelInput from "components/LabelInput";
 import CustomButton from "components/CustomButton";
 import colors from "constants/colors";
 import InputErrorLabel from "components/InputErrorLabel";
-import { auth } from "constants/strings";
+import { authStrings } from "constants/strings";
 
 type AuthFormProps = {
   onSubmit: ({
@@ -50,7 +50,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
     >
       {({ handleChange, handleSubmit, values, errors }) => (
         <View>
-          <Label style={styles.text}>{signUp ? auth.registerTitle : auth.loginTitle}</Label>
+          <Label style={styles.text}>{signUp ? authStrings.registerTitle : authStrings.loginTitle}</Label>
           <LabelInput
             icon={<FontAwesome name='user-o' size={24} color={colors.greenMint} />}
             placeholder='Email'
@@ -85,7 +85,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
             </>
           )}
           <CustomButton
-            title={signUp ? auth.signUp : auth.logIn}
+            title={signUp ? authStrings.signUp : authStrings.logIn}
             style={styles.button}
             onPress={() => {
               setHasSubmittedForm(true);

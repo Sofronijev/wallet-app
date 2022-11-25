@@ -11,7 +11,7 @@ import { addOrDeductMonth, formatIsoDate } from "modules/timeAndDate";
 import { useAppSelector } from "store/hooks";
 import { getUserId } from "store/reducers/userSlice";
 import { useGetMonthlyUserTransactionsQuery } from "app/middleware/transactions";
-import { errors } from "constants/strings";
+import { errorStrings } from "constants/strings";
 
 type MainScreenProps = {
   navigation: StackNavigationProp<AppStackParamList>;
@@ -41,7 +41,7 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     if (isError) {
-      Alert.alert(errors.general, errors.tryAgain);
+      Alert.alert(errorStrings.general, errorStrings.tryAgain);
     }
   }, [isError]);
 

@@ -7,7 +7,7 @@ import Label from "components/Label";
 import authStorage from "modules/authStorage";
 import ButtonText from "components/ButtonText";
 import { useDeleteUserMutation } from "app/middleware/auth";
-import { errors } from "constants/strings";
+import { errorStrings } from "constants/strings";
 import { showDeleteUserDataALert, showLogoutAlert } from "../modules";
 import AppActivityIndicator from "components/AppActivityIndicator";
 
@@ -28,7 +28,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = () => {
       await tryDeleteUser(user.id).unwrap();
       logout();
     } catch (error) {
-      Alert.alert(errors.general, error.data?.message || errors.tryAgain);
+      Alert.alert(errorStrings.general, error.data?.message || errorStrings.tryAgain);
     }
   };
 

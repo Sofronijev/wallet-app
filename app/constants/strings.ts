@@ -1,33 +1,34 @@
-export const errors = {
+export const errorStrings = {
   unknown: "Unknown error occurred",
   general: "An error occurred while getting data",
   tryAgain: "Please try again",
 };
 
-export const userAuthError = {
+export const userAuthErrorStrings = {
   storeData: "Error with storing user data",
   removeData: "Error with removing user data",
   readData: "Error with reading user data",
 };
 
-export const alertButton = {
+export const alertButtonStrings = {
   cancel: "Cancel",
   delete: "Delete",
+  confirm: "Confirm",
 };
 
-export const dateAndTime = {
+export const dateAndTimeStrings = {
   today: "Today",
   yesterday: "Yesterday",
 };
 
-export const auth = {
+export const authStrings = {
   loginTitle: "Welcome",
   registerTitle: "Create a new account",
   logIn: "Log in",
   signUp: "Sign up",
 };
 
-export const transactions = {
+export const transactionStrings = {
   available: "Available:",
   income: "Income:",
   expenses: "Expenses:",

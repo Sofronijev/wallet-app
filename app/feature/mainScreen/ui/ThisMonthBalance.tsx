@@ -9,7 +9,7 @@ import { useAppSelector } from "store/hooks";
 import AppActivityIndicator from "components/AppActivityIndicator";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-import { transactions } from "constants/strings";
+import { transactionStrings } from "constants/strings";
 
 type ThisMonthBalanceProps = {
   isLoading: boolean;
@@ -52,17 +52,17 @@ const ThisMonthBalance: React.FC<ThisMonthBalanceProps> = ({
       </View>
       <View>
         <View style={styles.row}>
-          <Label style={styles.label}>{transactions.available}</Label>
+          <Label style={styles.label}>{transactionStrings.available}</Label>
           <Label style={[styles.balance, available < 0 && styles.redBalance]}>
             {formatDecimalDigits(available)}
           </Label>
         </View>
         <View style={styles.row}>
-          <Label style={styles.label}>{transactions.income}</Label>
+          <Label style={styles.label}>{transactionStrings.income}</Label>
           <Label style={styles.transactions}>{formatDecimalDigits(getIncome)}</Label>
         </View>
         <View style={styles.row}>
-          <Label style={styles.label}>{transactions.expenses}</Label>
+          <Label style={styles.label}>{transactionStrings.expenses}</Label>
           <Label style={styles.transactions}>{formatDecimalDigits(getExpense)}</Label>
         </View>
         <AppActivityIndicator isLoading={isLoading} hideScreen />

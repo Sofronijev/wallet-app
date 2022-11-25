@@ -1,4 +1,4 @@
-import { dateAndTime } from "constants/strings";
+import { dateAndTimeStrings } from "constants/strings";
 import { addMonths, format, isToday, isYesterday } from "date-fns";
 
 export const dateIsoFormat = "yyyy-MM-dd";
@@ -13,8 +13,8 @@ export const formatIsoDate = (date: Date | string | number) =>
 
 export const formatDayString = (date: Date | string | number) => {
   const getDate = new Date(date);
-  if (isToday(getDate)) return dateAndTime.today;
-  if (isYesterday(getDate)) return dateAndTime.yesterday;
+  if (isToday(getDate)) return dateAndTimeStrings.today;
+  if (isYesterday(getDate)) return dateAndTimeStrings.yesterday;
   return getFormattedDate(getDate);
 };
 
