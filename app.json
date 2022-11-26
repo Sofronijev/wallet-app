@@ -25,7 +25,8 @@
         "backgroundColor": "#FFFFFF"
       },
       "icon": "./app/assets/icon.png",
-      "softwareKeyboardLayoutMode": "pan"
+      "softwareKeyboardLayoutMode": "pan",
+      "package": "com.sofronijev.RN_Wallet_App"
     },
     "web": {
       "favicon": "./app/assets/favicon.png"
