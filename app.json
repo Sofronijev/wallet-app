@@ -24,10 +24,16 @@
         "foregroundImage": "./app/assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
+      "icon": "./app/assets/icon.png",
       "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
       "favicon": "./app/assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f7b6fc89-b26b-4461-9157-a03bb59cbfc3"
+      }
     }
   }
 }
