@@ -1,11 +1,17 @@
 import React, { useCallback, useImperativeHandle, useRef, useState } from "react";
-import { StyleSheet } from "react-native";
-import BottomSheet, { BottomSheetBackdrop, BottomSheetFlatList } from "@gorhom/bottom-sheet";
-import Label from "components/Label";
+import { StyleSheet, View } from "react-native";
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetBackdropProps,
+  BottomSheetScrollView,
+} from "@gorhom/bottom-sheet";
 import colors from "constants/colors";
 import { Category, transactionCategories, Transaction } from "modules/transactionCategories";
 import Separator from "components/Separator";
 import TransactionRowSelect from "./TransactionRowSelect";
+import TransactionItem, { TRANSACTION_ITEM_HEIGHT } from "./TransactionItem";
+import { CATEGORIES_NUMBER_OF_ROWS, HEADER_TEXT_HEIGH } from "feature/transaction/modules";
+import TransactionSheetHeader from "./TransactionSheetHeader";
 
 const categoriesData = Object.values(transactionCategories).map((item) => ({
   name: item.name,
@@ -13,7 +19,15 @@ const categoriesData = Object.values(transactionCategories).map((item) => ({
   label: item.label,
 }));
 
-const snapPoints = ["50%"];
+const HANDLE_HEIGHT = 24;
+const CATEGORIES_PADDING = 10;
+
+const snapPoints = [
+  TRANSACTION_ITEM_HEIGHT * CATEGORIES_NUMBER_OF_ROWS +
+    HANDLE_HEIGHT +
+    HEADER_TEXT_HEIGH +
+    CATEGORIES_PADDING * 2,
+];
 
 type Props = {
   onSelect: (category: Category, type: Transaction) => void;
@@ -28,7 +42,6 @@ const TransactionBottomSheet: React.ForwardRefRenderFunction<refProps, Props> = 
   const sheetRef = useRef<BottomSheet>(null);
   const [data, setData] = useState<Transaction[]>(categoriesData);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
-
   const openSheet = useCallback(() => {
     sheetRef.current?.expand();
   }, []);
@@ -65,12 +78,28 @@ const TransactionBottomSheet: React.ForwardRefRenderFunction<refProps, Props> = 
     setSelectedCategory(null);
   };
 
-  const renderItem = ({ item }: { item: Transaction | Category }) => (
-    <TransactionRowSelect item={item} hideIcon={!!selectedCategory} onPress={onRowPress} />
-  );
+  const renderItems = () => {
+    if (!selectedCategory) {
+      return (
+        <View style={styles.categories}>
+          {data.map((item) => (
+            <TransactionItem key={item.id} item={item} onPress={onRowPress} />
+          ))}
+        </View>
+      );
+    }
+    return data.map((item) => (
+      <View key={item.id}>
+        <TransactionRowSelect item={item} onPress={onRowPress} />
+        <Separator offset={16}/>
+      </View>
+    ));
+  };
 
   const renderBackdrop = useCallback(
-    (props) => <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} />,
+    (props: BottomSheetBackdropProps) => (
+      <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} />
+    ),
     []
   );
   // BUG - IOS BUG - On first render, clicking on category will close sheet and not show the types (looks like it disappears), after that it will work normally
@@ -84,19 +113,10 @@ const TransactionBottomSheet: React.ForwardRefRenderFunction<refProps, Props> = 
       onClose={onClose}
       backdropComponent={renderBackdrop}
       handleStyle={styles.handle}
+      handleHeight={HANDLE_HEIGHT}
     >
-      <Label style={styles.title}>{"Pick category"}</Label>
-      {!!selectedCategory && (
-        <>
-          <TransactionRowSelect item={selectedCategory} onPress={clearCategory} />
-          <Separator />
-        </>
-      )}
-      <BottomSheetFlatList
-        data={data}
-        keyExtractor={(item) => `${item.id}`}
-        renderItem={renderItem}
-      />
+      <TransactionSheetHeader onBack={clearCategory} selectedCategory={selectedCategory} />
+      <BottomSheetScrollView>{renderItems()}</BottomSheetScrollView>
     </BottomSheet>
   );
 };
@@ -106,13 +126,29 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
     fontWeight: "bold",
-    paddingBottom: 10,
-    backgroundColor: colors.grey3,
+    flex: 1,
   },
   handle: {
     backgroundColor: colors.grey3,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
+  },
+  header: {
+    backgroundColor: colors.grey3,
+    height: HEADER_TEXT_HEIGH,
+    flexDirection: "row",
+    paddingBottom: 10,
+    justifyContent: "space-between",
+  },
+  categories: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    paddingVertical: CATEGORIES_PADDING,
+    justifyContent: "space-around",
+  },
+  icon: {
+    marginLeft: 10,
+    width: 30,
   },
 });
 

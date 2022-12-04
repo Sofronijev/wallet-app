@@ -18,3 +18,6 @@ export const deleteTransactionAlert = (onPress: () => void) => {
     { text: alertButtonStrings.delete, onPress, style: "destructive" },
   ]);
 };
+
+export const CATEGORIES_NUMBER_OF_ROWS = 4;
+export const HEADER_TEXT_HEIGH = 35;

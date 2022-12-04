@@ -9,7 +9,7 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "server": "cd server && yarn start",
-    "akp": "eas build -p android --profile preview"
+    "apk": "eas build -p android --profile preview"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^4",

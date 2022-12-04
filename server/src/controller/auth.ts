@@ -76,7 +76,6 @@ export const deleteUser = async (req: Request, res: Response) => {
     const user = await userRepository.findOneBy({
       id,
     });
-    console.log(id)
     if (!user) {
       return res.status(403).send({ message: "Account does't exists" });
     }

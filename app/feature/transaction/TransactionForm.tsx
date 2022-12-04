@@ -1,4 +1,4 @@
-import { Alert, Keyboard, StyleSheet, View } from "react-native";
+import { Keyboard, StyleSheet, View } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import LabelInput from "components/LabelInput";
