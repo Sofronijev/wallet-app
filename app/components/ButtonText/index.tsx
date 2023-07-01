@@ -1,7 +1,7 @@
 import { TouchableOpacity, ViewStyle } from "react-native";
 import React from "react";
-import Label from "./Label";
 import { buttonColor, ButtonType } from "modules/buttons";
+import Label from "components/Label";
 
 type ButtonTextProps = {
   onPress: () => void;

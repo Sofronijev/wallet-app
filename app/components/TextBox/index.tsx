@@ -1,6 +1,6 @@
-import { StyleSheet, Text, TextInputProps, View, ViewStyle } from "react-native";
+import { StyleSheet, TextInputProps, View, ViewStyle } from "react-native";
 import React from "react";
-import LabelInput from "./LabelInput";
+import LabelInput from "components/LabelInput";
 
 type TextBoxProps = TextInputProps & { style?: ViewStyle };
 

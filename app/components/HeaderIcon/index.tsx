@@ -1,5 +1,5 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
-import React, { ComponentType } from "react";
+import React from "react";
 
 type HeaderIconProps = {
   onPress: () => void;

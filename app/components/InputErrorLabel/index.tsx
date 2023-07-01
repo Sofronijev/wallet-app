@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import React from "react";
-import Label from "./Label";
 import colors from "constants/colors";
+import Label from "components/Label";
 
 type InputErrorLabelType = {
   text: string | undefined;
