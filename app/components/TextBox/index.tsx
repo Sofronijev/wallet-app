@@ -14,4 +14,3 @@ const TextBox: React.FC<TextBoxProps> = ({ style, ...props }) => {
 
 export default TextBox;
 
-const styles = StyleSheet.create({});
