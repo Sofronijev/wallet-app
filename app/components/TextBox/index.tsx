@@ -1,4 +1,4 @@
-import { StyleSheet, TextInputProps, View, ViewStyle } from "react-native";
+import { TextInputProps, View, ViewStyle } from "react-native";
 import React from "react";
 import LabelInput from "components/LabelInput";
 

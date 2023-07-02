@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeNavigator from "./HomeNavigator";
 import colors from "constants/colors";
 import { AppStackParamList } from "./routes";
-import TransactionForm from "feature/transaction/TransactionForm";
+import TransactionForm from "feature/transaction/ui/TransactionForm";
 import { transactionStrings } from "constants/strings";
 
 const Stack = createNativeStackNavigator<AppStackParamList>();

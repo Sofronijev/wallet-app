@@ -5,9 +5,9 @@ import LabelInput from "components/LabelInput";
 import InputErrorLabel from "components/InputErrorLabel";
 import DatePickerInput from "feature/transaction/ui/DatePickerInput";
 import CustomButton from "components/CustomButton";
-import TransactionBottomSheet from "./ui/TransactionBottomSheet";
+import TransactionBottomSheet from "./TransactionBottomSheet";
 import { Category, Transaction } from "modules/transactionCategories";
-import { TransactionBottomSheetType } from "./modules/transactionBottomSheet";
+import { TransactionBottomSheetType } from "../modules/transactionBottomSheet";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import colors from "constants/colors";
 import TextBox from "components/TextBox";
@@ -25,11 +25,11 @@ import {
   initialTransactionFormValues,
   TransactionFromInputs,
   transactionValidationSchema,
-} from "./modules/formValidation";
+} from "../modules/formValidation";
 import { RouteProp } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import HeaderIcon from "components/HeaderIcon";
-import { deleteTransactionAlert, handleTransactionError } from "./modules";
+import { deleteTransactionAlert, handleTransactionError } from "../modules";
 import { useAppSelector } from "store/hooks";
 import { getUserId } from "store/reducers/userSlice";
 import { transactionStrings } from "constants/strings";

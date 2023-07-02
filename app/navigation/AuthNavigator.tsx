@@ -1,8 +1,8 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { AuthStackParamList } from "./routes";
-import LoginForm from "feature/auth/LoginForm";
-import RegisterForm from "feature/auth/RegisterForm";
+import LoginForm from "feature/auth/ui/LoginForm";
+import RegisterForm from "feature/auth/ui/RegisterForm";
 import colors from "constants/colors";
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();

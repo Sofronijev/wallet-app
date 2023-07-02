@@ -2,8 +2,6 @@ import { Alert, ScrollView, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import { StackNavigationProp } from "@react-navigation/stack";
-import ThisMonthBalance from "feature/mainScreen/ui/ThisMonthBalance";
-import RecentTransactions from "feature/mainScreen/ui/RecentTransactions";
 import colors from "constants/colors";
 import { AppStackParamList } from "navigation/routes";
 import CustomButton from "components/CustomButton";
@@ -12,12 +10,14 @@ import { useAppSelector } from "store/hooks";
 import { getUserId } from "store/reducers/userSlice";
 import { useGetMonthlyUserTransactionsQuery } from "app/middleware/transactions";
 import { errorStrings } from "constants/strings";
+import ThisMonthBalance from "./ThisMonthBalance";
+import RecentTransactions from "./RecentTransactions";
 
-type MainScreenProps = {
+type MonthlyScreenProps = {
   navigation: StackNavigationProp<AppStackParamList>;
 };
 
-const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
+const MonthlyScreen: React.FC<MonthlyScreenProps> = ({ navigation }) => {
   const userId = useAppSelector(getUserId);
   const [monthDifference, setMonthDifference] = useState(0);
   const today = new Date();
@@ -76,7 +76,7 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
   );
 };
 
-export default MainScreen;
+export default MonthlyScreen;
 
 const styles = StyleSheet.create({
   container: {

@@ -1,10 +1,10 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import MainScreen from "feature/mainScreen";
 import colors from "constants/colors";
 import { HomeStackParamList } from "./routes";
 import { Ionicons } from "@expo/vector-icons";
 import SettingsScreen from "feature/settingsScreen/ui";
+import MonthlyScreen from "feature/monthlyScreen/ui";
 
 const Tab = createBottomTabNavigator<HomeStackParamList>();
 
@@ -22,10 +22,19 @@ const HomeNavigator = () => (
   >
     <Tab.Screen
       name='Balance'
-      component={MainScreen}
+      component={MonthlyScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <Ionicons name='md-wallet-sharp' size={size} color={color} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name='Analytics'
+      component={MonthlyScreen}
+      options={{
+        tabBarIcon: ({ color, size }) => (
+          <Ionicons name='pie-chart' size={size} color={color} />
         ),
       }}
     />
