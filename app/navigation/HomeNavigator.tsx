@@ -5,6 +5,7 @@ import { HomeStackParamList } from "./routes";
 import { Ionicons } from "@expo/vector-icons";
 import SettingsScreen from "feature/settingsScreen/ui";
 import MonthlyScreen from "feature/monthlyScreen/ui";
+import BalanceScreen from "feature/balaceScreen/ui/BalanceScreen";
 
 const Tab = createBottomTabNavigator<HomeStackParamList>();
 
@@ -22,7 +23,7 @@ const HomeNavigator = () => (
   >
     <Tab.Screen
       name='Balance'
-      component={MonthlyScreen}
+      component={BalanceScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <Ionicons name='md-wallet-sharp' size={size} color={color} />
