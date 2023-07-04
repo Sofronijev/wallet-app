@@ -15,5 +15,6 @@
       "navigation/*": ["app/navigation/*"],
       "store/*": ["app/store/*"],
     }
-  }
+  },
+  "exclude": ["node_modules"]
 }
