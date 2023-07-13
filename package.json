@@ -8,7 +8,6 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "server": "cd server && yarn start",
     "apk": "eas build -p android --profile preview"
   },
   "dependencies": {

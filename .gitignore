@@ -16,14 +16,3 @@ web-build/
 # macOS
 .DS_Store
 
-#Server
-server/node_modules
-server/.env
-server/.idea
-server/.vscode
-server/build
-server/tmp
-server/temp
-
-# Old server - will be removed
-_stari_server/

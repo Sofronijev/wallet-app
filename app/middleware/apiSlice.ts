@@ -12,7 +12,7 @@ import { Alert } from "react-native";
 import { clearUserData } from "store/reducers/userSlice";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://192.168.1.5:5000/",
+  baseUrl: "https://walletapi.milossofronijevic.com",
   credentials: "include",
   prepareHeaders: async (headers) => {
     const accessToken = await Auth.getAccessToken();
