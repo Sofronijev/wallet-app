@@ -154,7 +154,7 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
         placeholder='Amount'
         onChangeText={formik.handleChange("amount")}
         keyboardType='decimal-pad'
-        style={styles.marginTop}
+        style={styles.input}
         icon={<FontAwesome5 name='coins' size={24} color={colors.greenMint} />}
         autoFocus={!editData}
       />
@@ -165,7 +165,7 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
           icon={<MaterialIcons name='category' size={24} color={colors.greenMint} />}
           disabled
           placeholder='Category'
-          style={styles.marginTop}
+          style={styles.input}
           inputStyle={styles.category}
         />
       </TouchableOpacity>
@@ -175,13 +175,13 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
       />
       <TextBox
         placeholder='Transaction comment'
-        style={styles.marginTop}
+        style={styles.input}
         numberOfLines={6}
         maxLength={300}
         value={formik.values.description}
         onChangeText={formik.handleChange("description")}
       />
-      <CustomButton title='Submit' onPress={onSubmit} style={styles.marginTop} />
+      <CustomButton title='Submit' onPress={onSubmit} style={styles.button} />
       <AppActivityIndicator isLoading={isLoading || editLoading || deleteLoading} />
       <TransactionBottomSheet ref={sheetRef} onSelect={onSelectCategory} />
     </View>
@@ -196,7 +196,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 20,
   },
-  marginTop: {
+  input: {
+    marginTop: 20,
+    backgroundColor: colors.white,
+    borderRadius: 10,
+  },
+  button: {
     marginTop: 20,
   },
   category: {

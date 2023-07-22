@@ -38,7 +38,7 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
   return (
     <View>
       {!isIosDevice && (
-        <TouchableOpacity onPress={showCalendar}>
+        <TouchableOpacity onPress={showCalendar} style={styles.dateLabel}>
           <LabelInput
             value={getFormattedDate(value, calendarDateFormat)}
             icon={<FontAwesome name='calendar' size={24} color={colors.greenMint} />}
@@ -67,5 +67,7 @@ export default DatePickerInput;
 const styles = StyleSheet.create({
   dateLabel: {
     color: colors.black,
+    backgroundColor: colors.white,
+    borderRadius: 10,
   },
 });
