@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Platform, StyleSheet, TextStyle, TouchableOpacity, View } from "react-native";
 import DateTimePicker, { Event } from "@react-native-community/datetimepicker";
-import { formatIsoDate, getFormattedDate } from "modules/timeAndDate";
+import { calendarDateFormat, formatIsoDate, getFormattedDate } from "modules/timeAndDate";
 import colors from "constants/colors";
 import LabelInput from "components/LabelInput";
 import { FontAwesome } from "@expo/vector-icons";
@@ -40,7 +40,7 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
       {!isIosDevice && (
         <TouchableOpacity onPress={showCalendar}>
           <LabelInput
-            value={getFormattedDate(value)}
+            value={getFormattedDate(value, calendarDateFormat)}
             icon={<FontAwesome name='calendar' size={24} color={colors.greenMint} />}
             editable={false}
             inputStyle={styles.dateLabel}

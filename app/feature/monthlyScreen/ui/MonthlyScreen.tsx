@@ -80,7 +80,6 @@ export default MonthlyScreen;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.white,
     paddingHorizontal: 16,
   },
   button: {

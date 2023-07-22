@@ -27,14 +27,12 @@ const BalanceScreen: React.FC = () => {
 export default BalanceScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 16,
-  },
+  container: { paddingHorizontal: 16 },
   balanceContainer: {
-    borderWidth: 1,
     marginTop: 20,
     padding: 10,
     borderRadius: 20,
+    backgroundColor: colors.white,
   },
   balanceText: {
     textAlign: "center",

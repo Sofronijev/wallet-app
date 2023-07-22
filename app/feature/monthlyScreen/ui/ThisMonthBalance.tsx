@@ -46,7 +46,11 @@ const ThisMonthBalance: React.FC<ThisMonthBalanceProps> = ({
             <MaterialCommunityIcons name='calendar-today' size={25} color={colors.black} />
           </TouchableOpacity>
           <TouchableOpacity onPress={addMonth} style={styles.icon} disabled={disableAddMonth}>
-            <FontAwesome name='chevron-right' size={25} color={disableAddMonth ? colors.disabled : colors.black} />
+            <FontAwesome
+              name='chevron-right'
+              size={25}
+              color={disableAddMonth ? colors.disabled : colors.black}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -75,10 +79,10 @@ export default ThisMonthBalance;
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: colors.white,
     marginTop: 20,
     paddingVertical: 20,
     borderRadius: 10,
-    borderWidth: 1,
     overflow: "hidden",
   },
   titleContainer: {

@@ -63,7 +63,7 @@ export default TransactionsRow;
 
 const styles = StyleSheet.create({
   container: {
-    borderColor: colors.grey,
+    borderColor: colors.grey3,
     borderWidth: 1,
     borderRadius: 10,
     flexDirection: "row",
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   price: {
-    fontSize: 20,
+    fontSize: 18,
     paddingHorizontal: 10,
     fontWeight: "bold",
   },
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   label: {
-    fontSize: 17,
+    fontSize: 15,
     fontWeight: "bold",
   },
   descriptionText: {

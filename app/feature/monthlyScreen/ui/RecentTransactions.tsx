@@ -30,7 +30,7 @@ const RecentTransactions: React.FC<RecentTransactionsProps> = ({ isLoading }) =>
     </View>
   );
   return (
-    <View>
+    <View style={styles.container}>
       <Label style={styles.title}>Recent transactions</Label>
       {isLoading ? renderLoading : renderTransactions}
     </View>
@@ -40,12 +40,19 @@ const RecentTransactions: React.FC<RecentTransactionsProps> = ({ isLoading }) =>
 export default RecentTransactions;
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.white,
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 16,
+  },
   loadingContainer: {
     paddingTop: 50,
   },
   title: {
-    color: colors.grey2,
-    fontSize: 18,
-    paddingBottom: 10,
+    color: colors.black,
+    fontSize: 20,
+    paddingBottom: 20,
+    fontWeight: "500",
   },
 });
