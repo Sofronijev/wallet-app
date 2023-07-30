@@ -3,35 +3,38 @@ import React from "react";
 import Label from "components/Label";
 import colors from "constants/colors";
 import TransactionsRow from "./TransactionsRow";
-import { useAppSelector } from "store/hooks";
-import { getMonthlyTransactions } from "store/reducers/transactionsSlice";
+import { TransactionType } from "store/reducers/transactionsSlice";
 import AppActivityIndicator from "components/AppActivityIndicator";
-import TransactionsNullScreen from "./TransactionsNullScreen";
 
 type RecentTransactionsProps = {
   isLoading: boolean;
+  transactions: TransactionType[];
+  title: string;
+  nullScreen?: JSX.Element;
 };
 
-const RecentTransactions: React.FC<RecentTransactionsProps> = ({ isLoading }) => {
-  const transactions = useAppSelector(getMonthlyTransactions);
-  const hasTransactions = !!transactions?.length;
+const RecentTransactions: React.FC<RecentTransactionsProps> = ({
+  isLoading,
+  transactions,
+  title,
+  nullScreen,
+}) => {
+  const hasTransactions = false;
 
-  const renderTransactions = hasTransactions ? (
-    transactions?.map((transaction) => (
-      <TransactionsRow key={transaction.id} transaction={transaction} />
-    ))
-  ) : (
-    <TransactionsNullScreen isLoading={isLoading} />
-  );
+  const renderTransactions = hasTransactions
+    ? transactions?.map((transaction) => (
+        <TransactionsRow key={transaction.id} transaction={transaction} />
+      ))
+    : nullScreen;
 
   const renderLoading = (
     <View style={styles.loadingContainer}>
-      <AppActivityIndicator isLoading={isLoading} hideScreen />
+      <AppActivityIndicator isLoading={true} hideScreen />
     </View>
   );
   return (
     <View style={styles.container}>
-      <Label style={styles.title}>Recent transactions</Label>
+      <Label style={styles.title}>{title}</Label>
       {isLoading ? renderLoading : renderTransactions}
     </View>
   );

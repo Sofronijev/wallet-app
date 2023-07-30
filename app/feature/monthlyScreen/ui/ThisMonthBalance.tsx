@@ -13,7 +13,7 @@ import { transactionStrings } from "constants/strings";
 
 type ThisMonthBalanceProps = {
   isLoading: boolean;
-  selectedMonth: Date;
+  date: Date;
   disableAddMonth: boolean;
   addMonth: () => void;
   deductMonth: () => void;
@@ -22,14 +22,14 @@ type ThisMonthBalanceProps = {
 
 const ThisMonthBalance: React.FC<ThisMonthBalanceProps> = ({
   isLoading,
-  selectedMonth,
+  date,
   disableAddMonth,
   addMonth,
   deductMonth,
   setCurrentMonth,
 }) => {
   const { income, expense } = useAppSelector(getMonthlyBalance);
-  const formattedMonth = getMonthAndYear(selectedMonth);
+  const formattedMonth = getMonthAndYear(date);
   const getIncome = income ?? 0;
   const getExpense = expense ?? 0;
   const available = getIncome - getExpense;

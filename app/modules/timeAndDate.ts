@@ -3,9 +3,11 @@ import { addMonths, format, isToday, isYesterday } from "date-fns";
 
 export const dateIsoFormat = "yyyy-MM-dd";
 export const dayAndMonthFormat = "dd MMM";
-export const calendarDateFormat = "E, dd MMM yyyy"
+export const calendarDateFormat = "E, dd MMM yyyy";
 
 export const getMonthAndYear = (date: Date) => format(date, "MMMM Y");
+
+export const getMonth = (date: Date) => format(date, "MMMM");
 
 export const getFormattedDate = (date: Date | string | number, dateFormat = dateIsoFormat) =>
   format(new Date(date), dateFormat);

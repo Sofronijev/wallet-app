@@ -1,4 +1,4 @@
-import { Alert, StyleSheet, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, View } from "react-native";
 import React from "react";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import Label from "components/Label";
@@ -10,10 +10,12 @@ import { AppStackParamList } from "navigation/routes";
 import { useAppSelector } from "store/hooks";
 import { getUserId } from "store/reducers/userSlice";
 import { useGetUserBalanceQuery } from "app/middleware/transactions";
-import { getUserBalance } from "store/reducers/balance/selectiors";
+import { getUserBalance, getUserRecentTransactions } from "store/reducers/balance/selectiors";
 import { formatDecimalDigits } from "modules/numbers";
 import { errorStrings } from "constants/strings";
 import AppActivityIndicator from "components/AppActivityIndicator";
+import RecentTransactions from "feature/monthlyScreen/ui/RecentTransactions";
+import BalanceTransactionNullScreen from "./BalanceTransactionNullScreen";
 
 const BalanceScreen: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<AppStackParamList>>();
@@ -28,13 +30,14 @@ const BalanceScreen: React.FC = () => {
   );
 
   const userBalance = useAppSelector(getUserBalance);
+  const transactions = useAppSelector(getUserRecentTransactions);
 
   if (isError) {
     Alert.alert(errorStrings.general, errorStrings.tryAgain);
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.balanceContainer}>
         <Label style={styles.balanceText}>Available balance</Label>
         <Label style={styles.balanceValue}>{formatDecimalDigits(userBalance)}</Label>
@@ -44,8 +47,14 @@ const BalanceScreen: React.FC = () => {
         title='New transaction'
         onPress={() => navigation.navigate("Transaction")}
       />
+      <RecentTransactions
+        isLoading={isLoading || isFetching}
+        transactions={transactions}
+        title='Recent transactions'
+        nullScreen={<BalanceTransactionNullScreen />}
+      />
       <AppActivityIndicator isLoading={isLoading || isFetching} />
-    </View>
+    </ScrollView>
   );
 };
 

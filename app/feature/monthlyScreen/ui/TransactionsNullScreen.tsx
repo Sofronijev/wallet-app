@@ -3,6 +3,7 @@ import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import colors from "constants/colors";
 import AppActivityIndicator from "components/AppActivityIndicator";
+import Label from "components/Label";
 
 type TransactionNullScreenProps = {
     isLoading: boolean;
@@ -12,7 +13,7 @@ const TransactionsNullScreen: React.FC<TransactionNullScreenProps> = ({isLoading
   return (
     <View style={styles.container}>
       <Ionicons name='wallet-outline' size={100} color={colors.greyNullScreen} />
-      <Text>No transactions for this month</Text>
+      <Label>No transactions for this month</Label>
       <AppActivityIndicator isLoading={isLoading} hideScreen />
     </View>
   );
