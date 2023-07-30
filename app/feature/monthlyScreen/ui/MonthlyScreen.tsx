@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { AppStackParamList } from "navigation/routes";
-import CustomButton from "components/CustomButton";
 import { addOrDeductMonth, formatIsoDate, getMonth } from "modules/timeAndDate";
 import { useAppSelector } from "store/hooks";
 import { getUserId } from "store/reducers/userSlice";
@@ -13,6 +12,7 @@ import ThisMonthBalance from "./ThisMonthBalance";
 import RecentTransactions from "./RecentTransactions";
 import { getMonthlyTransactions } from "store/reducers/transactionsSlice";
 import TransactionsNullScreen from "./TransactionsNullScreen";
+import AddButton from "components/AddButton";
 
 type MonthlyScreenProps = {
   navigation: StackNavigationProp<AppStackParamList>;
@@ -58,27 +58,25 @@ const MonthlyScreen: React.FC<MonthlyScreenProps> = ({ navigation }) => {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <ThisMonthBalance
-        isLoading={transactionLoading}
-        date={selectedDate}
-        addMonth={addMonth}
-        deductMonth={deductMonth}
-        setCurrentMonth={setCurrentMonth}
-        disableAddMonth={monthDifference === 0}
-      />
-      <CustomButton
-        style={styles.button}
-        title='New transaction'
-        onPress={() => navigation.navigate("Transaction")}
-      />
-      <RecentTransactions
-        isLoading={transactionLoading}
-        transactions={transactions}
-        title={`Last ${monthName} transactions`}
-        nullScreen={<TransactionsNullScreen isLoading={isLoading} />}
-      />
-    </ScrollView>
+    <>
+      <ScrollView style={styles.container}>
+        <ThisMonthBalance
+          isLoading={transactionLoading}
+          date={selectedDate}
+          addMonth={addMonth}
+          deductMonth={deductMonth}
+          setCurrentMonth={setCurrentMonth}
+          disableAddMonth={monthDifference === 0}
+        />
+        <RecentTransactions
+          isLoading={transactionLoading}
+          transactions={transactions}
+          title={`Last ${monthName} transactions`}
+          nullScreen={<TransactionsNullScreen isLoading={isLoading} />}
+        />
+      </ScrollView>
+      <AddButton />
+    </>
   );
 };
 
@@ -87,9 +85,5 @@ export default MonthlyScreen;
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
-  },
-  button: {
-    marginHorizontal: 10,
-    marginVertical: 20,
   },
 });

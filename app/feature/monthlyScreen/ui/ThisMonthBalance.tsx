@@ -80,7 +80,7 @@ export default ThisMonthBalance;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.white,
-    marginTop: 20,
+    marginVertical: 20,
     paddingVertical: 20,
     borderRadius: 10,
     overflow: "hidden",

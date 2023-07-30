@@ -19,7 +19,7 @@ const RecentTransactions: React.FC<RecentTransactionsProps> = ({
   title,
   nullScreen,
 }) => {
-  const hasTransactions = false;
+  const hasTransactions = !!transactions?.length;
 
   const renderTransactions = hasTransactions
     ? transactions?.map((transaction) => (
