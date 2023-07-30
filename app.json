@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "RN_Wallet_App",
-    "slug": "RN_Wallet_App",
+    "name": "Wallet App",
+    "slug": "wallet-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
     "splash": {
       "image": "./app/assets/splash.png",
       "resizeMode": "cover",
-      "backgroundColor": "#ffffff",
+      "backgroundColor": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
