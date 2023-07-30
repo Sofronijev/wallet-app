@@ -31,6 +31,15 @@ export type DeleteTransactionReq = {
   id: number;
 };
 
+export type GetUserBalanceReq = {
+  userId: number;
+}
+
+export type GetUserBalanceResponse = {
+  balance: number;
+  recentTransactions: TransactionType[];
+}
+
 export const transactionsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // builder.query<ReturnValueHere, ArgumentTypeHere>. If there is no argument, use void
@@ -66,6 +75,14 @@ export const transactionsApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Transactions"], // Used to refetch transactions, connected to providesTags
     }),
+    getUserBalance: builder.query<GetUserBalanceResponse, GetUserBalanceReq>({
+      query: (data: MonthlyTransactionsReq) => ({
+        url: "/transaction/getUserBalance",
+        method: "POST",
+        body: data,
+      }),
+      providesTags: ["Transactions"],
+    }),
   }),
 });
 export const {
@@ -73,4 +90,5 @@ export const {
   useCreateNewTransactionMutation,
   useEditTransactionMutation,
   useDeleteTransactionMutation,
+  useGetUserBalanceQuery,
 } = transactionsApi;

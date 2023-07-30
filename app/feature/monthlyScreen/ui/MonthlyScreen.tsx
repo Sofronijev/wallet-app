@@ -2,7 +2,6 @@ import { Alert, ScrollView, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import { StackNavigationProp } from "@react-navigation/stack";
-import colors from "constants/colors";
 import { AppStackParamList } from "navigation/routes";
 import CustomButton from "components/CustomButton";
 import { addOrDeductMonth, formatIsoDate } from "modules/timeAndDate";
@@ -39,11 +38,9 @@ const MonthlyScreen: React.FC<MonthlyScreenProps> = ({ navigation }) => {
     refetch();
   }, [monthDifference]);
 
-  useEffect(() => {
-    if (isError) {
-      Alert.alert(errorStrings.general, errorStrings.tryAgain);
-    }
-  }, [isError]);
+  if (isError) {
+    Alert.alert(errorStrings.general, errorStrings.tryAgain);
+  }
 
   const addMonth = () => {
     if (monthDifference === 0) return;
