@@ -1,5 +1,5 @@
 import { SimpleResponse } from "modules/types";
-import { MonthlyBalanceType, TransactionType } from "store/reducers/monthlyBalanceSlice";
+import { MonthlyBalanceType, TransactionType } from "store/reducers/monthlyBalance/monthlyBalanceSlice";
 import { apiSlice } from "./apiSlice";
 
 export type MonthlyTransactionsReq = {

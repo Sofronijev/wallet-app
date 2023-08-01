@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { transactionsApi } from "app/middleware/transactions";
-import { TransactionType } from "../monthlyBalanceSlice";
+import { TransactionType } from "../monthlyBalance/monthlyBalanceSlice";
 import { SliceAction } from "store/type";
 
 export type BalanceStoreType = {

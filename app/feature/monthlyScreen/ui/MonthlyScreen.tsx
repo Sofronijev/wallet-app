@@ -10,9 +10,9 @@ import { useGetMonthlyUserTransactionsQuery } from "app/middleware/transactions"
 import { errorStrings } from "constants/strings";
 import ThisMonthBalance from "./ThisMonthBalance";
 import RecentTransactions from "./RecentTransactions";
-import { getMonthlyTransactions } from "store/reducers/monthlyBalanceSlice";
 import TransactionsNullScreen from "./TransactionsNullScreen";
 import AddButton from "components/AddButton";
+import { getMonthlyTransactions } from "store/reducers/monthlyBalance/selectors";
 
 type MonthlyScreenProps = {
   navigation: StackNavigationProp<AppStackParamList>;

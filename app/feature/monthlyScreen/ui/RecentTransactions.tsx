@@ -3,7 +3,7 @@ import React from "react";
 import Label from "components/Label";
 import colors from "constants/colors";
 import TransactionsRow from "./TransactionsRow";
-import { TransactionType } from "store/reducers/monthlyBalanceSlice";
+import { TransactionType } from "store/reducers/monthlyBalance/monthlyBalanceSlice";
 import AppActivityIndicator from "components/AppActivityIndicator";
 
 type RecentTransactionsProps = {

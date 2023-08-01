@@ -5,7 +5,7 @@ import Label from "components/Label";
 import CategoryIcon from "components/CategoryIcon";
 import { formatDecimalDigits } from "modules/numbers";
 import { CategoryNumber, transactionCategories } from "modules/transactionCategories";
-import { TransactionType } from "store/reducers/monthlyBalanceSlice";
+import { TransactionType } from "store/reducers/monthlyBalance/monthlyBalanceSlice";
 import { formatDayString } from "modules/timeAndDate";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";

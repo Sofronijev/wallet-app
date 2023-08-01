@@ -4,12 +4,12 @@ import Label from "components/Label";
 import colors from "constants/colors";
 import { getMonthAndYear } from "modules/timeAndDate";
 import { formatDecimalDigits } from "modules/numbers";
-import { getMonthlyBalance } from "store/reducers/monthlyBalanceSlice";
 import { useAppSelector } from "store/hooks";
 import AppActivityIndicator from "components/AppActivityIndicator";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { transactionStrings } from "constants/strings";
+import { getMonthlyBalance } from "store/reducers/monthlyBalance/selectors";
 
 type ThisMonthBalanceProps = {
   isLoading: boolean;

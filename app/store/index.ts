@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "app/middleware/apiSlice";
-import monthlyBalanceSlice from "./reducers/monthlyBalanceSlice";
+import monthlyBalanceSlice from "./reducers/monthlyBalance/monthlyBalanceSlice";
 import userReducer from "./reducers/userSlice";
 import balanceSlice from "./reducers/balance/balanceSlice";
 

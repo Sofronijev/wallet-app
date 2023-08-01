@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { MonthlyTransactionsReq, transactionsApi } from "app/middleware/transactions";
-import { RootStateType } from "../index";
 import { SliceAction } from "store/type";
 import { getFormattedDate, monthYearFormat } from "modules/timeAndDate";
 
-const formatDataForStore = (date: Date | string) => getFormattedDate(date, monthYearFormat);
+export const formatDataForStore = (date: Date | string) => getFormattedDate(date, monthYearFormat);
 
 export type TransactionType = {
   id: number;
@@ -16,7 +15,7 @@ export type TransactionType = {
   categoryId: number;
 };
 
-type AccountBalance = { expense: number; income: number; balance: number };
+export type AccountBalance = { expense: number; income: number; balance: number };
 
 export type MonthlyBalanceType = {
   transactions: TransactionType[];
@@ -61,28 +60,5 @@ export const monthlyBalanceSlice = createSlice({
 });
 
 export const { clearTransactionData } = monthlyBalanceSlice.actions;
-
-export const getMonthlyTransactions =
-  (date: string | Date) =>
-  (state: RootStateType): TransactionType[] => {
-    const formattedDate = formatDataForStore(date);
-    return state.monthlyBalance.balanceByMonth[formattedDate]?.transactions ?? [];
-  };
-
-export const getMonthlyBalance =
-  (date: string | Date) =>
-  (state: RootStateType): AccountBalance => {
-    const formattedDate = formatDataForStore(date);
-    const monthlyBalance = state.monthlyBalance.balanceByMonth[formattedDate];
-
-    const income = monthlyBalance?.income ?? 0;
-    const expense = monthlyBalance?.expense ?? 0;
-    const balance = monthlyBalance?.balance ?? 0;
-    return {
-      income,
-      expense,
-      balance,
-    };
-  };
 
 export default monthlyBalanceSlice.reducer;
