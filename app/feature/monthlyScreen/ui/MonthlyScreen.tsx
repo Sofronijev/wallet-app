@@ -10,7 +10,7 @@ import { useGetMonthlyUserTransactionsQuery } from "app/middleware/transactions"
 import { errorStrings } from "constants/strings";
 import ThisMonthBalance from "./ThisMonthBalance";
 import RecentTransactions from "./RecentTransactions";
-import { getMonthlyTransactions } from "store/reducers/transactionsSlice";
+import { getMonthlyTransactions } from "store/reducers/monthlyBalanceSlice";
 import TransactionsNullScreen from "./TransactionsNullScreen";
 import AddButton from "components/AddButton";
 
@@ -24,6 +24,7 @@ const MonthlyScreen: React.FC<MonthlyScreenProps> = ({ navigation }) => {
   const today = new Date();
   const selectedDate = addOrDeductMonth(today, monthDifference);
   const monthName = getMonth(selectedDate);
+  const transactions = useAppSelector(getMonthlyTransactions(selectedDate));
 
   const { isLoading, isError, isFetching, refetch } = useGetMonthlyUserTransactionsQuery(
     userId
@@ -36,7 +37,6 @@ const MonthlyScreen: React.FC<MonthlyScreenProps> = ({ navigation }) => {
       : skipToken
   );
   const transactionLoading = isLoading || isFetching;
-  const transactions = useAppSelector(getMonthlyTransactions);
 
   useEffect(() => {
     refetch();

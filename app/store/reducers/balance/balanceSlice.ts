@@ -1,6 +1,7 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { transactionsApi } from "app/middleware/transactions";
-import { TransactionType } from "../transactionsSlice";
+import { TransactionType } from "../monthlyBalanceSlice";
+import { SliceAction } from "store/type";
 
 export type BalanceStoreType = {
   balance: number;
@@ -23,7 +24,7 @@ export const balanceSlice = createSlice({
   extraReducers: (builder) => {
     builder.addMatcher(
       transactionsApi.endpoints.getUserBalance.matchFulfilled,
-      (state, action: PayloadAction<BalanceStoreType>) => {
+      (state, action: SliceAction<BalanceStoreType>) => {
         return action.payload;
       }
     );

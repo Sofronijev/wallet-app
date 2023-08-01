@@ -4,6 +4,7 @@ import { addMonths, format, isToday, isYesterday } from "date-fns";
 export const dateIsoFormat = "yyyy-MM-dd";
 export const dayAndMonthFormat = "dd MMM";
 export const calendarDateFormat = "E, dd MMM yyyy";
+export const monthYearFormat = "yyyy-MM";
 
 export const getMonthAndYear = (date: Date) => format(date, "MMMM Y");
 

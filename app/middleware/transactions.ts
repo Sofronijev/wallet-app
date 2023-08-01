@@ -1,5 +1,5 @@
 import { SimpleResponse } from "modules/types";
-import { TransactionStoreType, TransactionType } from "store/reducers/transactionsSlice";
+import { MonthlyBalanceType, TransactionType } from "store/reducers/monthlyBalanceSlice";
 import { apiSlice } from "./apiSlice";
 
 export type MonthlyTransactionsReq = {
@@ -43,7 +43,7 @@ export type GetUserBalanceResponse = {
 export const transactionsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // builder.query<ReturnValueHere, ArgumentTypeHere>. If there is no argument, use void
-    getMonthlyUserTransactions: builder.query<TransactionStoreType, MonthlyTransactionsReq>({
+    getMonthlyUserTransactions: builder.query<MonthlyBalanceType, MonthlyTransactionsReq>({
       query: (data: MonthlyTransactionsReq) => ({
         url: "/transaction/getMonthlyUserTransactions",
         method: "POST",

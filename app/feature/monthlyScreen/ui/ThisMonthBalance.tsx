@@ -4,7 +4,7 @@ import Label from "components/Label";
 import colors from "constants/colors";
 import { getMonthAndYear } from "modules/timeAndDate";
 import { formatDecimalDigits } from "modules/numbers";
-import { getMonthlyBalance } from "store/reducers/transactionsSlice";
+import { getMonthlyBalance } from "store/reducers/monthlyBalanceSlice";
 import { useAppSelector } from "store/hooks";
 import AppActivityIndicator from "components/AppActivityIndicator";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -28,11 +28,8 @@ const ThisMonthBalance: React.FC<ThisMonthBalanceProps> = ({
   deductMonth,
   setCurrentMonth,
 }) => {
-  const { income, expense } = useAppSelector(getMonthlyBalance);
+  const { income, expense, balance } = useAppSelector(getMonthlyBalance(date));
   const formattedMonth = getMonthAndYear(date);
-  const getIncome = income ?? 0;
-  const getExpense = expense ?? 0;
-  const available = getIncome - getExpense;
 
   return (
     <View style={styles.container}>
@@ -57,17 +54,17 @@ const ThisMonthBalance: React.FC<ThisMonthBalanceProps> = ({
       <View>
         <View style={styles.row}>
           <Label style={styles.label}>{transactionStrings.available}</Label>
-          <Label style={[styles.balance, available < 0 && styles.redBalance]}>
-            {formatDecimalDigits(available)}
+          <Label style={[styles.balance, balance < 0 && styles.redBalance]}>
+            {formatDecimalDigits(balance)}
           </Label>
         </View>
         <View style={styles.row}>
           <Label style={styles.label}>{transactionStrings.income}</Label>
-          <Label style={styles.transactions}>{formatDecimalDigits(getIncome)}</Label>
+          <Label style={styles.transactions}>{formatDecimalDigits(income)}</Label>
         </View>
         <View style={styles.row}>
           <Label style={styles.label}>{transactionStrings.expenses}</Label>
-          <Label style={styles.transactions}>{formatDecimalDigits(getExpense)}</Label>
+          <Label style={styles.transactions}>{formatDecimalDigits(expense)}</Label>
         </View>
         <AppActivityIndicator isLoading={isLoading} hideScreen />
       </View>

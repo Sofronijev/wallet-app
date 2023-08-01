@@ -1,5 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { RootStateType } from "../index";
+import { SliceAction } from "store/type";
 
 export type UserDataType = {
   id: number;
@@ -19,7 +20,7 @@ export const userSlice = createSlice({
   name: "user",
   initialState: initialUserState,
   reducers: {
-    setUserData: (state, action: PayloadAction<UserDataType>) => {
+    setUserData: (state, action: SliceAction<UserDataType>) => {
       state.data = action.payload;
     },
     clearUserData: () => {

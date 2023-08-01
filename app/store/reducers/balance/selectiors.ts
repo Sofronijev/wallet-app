@@ -1,5 +1,5 @@
 import { RootStateType } from "store/index";
-import { TransactionType } from "../transactionsSlice";
+import { TransactionType } from "../monthlyBalanceSlice";
 
 export const getUserBalance = (state: RootStateType): number => state.balance.balance;
 
