@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 10,
     padding: 10,
-    marginBottom: 16,
+    marginBottom: 100,
   },
   loadingContainer: {
     paddingTop: 50,
