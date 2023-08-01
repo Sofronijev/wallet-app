@@ -131,7 +131,8 @@ export enum CategoryNumber {
 
 export const transactionCategories: CategoriesType = {
   [CategoryNumber.income]: { name: "income", id: CategoryNumber.income, label: "Income", types: income },
-  [CategoryNumber.saving]: { name: "saving", id: CategoryNumber.saving, label: "Saving", types: saving },
+  // TODO: Hide Saving until feature for handling savings is added
+  // [CategoryNumber.saving]: { name: "saving", id: CategoryNumber.saving, label: "Saving", types: saving },
   [CategoryNumber.gifts]: { name: "gifts", id: CategoryNumber.gifts, label: "Gifts/Charity", types: gifts },
   [CategoryNumber.housing]: { name: "housing", id: CategoryNumber.housing, label: "Housing", types: housing },
   [CategoryNumber.utilities]: { name: "utilities", id: CategoryNumber.utilities, label: "Utilities", types: utilities },
