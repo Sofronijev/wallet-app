@@ -5,6 +5,10 @@ import colors from "constants/colors";
 import TransactionsRow from "./TransactionsRow";
 import { TransactionType } from "store/reducers/monthlyBalance/monthlyBalanceSlice";
 import AppActivityIndicator from "components/AppActivityIndicator";
+import ButtonText from "components/ButtonText";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { AppStackParamList } from "navigation/routes";
 
 type RecentTransactionsProps = {
   isLoading: boolean;
@@ -19,7 +23,12 @@ const RecentTransactions: React.FC<RecentTransactionsProps> = ({
   title,
   nullScreen,
 }) => {
+  const navigation = useNavigation<StackNavigationProp<AppStackParamList>>();
   const hasTransactions = !!transactions?.length;
+
+  const navigateToTransactionSearch = () => {
+    navigation.navigate("TransactionSearch");
+  };
 
   const renderTransactions = hasTransactions
     ? transactions?.map((transaction) => (
@@ -36,6 +45,7 @@ const RecentTransactions: React.FC<RecentTransactionsProps> = ({
     <View style={styles.container}>
       <Label style={styles.title}>{title}</Label>
       {isLoading ? renderLoading : renderTransactions}
+      <ButtonText title='View all transactions' onPress={navigateToTransactionSearch} />
     </View>
   );
 };

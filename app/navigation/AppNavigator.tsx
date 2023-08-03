@@ -5,6 +5,7 @@ import colors from "constants/colors";
 import { AppStackParamList } from "./routes";
 import TransactionForm from "feature/transaction/ui/TransactionForm";
 import { transactionStrings } from "constants/strings";
+import TransactionSearch from "feature/transactionSearch/ui/TransactionSearch";
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
 
@@ -28,6 +29,14 @@ const AppNavigator: React.FC = () => {
         options={{
           animation: "slide_from_bottom",
           title: transactionStrings.addTransaction,
+        }}
+      />
+      <Stack.Screen
+        name='TransactionSearch'
+        component={TransactionSearch}
+        options={{
+          animation: "slide_from_bottom",
+          title: transactionStrings.transactionSearch,
         }}
       />
     </Stack.Navigator>

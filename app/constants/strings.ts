@@ -38,6 +38,7 @@ export const transactionStrings = {
   errorAdding: "An error occurred while adding transaction",
   editTransaction: "Edit transaction",
   addTransaction: "Add transaction",
+  transactionSearch: "All transactions",
 };
 
 export const logoutAlertStrings = {
