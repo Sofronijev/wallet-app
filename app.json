@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Wallet App",
-    "slug": "wallet-app",
+    "slug": "RN_Wallet_App",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
