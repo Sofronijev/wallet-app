@@ -19,6 +19,7 @@ const RootNavigator = () => {
       const user = await authStorage.getUser();
       if (user) dispatch(setUserData(user.userData));
     } catch (e) {
+      // TODO - fix this
       console.warn(e);
     } finally {
       setIsReady(true);
