@@ -15,6 +15,7 @@ import {
 } from "store/reducers/transactionSearch/selectors";
 import AppActivityIndicator from "components/AppActivityIndicator";
 import { errorStrings } from "constants/strings";
+import colors from "constants/colors";
 
 type Props = {};
 
@@ -64,7 +65,7 @@ const TransactionSearch = (props: Props) => {
 export default TransactionSearch;
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: { flex: 1, backgroundColor: colors.white },
   flatList: {
     paddingHorizontal: 16,
   },
