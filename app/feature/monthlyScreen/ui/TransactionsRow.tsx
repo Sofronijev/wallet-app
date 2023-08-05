@@ -23,28 +23,27 @@ const TransactionsRow: React.FC<Props> = ({ transaction }) => {
   const hasDescription = !!transaction.description;
   const isIncome = transaction.categoryId === CategoryNumber.income;
 
+  const openEditTransaction = () => {
+    navigation.navigate("Transaction", {
+      editData: {
+        id: transaction.id,
+        date: transaction.date,
+        amount: `${transaction.amount}`,
+        description: transaction.description,
+        category,
+        type,
+      },
+    });
+  };
+
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() =>
-        navigation.navigate("Transaction", {
-          editData: {
-            id: transaction.id,
-            date: transaction.date,
-            amount: `${transaction.amount}`,
-            description: transaction.description,
-            category,
-            type,
-          },
-        })
-      }
-    >
+    <TouchableOpacity style={styles.container} onPress={openEditTransaction}>
       <View style={styles.icon}>
         <CategoryIcon categoryName={category.name} />
       </View>
       <View style={styles.descriptionContainer}>
         <Label numberOfLines={hasDescription ? 1 : 2} style={styles.label}>
-          {`${formatDayString(transaction.date)} - ${type?.label}`}
+          {type?.label}
         </Label>
         {hasDescription && (
           <Label numberOfLines={1} style={styles.descriptionText}>
@@ -52,9 +51,16 @@ const TransactionsRow: React.FC<Props> = ({ transaction }) => {
           </Label>
         )}
       </View>
-      <Label style={[styles.price, isIncome && styles.incomeColor]}>
-        {`${transactionStrings.showMinus(isIncome)}${formatDecimalDigits(transaction.amount)}`}
-      </Label>
+      <View>
+        <Label style={[styles.price, isIncome && styles.incomeColor]}>
+          {`${transactionStrings.showMinus(isIncome)}${formatDecimalDigits(transaction.amount)}`}
+        </Label>
+        <View style={styles.dateContainer}>
+          <Label style={styles.date} numberOfLines={1}>
+            {formatDayString(transaction.date)}
+          </Label>
+        </View>
+      </View>
     </TouchableOpacity>
   );
 };
@@ -90,8 +96,16 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     fontSize: 16,
+    color: colors.grey4,
   },
   incomeColor: {
     color: colors.greenMint,
-  }
+  },
+  dateContainer: {
+    flexDirection: "row-reverse",
+  },
+  date: {
+    paddingHorizontal: 10,
+    color: colors.grey4,
+  },
 });

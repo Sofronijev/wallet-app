@@ -4,7 +4,8 @@ import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetBackdropProps,
   BottomSheetScrollView,
-} from "@gorhom/bottom-sheet";
+} from "@gorhom/bottom-sheet/src";
+// after SDK 49 need to put /src at end so it works @gorhom/bottom-sheet/src
 import colors from "constants/colors";
 import { Category, transactionCategories, Transaction } from "modules/transactionCategories";
 import Separator from "components/Separator";

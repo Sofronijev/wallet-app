@@ -15,7 +15,6 @@ import BalanceTransactionNullScreen from "./BalanceTransactionNullScreen";
 import AddButton from "components/AddButton";
 
 const BalanceScreen: React.FC = () => {
-
   const userId = useAppSelector(getUserId);
   const { isLoading, isError, isFetching } = useGetUserBalanceQuery(
     userId
@@ -38,6 +37,7 @@ const BalanceScreen: React.FC = () => {
         <View style={styles.balanceContainer}>
           <Label style={styles.balanceText}>Available balance</Label>
           <Label style={styles.balanceValue}>{formatDecimalDigits(userBalance)}</Label>
+          <AppActivityIndicator isLoading={isLoading || isFetching} />
         </View>
         <RecentTransactions
           isLoading={isLoading || isFetching}
@@ -45,7 +45,6 @@ const BalanceScreen: React.FC = () => {
           title='Recent transactions'
           nullScreen={<BalanceTransactionNullScreen />}
         />
-        <AppActivityIndicator isLoading={isLoading || isFetching} />
       </ScrollView>
       <AddButton />
     </>
