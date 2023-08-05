@@ -6,7 +6,7 @@ import colors from "constants/colors";
 import { useAppSelector } from "store/hooks";
 import { getUserId } from "store/reducers/userSlice";
 import { useGetUserBalanceQuery } from "app/middleware/transactions";
-import { getUserBalance, getUserRecentTransactions } from "store/reducers/balance/selectiors";
+import { getUserBalance, getUserRecentTransactions } from "store/reducers/balance/selectors";
 import { formatDecimalDigits } from "modules/numbers";
 import { errorStrings } from "constants/strings";
 import AppActivityIndicator from "components/AppActivityIndicator";

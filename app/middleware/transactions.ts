@@ -1,5 +1,8 @@
 import { SimpleResponse } from "modules/types";
-import { MonthlyBalanceType, TransactionType } from "store/reducers/monthlyBalance/monthlyBalanceSlice";
+import {
+  MonthlyBalanceType,
+  TransactionType,
+} from "store/reducers/monthlyBalance/monthlyBalanceSlice";
 import { apiSlice } from "./apiSlice";
 
 export type MonthlyTransactionsReq = {
@@ -33,12 +36,26 @@ export type DeleteTransactionReq = {
 
 export type GetUserBalanceReq = {
   userId: number;
-}
+};
 
 export type GetUserBalanceResponse = {
   balance: number;
   recentTransactions: TransactionType[];
-}
+};
+
+export type SearchTransactionsRequest = {
+  userId: number;
+  start?: number;
+  count?: number;
+  startDate?: string;
+  endDate?: string;
+  categories?: number[];
+};
+
+export type SearchTransactionsResponse = {
+  transactions: TransactionType[];
+  count: number;
+};
 
 export const transactionsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -76,12 +93,27 @@ export const transactionsApi = apiSlice.injectEndpoints({
       invalidatesTags: ["Transactions"], // Used to refetch transactions, connected to providesTags
     }),
     getUserBalance: builder.query<GetUserBalanceResponse, GetUserBalanceReq>({
-      query: (data: MonthlyTransactionsReq) => ({
+      query: (data: GetUserBalanceReq) => ({
         url: "/transaction/getUserBalance",
         method: "POST",
         body: data,
       }),
       providesTags: ["Transactions"],
+    }),
+    searchTransactions: builder.query<SearchTransactionsResponse, SearchTransactionsRequest>({
+      query: (data: SearchTransactionsRequest) => ({
+        url: "/transaction/searchTransactions",
+        method: "POST",
+        body: data,
+      }),
+      providesTags: ["Transactions"],
+    }),
+    searchTransactionsMore: builder.mutation<SearchTransactionsResponse, SearchTransactionsRequest>({
+      query: (data: SearchTransactionsRequest) => ({
+        url: "/transaction/searchTransactions",
+        method: "POST",
+        body: data,
+      }),
     }),
   }),
 });
@@ -91,4 +123,6 @@ export const {
   useEditTransactionMutation,
   useDeleteTransactionMutation,
   useGetUserBalanceQuery,
+  useSearchTransactionsQuery,
+  useSearchTransactionsMoreMutation,
 } = transactionsApi;

@@ -3,11 +3,13 @@ import { apiSlice } from "app/middleware/apiSlice";
 import monthlyBalanceSlice from "./reducers/monthlyBalance/monthlyBalanceSlice";
 import userReducer from "./reducers/userSlice";
 import balanceSlice from "./reducers/balance/balanceSlice";
+import transactionSearchSlice from "./reducers/transactionSearch/transactionSearchSlice";
 
 const rootReducer = {
   user: userReducer,
   monthlyBalance: monthlyBalanceSlice,
   balance: balanceSlice,
+  transactionSearch: transactionSearchSlice,
   [apiSlice.reducerPath]: apiSlice.reducer,
 };
 
