@@ -16,10 +16,9 @@ import {
 import AppActivityIndicator from "components/AppActivityIndicator";
 import { errorStrings } from "constants/strings";
 import colors from "constants/colors";
+import BalanceTransactionNullScreen from "feature/balaceScreen/ui/BalanceTransactionNullScreen";
 
-type Props = {};
-
-const TransactionSearch = (props: Props) => {
+const TransactionSearch = () => {
   const userId = useAppSelector(getUserId);
   const { isLoading, isError, isFetching } = useSearchTransactionsQuery({
     userId,
@@ -44,9 +43,14 @@ const TransactionSearch = (props: Props) => {
     }
   };
 
+  if (!transactionNumber) {
+    return <BalanceTransactionNullScreen isLoading={isFetching || isLoading} />;
+  }
+
   const renderItem = ({ item }: { item: TransactionType }) => (
     <TransactionsRow key={item.id} transaction={item} />
   );
+
   return (
     <View style={styles.container}>
       <Label style={styles.text}>All transactions</Label>
