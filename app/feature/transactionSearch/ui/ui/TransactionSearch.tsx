@@ -16,7 +16,7 @@ import {
 import AppActivityIndicator from "components/AppActivityIndicator";
 import { errorStrings } from "constants/strings";
 import colors from "constants/colors";
-import BalanceTransactionNullScreen from "feature/balaceScreen/ui/BalanceTransactionNullScreen";
+import NullScreen from "components/NullScreen";
 
 const TransactionSearch = () => {
   const userId = useAppSelector(getUserId);
@@ -44,7 +44,14 @@ const TransactionSearch = () => {
   };
 
   if (!transactionNumber) {
-    return <BalanceTransactionNullScreen isLoading={isFetching || isLoading} />;
+    return (
+      <NullScreen
+        icon='wallet'
+        isLoading={isFetching || isLoading}
+        title='No transactions added'
+        subtitle='Start tracking your expenses and incomes to gain better control of your finances'
+      />
+    );
   }
 
   const renderItem = ({ item }: { item: TransactionType }) => (

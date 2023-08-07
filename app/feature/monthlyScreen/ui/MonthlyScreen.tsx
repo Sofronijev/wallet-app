@@ -72,7 +72,7 @@ const MonthlyScreen: React.FC<MonthlyScreenProps> = ({ navigation }) => {
           isLoading={transactionLoading}
           transactions={transactions}
           title={`Last ${monthName} transactions`}
-          nullScreen={<TransactionsNullScreen isLoading={isLoading} />}
+          nullScreen={<TransactionsNullScreen isLoading={transactionLoading} />}
         />
       </ScrollView>
       <AddButton />

@@ -38,7 +38,7 @@ const RecentTransactions: React.FC<RecentTransactionsProps> = ({
 
   const renderLoading = (
     <View style={styles.loadingContainer}>
-      <AppActivityIndicator isLoading={true} hideScreen />
+      <AppActivityIndicator isLoading />
     </View>
   );
   return (
