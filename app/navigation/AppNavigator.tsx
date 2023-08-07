@@ -5,7 +5,7 @@ import colors from "constants/colors";
 import { AppStackParamList } from "./routes";
 import TransactionForm from "feature/transaction/ui/TransactionForm";
 import { transactionStrings } from "constants/strings";
-import TransactionSearch from "feature/transactionSearch/ui/ui/TransactionSearch";
+import TransactionSearch from "feature/transactionSearch/ui/TransactionSearch";
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
 
