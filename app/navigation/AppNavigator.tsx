@@ -6,6 +6,8 @@ import { AppStackParamList } from "./routes";
 import TransactionForm from "feature/transaction/ui/TransactionForm";
 import { transactionStrings } from "constants/strings";
 import TransactionSearch from "feature/transactionSearch/ui/TransactionSearch";
+import HeaderIcon from "components/HeaderIcon";
+import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
 
@@ -37,6 +39,12 @@ const AppNavigator: React.FC = () => {
         options={{
           animation: "slide_from_bottom",
           title: transactionStrings.transactionSearch,
+          // TODO - create FILTERS screen
+          headerRight: () => (
+            <HeaderIcon onPress={() => console.log("Open filters")}>
+              <Ionicons name='filter' size={24} color={colors.white} />
+            </HeaderIcon>
+          ),
         }}
       />
     </Stack.Navigator>

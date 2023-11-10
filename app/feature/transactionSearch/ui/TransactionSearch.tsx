@@ -1,4 +1,4 @@
-import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
+import { Alert, FlatList, StyleSheet, View } from "react-native";
 import React from "react";
 import { getUserId } from "store/reducers/userSlice";
 import { useAppSelector } from "store/hooks";
@@ -6,7 +6,6 @@ import {
   useSearchTransactionsMoreMutation,
   useSearchTransactionsQuery,
 } from "app/middleware/transactions";
-import Label from "components/Label";
 import TransactionsRow from "feature/monthlyScreen/ui/TransactionsRow";
 import { TransactionType } from "store/reducers/monthlyBalance/monthlyBalanceSlice";
 import {
@@ -60,7 +59,6 @@ const TransactionSearch = () => {
 
   return (
     <View style={styles.container}>
-      <Label style={styles.text}>All transactions</Label>
       <FlatList
         data={transactions}
         renderItem={renderItem}

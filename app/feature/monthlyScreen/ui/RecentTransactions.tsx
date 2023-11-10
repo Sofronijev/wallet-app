@@ -45,7 +45,9 @@ const RecentTransactions: React.FC<RecentTransactionsProps> = ({
     <View style={styles.container}>
       <Label style={styles.title}>{title}</Label>
       {isLoading ? renderLoading : renderTransactions}
-      <ButtonText title='View all transactions' onPress={navigateToTransactionSearch} />
+      <View style={styles.button}>
+        <ButtonText title='View all transactions' onPress={navigateToTransactionSearch} />
+      </View>
     </View>
   );
 };
@@ -67,5 +69,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     paddingBottom: 20,
     fontWeight: "500",
+  },
+  button: {
+    paddingTop: 15,
   },
 });
