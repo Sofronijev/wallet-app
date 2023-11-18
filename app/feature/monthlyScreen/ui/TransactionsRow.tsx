@@ -10,7 +10,6 @@ import { formatDayString } from "modules/timeAndDate";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { AppStackParamList } from "navigation/routes";
-import { transactionStrings } from "constants/strings";
 
 type Props = {
   transaction: TransactionType;
@@ -53,7 +52,7 @@ const TransactionsRow: React.FC<Props> = ({ transaction }) => {
       </View>
       <View>
         <Label style={[styles.price, isIncome && styles.incomeColor]}>
-          {`${transactionStrings.showMinus(isIncome)}${formatDecimalDigits(transaction.amount)}`}
+          {`${formatDecimalDigits((transaction.amount))}`}
         </Label>
         <View style={styles.dateContainer}>
           <Label style={styles.date} numberOfLines={1}>

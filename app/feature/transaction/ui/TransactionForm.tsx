@@ -29,7 +29,7 @@ import {
 import { RouteProp } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import HeaderIcon from "components/HeaderIcon";
-import { deleteTransactionAlert, handleTransactionError } from "../modules";
+import { deleteTransactionAlert, formatFormAmountValue, handleTransactionError } from "../modules";
 import { useAppSelector } from "store/hooks";
 import { getUserId } from "store/reducers/userSlice";
 import { transactionStrings } from "constants/strings";
@@ -54,25 +54,23 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
     Keyboard.dismiss();
     try {
       if (values.type && values.category && walletId) {
+        const transactionData = {
+          amount: formatFormAmountValue(values.amount, values.category.id, values.type.id),
+          description: values.description,
+          date: formatIsoDate(values.date),
+          typeId: values.type.id,
+          categoryId: values.category.id,
+          walletId,
+        };
         if (editData) {
           await tryEditNewTransaction({
             id: editData.id,
-            amount: Number(values.amount),
-            description: values.description,
-            date: formatIsoDate(values.date),
-            typeId: values.type.id,
-            categoryId: values.category.id,
-            walletId,
+            ...transactionData,
           }).unwrap();
         } else {
           await tryCreateNewTransaction({
-            amount: Number(values.amount),
-            description: values.description,
-            date: formatIsoDate(values.date),
             userId,
-            typeId: values.type.id,
-            categoryId: values.category.id,
-            walletId,
+            ...transactionData,
           }).unwrap();
         }
         navigation.goBack();
@@ -137,6 +135,10 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
     return `${formik.values.category?.label}, ${formik.values.type?.label}`;
   };
 
+  // In case amount is negative, remove minus sign for preview
+  // TODO - add validation while typing
+  const formattedAmount = formik.values.amount.replace('-', '');
+
   const onDateChange = (date: string) => {
     formik.setFieldValue("date", date);
   };
@@ -154,7 +156,7 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
         onDateSelect={onDateChange}
       />
       <LabelInput
-        value={formik.values.amount}
+        value={formattedAmount}
         placeholder='Amount'
         onChangeText={formik.handleChange("amount")}
         keyboardType='decimal-pad'

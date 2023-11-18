@@ -49,6 +49,7 @@ export type GetUserBalanceResponse = {
 
 export type SearchTransactionsRequest = {
   userId: number;
+  walletIds: number[];
   start?: number;
   count?: number;
   startDate?: string;

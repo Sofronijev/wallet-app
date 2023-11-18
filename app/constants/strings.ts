@@ -32,7 +32,6 @@ export const transactionStrings = {
   available: "Available:",
   income: "Income:",
   expenses: "Expenses:",
-  showMinus: (isIncome: boolean) => (isIncome ? "" : "-"),
   noTransaction: "Transaction does not exist",
   deleteTransaction: "Are you sure you want to delete this transaction?",
   errorAdding: "An error occurred while adding transaction",
