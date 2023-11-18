@@ -8,12 +8,10 @@ export type UserDataType = {
   email: string;
 };
 
-export type UserStoreType = {
-  data: UserDataType;
-};
-
-const initialUserState: UserStoreType = {
-  data: { id: 0, username: "", email: "" },
+const initialUserState: UserDataType = {
+  id: 0,
+  username: "",
+  email: "",
 };
 
 export const userSlice = createSlice({
@@ -21,7 +19,9 @@ export const userSlice = createSlice({
   initialState: initialUserState,
   reducers: {
     setUserData: (state, action: SliceAction<UserDataType>) => {
-      state.data = action.payload;
+      state.id = action.payload.id;
+      state.username = action.payload.username;
+      state.email = action.payload.email;
     },
     clearUserData: () => {
       return initialUserState;
@@ -31,7 +31,7 @@ export const userSlice = createSlice({
 
 export const { setUserData, clearUserData } = userSlice.actions;
 
-export const getUserData = (state: RootStateType): UserDataType => state.user.data;
-export const getUserId = (state: RootStateType): number => state.user.data.id;
+export const getUserData = (state: RootStateType): UserDataType => state.user;
+export const getUserId = (state: RootStateType): number => state.user.id;
 
 export default userSlice.reducer;

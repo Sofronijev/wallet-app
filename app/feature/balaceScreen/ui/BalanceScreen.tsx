@@ -13,10 +13,17 @@ import AppActivityIndicator from "components/AppActivityIndicator";
 import RecentTransactions from "feature/monthlyScreen/ui/RecentTransactions";
 import BalanceTransactionNullScreen from "./BalanceTransactionNullScreen";
 import AddButton from "components/AddButton";
+import { useGetUserWalletsQuery } from "app/middleware/wallets";
+import { getActiveWallet, getAllWallets } from "store/reducers/wallets/selectors";
 
 const BalanceScreen: React.FC = () => {
   const userId = useAppSelector(getUserId);
-  const { isLoading, isError, isFetching } = useGetUserBalanceQuery(
+
+  const {
+    isLoading: isWalletsLoading,
+    isError: isWalletsError,
+    isFetching: isWalletsFetching,
+  } = useGetUserWalletsQuery(
     userId
       ? {
           userId,
@@ -26,8 +33,23 @@ const BalanceScreen: React.FC = () => {
 
   const userBalance = useAppSelector(getUserBalance);
   const transactions = useAppSelector(getUserRecentTransactions);
+  const wallets = useAppSelector(getAllWallets);
+  const activeWallet = useAppSelector(getActiveWallet);
+  const walletName = activeWallet?.walletName ?? "";
+  const walletId = activeWallet?.walletId;
 
-  if (isError) {
+  const { isLoading, isError, isFetching } = useGetUserBalanceQuery(
+    userId && walletId
+      ? {
+          userId,
+          walletIds: [walletId],
+        }
+      : skipToken
+  );
+
+  const isDataLoading = isLoading || isFetching || isWalletsLoading || isWalletsFetching;
+
+  if (isError || isWalletsError) {
     Alert.alert(errorStrings.general, errorStrings.tryAgain);
   }
 
@@ -35,12 +57,13 @@ const BalanceScreen: React.FC = () => {
     <>
       <ScrollView style={styles.container}>
         <View style={styles.balanceContainer}>
+          <Label style={styles.walletName}>{walletName}</Label>
           <Label style={styles.balanceText}>Available balance</Label>
           <Label style={styles.balanceValue}>{formatDecimalDigits(userBalance)}</Label>
-          <AppActivityIndicator isLoading={isLoading || isFetching} />
+          <AppActivityIndicator isLoading={isDataLoading} />
         </View>
         <RecentTransactions
-          isLoading={isLoading || isFetching}
+          isLoading={isDataLoading}
           transactions={transactions}
           title='Recent transactions'
           nullScreen={<BalanceTransactionNullScreen />}
@@ -69,5 +92,11 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
+  },
+  walletName: {
+    fontSize: 23,
+    fontWeight: "bold",
+    paddingBottom: 20,
+    paddingLeft: 10,
   },
 });

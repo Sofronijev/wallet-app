@@ -25,11 +25,12 @@ const LoginForm: React.FC<Props> = ({ navigation }) => {
     try {
       const userData = await tryLoginUser({ email, password }).unwrap();
       if (userData) {
-        authStorage.storeRefreshToken(userData.token.refreshToken);
-        authStorage.storeAccessToken(userData.token.accessToken);
+        const {token, ...restUserData} = userData;
+        authStorage.storeRefreshToken(token.refreshToken);
+        authStorage.storeAccessToken(token.accessToken);
         // Had to manually dispatch action because addMatcher in userSlice was causing some issues with require circle
         //https://stackoverflow.com/questions/55664673/require-cycles-are-allowed-but-can-result-in-uninitialized-values-consider-ref
-        dispatch(setUserData(userData.data));
+        dispatch(setUserData(restUserData));
       }
     } catch (err) {
       setSubmitError(err?.data?.message ?? errorStrings.unknown);

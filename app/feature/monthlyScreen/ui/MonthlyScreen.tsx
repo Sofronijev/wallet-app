@@ -1,9 +1,7 @@
 import { Alert, ScrollView, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import { skipToken } from "@reduxjs/toolkit/query/react";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { AppStackParamList } from "navigation/routes";
-import { addOrDeductMonth, formatIsoDate, getMonth } from "modules/timeAndDate";
+import { addOrDeductMonth, formatIsoDate } from "modules/timeAndDate";
 import { useAppSelector } from "store/hooks";
 import { getUserId } from "store/reducers/userSlice";
 import { useGetMonthlyUserTransactionsQuery } from "app/middleware/transactions";
@@ -13,26 +11,24 @@ import RecentTransactions from "./RecentTransactions";
 import TransactionsNullScreen from "./TransactionsNullScreen";
 import AddButton from "components/AddButton";
 import { getMonthlyTransactions } from "store/reducers/monthlyBalance/selectors";
+import { getActiveWallet } from "store/reducers/wallets/selectors";
 
-type MonthlyScreenProps = {
-  navigation: StackNavigationProp<AppStackParamList>;
-};
-
-const MonthlyScreen: React.FC<MonthlyScreenProps> = ({ navigation }) => {
+const MonthlyScreen: React.FC = () => {
   const userId = useAppSelector(getUserId);
   const [monthDifference, setMonthDifference] = useState(0);
   const today = new Date();
   const selectedDate = addOrDeductMonth(today, monthDifference);
-  const monthName = getMonth(selectedDate);
   const transactions = useAppSelector(getMonthlyTransactions(selectedDate));
+  const walletId = useAppSelector(getActiveWallet)?.walletId;
 
   const { isLoading, isError, isFetching, refetch } = useGetMonthlyUserTransactionsQuery(
-    userId
+    userId && walletId
       ? {
           userId,
           start: 0,
           count: 10,
           date: formatIsoDate(selectedDate),
+          walletIds: [walletId],
         }
       : skipToken
   );
@@ -71,7 +67,6 @@ const MonthlyScreen: React.FC<MonthlyScreenProps> = ({ navigation }) => {
         <RecentTransactions
           isLoading={transactionLoading}
           transactions={transactions}
-          title={`Last ${monthName} transactions`}
           nullScreen={<TransactionsNullScreen isLoading={transactionLoading} />}
         />
       </ScrollView>

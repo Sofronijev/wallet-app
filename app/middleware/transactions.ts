@@ -10,6 +10,7 @@ export type MonthlyTransactionsReq = {
   start: number;
   count: number;
   date: string;
+  walletIds: number[];
 };
 
 export type CreateTransactionReq = {
@@ -19,6 +20,7 @@ export type CreateTransactionReq = {
   userId: number;
   typeId: number;
   categoryId: number;
+  walletId: number;
 };
 
 export type EditTransactionReq = {
@@ -28,6 +30,7 @@ export type EditTransactionReq = {
   date: string;
   typeId: number;
   categoryId: number;
+  walletId: number;
 };
 
 export type DeleteTransactionReq = {
@@ -36,6 +39,7 @@ export type DeleteTransactionReq = {
 
 export type GetUserBalanceReq = {
   userId: number;
+  walletIds: number[];
 };
 
 export type GetUserBalanceResponse = {

@@ -4,12 +4,14 @@ import monthlyBalanceSlice from "./reducers/monthlyBalance/monthlyBalanceSlice";
 import userReducer from "./reducers/userSlice";
 import balanceSlice from "./reducers/balance/balanceSlice";
 import transactionSearchSlice from "./reducers/transactionSearch/transactionSearchSlice";
+import walletsSlice from "./reducers/wallets/walletsSlice";
 
 const rootReducer = {
   user: userReducer,
   monthlyBalance: monthlyBalanceSlice,
   balance: balanceSlice,
   transactionSearch: transactionSearchSlice,
+  wallets: walletsSlice,
   [apiSlice.reducerPath]: apiSlice.reducer,
 };
 

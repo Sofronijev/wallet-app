@@ -33,6 +33,7 @@ import { deleteTransactionAlert, handleTransactionError } from "../modules";
 import { useAppSelector } from "store/hooks";
 import { getUserId } from "store/reducers/userSlice";
 import { transactionStrings } from "constants/strings";
+import { getActiveWallet } from "store/reducers/wallets/selectors";
 
 type Props = {
   navigation: StackNavigationProp<AppStackParamList>;
@@ -47,11 +48,12 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
   const [tryEditNewTransaction, { isLoading: editLoading }] = useEditTransactionMutation();
   const [tryDeleteNewTransaction, { isLoading: deleteLoading }] = useDeleteTransactionMutation();
   const userId = useAppSelector(getUserId);
+  const walletId = useAppSelector(getActiveWallet)?.walletId;
 
   const onTransactionSubmit = async (values: TransactionFromInputs) => {
     Keyboard.dismiss();
     try {
-      if (values.type && values.category) {
+      if (values.type && values.category && walletId) {
         if (editData) {
           await tryEditNewTransaction({
             id: editData.id,
@@ -60,6 +62,7 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
             date: formatIsoDate(values.date),
             typeId: values.type.id,
             categoryId: values.category.id,
+            walletId,
           }).unwrap();
         } else {
           await tryCreateNewTransaction({
@@ -69,6 +72,7 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
             userId,
             typeId: values.type.id,
             categoryId: values.category.id,
+            walletId,
           }).unwrap();
         }
         navigation.goBack();
