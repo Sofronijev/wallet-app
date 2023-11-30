@@ -68,9 +68,7 @@ export default TransactionsRow;
 
 const styles = StyleSheet.create({
   container: {
-    borderColor: colors.grey3,
-    borderWidth: 1,
-    borderRadius: 10,
+    backgroundColor: colors.white,
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 10,

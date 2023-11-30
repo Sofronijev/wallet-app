@@ -12,8 +12,10 @@ export type Wallet = {
   startingBalance: number;
   walletName: string;
   type: keyof typeof WalletTypes;
-  currencyCode: string,
-  currencySymbol: string,
+  currencyCode: string;
+  currencySymbol: string;
+  currentBalance: number;
+  color: string;
 };
 
 type WalletStoreType = {
@@ -48,7 +50,7 @@ export const walletsSlice = createSlice({
     },
     setActiveWallet: (state, action: SliceAction<number>) => {
       state.activeWalletId = action.payload;
-    }, 
+    },
   },
   extraReducers: (builder) => {
     builder.addMatcher(

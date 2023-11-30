@@ -26,7 +26,7 @@ const WalletList = (props: Props) => {
 
   const userId = useAppSelector(getUserId);
 
-  const { isLoading, isError, isFetching, data } = useGetUserWalletsQuery(
+  const { isLoading, isFetching } = useGetUserWalletsQuery(
     userId
       ? {
           userId,
@@ -47,10 +47,10 @@ const WalletList = (props: Props) => {
 
   const renderWallet: ListRenderItem<Wallet> = ({ item }) => {
     return (
-      <View style={[styles.walletContainer, { width: walletWidth }]}>
+      <View style={[styles.walletContainer, { width: walletWidth, borderColor: item.color }]}>
         <Label style={styles.walletName}>{item.walletName}</Label>
         <Label style={styles.balanceText}>Available balance</Label>
-        <Label style={styles.walletValue}>{formatDecimalDigits(userBalance)}</Label>
+        <Label style={styles.walletValue}>{formatDecimalDigits(item.currentBalance)}</Label>
       </View>
     );
   };
@@ -84,6 +84,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 20,
     backgroundColor: colors.white,
+    borderLeftWidth: 5,
+    borderRightWidth: 5,
   },
   balanceText: {
     textAlign: "center",

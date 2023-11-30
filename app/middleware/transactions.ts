@@ -79,7 +79,8 @@ export const transactionsApi = apiSlice.injectEndpoints({
         method: "POST",
         body: transactionData,
       }),
-      invalidatesTags: ["Transactions"], // Used to refetch transactions, connected to providesTags
+      // TODO: Currently, this will fetch all wallets, make it so it only refetches wallet that had changed transaction
+      invalidatesTags: ["Transactions", "Wallets"], // Used to refetch transactions, connected to providesTags
     }),
     editTransaction: builder.mutation<SimpleResponse, EditTransactionReq>({
       query: (transactionData: EditTransactionReq) => ({
@@ -87,7 +88,8 @@ export const transactionsApi = apiSlice.injectEndpoints({
         method: "PUT",
         body: transactionData,
       }),
-      invalidatesTags: ["Transactions"], // Used to refetch transactions, connected to providesTags
+      // TODO: Currently, this will fetch all wallets, make it so it only refetches wallet that had changed transaction
+      invalidatesTags: ["Transactions", "Wallets"], // Used to refetch transactions, connected to providesTags
     }),
     deleteTransaction: builder.mutation<SimpleResponse, DeleteTransactionReq>({
       query: (transactionData: DeleteTransactionReq) => ({
@@ -95,7 +97,8 @@ export const transactionsApi = apiSlice.injectEndpoints({
         method: "DELETE",
         body: transactionData,
       }),
-      invalidatesTags: ["Transactions"], // Used to refetch transactions, connected to providesTags
+      // TODO: Currently, this will fetch all wallets, make it so it only refetches wallet that had changed transaction
+      invalidatesTags: ["Transactions", "Wallets"], // Used to refetch transactions, connected to providesTags
     }),
     getUserBalance: builder.query<GetUserBalanceResponse, GetUserBalanceReq>({
       query: (data: GetUserBalanceReq) => ({
@@ -113,13 +116,15 @@ export const transactionsApi = apiSlice.injectEndpoints({
       }),
       providesTags: ["Transactions"],
     }),
-    searchTransactionsMore: builder.mutation<SearchTransactionsResponse, SearchTransactionsRequest>({
-      query: (data: SearchTransactionsRequest) => ({
-        url: "/transaction/searchTransactions",
-        method: "POST",
-        body: data,
-      }),
-    }),
+    searchTransactionsMore: builder.mutation<SearchTransactionsResponse, SearchTransactionsRequest>(
+      {
+        query: (data: SearchTransactionsRequest) => ({
+          url: "/transaction/searchTransactions",
+          method: "POST",
+          body: data,
+        }),
+      }
+    ),
   }),
 });
 export const {
