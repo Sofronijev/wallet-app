@@ -1,44 +1,44 @@
-import { Alert, ScrollView, StyleSheet, View } from "react-native";
+import { Alert, FlatList, ListRenderItem, StyleSheet, View } from "react-native";
 import React from "react";
 import { skipToken } from "@reduxjs/toolkit/query/react";
-import Label from "components/Label";
 import colors from "constants/colors";
 import { useAppSelector } from "store/hooks";
 import { getUserId } from "store/reducers/userSlice";
 import { useGetUserBalanceQuery } from "app/middleware/transactions";
-import { getUserBalance, getUserRecentTransactions } from "store/reducers/balance/selectors";
-import { formatDecimalDigits } from "modules/numbers";
+import { getUserRecentTransactions } from "store/reducers/balance/selectors";
 import { errorStrings } from "constants/strings";
-import AppActivityIndicator from "components/AppActivityIndicator";
-import RecentTransactions from "feature/monthlyScreen/ui/RecentTransactions";
 import BalanceTransactionNullScreen from "./BalanceTransactionNullScreen";
 import AddButton from "components/AddButton";
-import { useGetUserWalletsQuery } from "app/middleware/wallets";
-import { getActiveWallet, getAllWallets } from "store/reducers/wallets/selectors";
+import { getActiveWallet } from "store/reducers/wallets/selectors";
+import TransactionsRow from "feature/monthlyScreen/ui/TransactionsRow";
+import { TransactionType } from "store/reducers/monthlyBalance/monthlyBalanceSlice";
+import WalletList from "feature/wallet/ui/WalletList";
+import Label from "components/Label";
+import ButtonText from "components/ButtonText";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { AppStackParamList } from "navigation/routes";
+
+const renderTransaction: ListRenderItem<TransactionType> = ({ item }) => (
+  <View style={styles.transactionContainer}>
+    <TransactionsRow transaction={item} />
+  </View>
+);
+const transactionKeyExtractor = (item: TransactionType) => `${item.id}`;
 
 const BalanceScreen: React.FC = () => {
   const userId = useAppSelector(getUserId);
+  const navigation = useNavigation<StackNavigationProp<AppStackParamList>>();
 
-  const {
-    isLoading: isWalletsLoading,
-    isError: isWalletsError,
-    isFetching: isWalletsFetching,
-  } = useGetUserWalletsQuery(
-    userId
-      ? {
-          userId,
-        }
-      : skipToken
-  );
+  const navigateToTransactionSearch = () => {
+    navigation.navigate("TransactionSearch");
+  };
 
-  const userBalance = useAppSelector(getUserBalance);
   const transactions = useAppSelector(getUserRecentTransactions);
-  const wallets = useAppSelector(getAllWallets);
   const activeWallet = useAppSelector(getActiveWallet);
-  const walletName = activeWallet?.walletName ?? "";
   const walletId = activeWallet?.walletId;
 
-  const { isLoading, isError, isFetching } = useGetUserBalanceQuery(
+  const { isError } = useGetUserBalanceQuery(
     userId && walletId
       ? {
           userId,
@@ -47,28 +47,32 @@ const BalanceScreen: React.FC = () => {
       : skipToken
   );
 
-  const isDataLoading = isLoading || isFetching || isWalletsLoading || isWalletsFetching;
-
-  if (isError || isWalletsError) {
+  if (isError) {
     Alert.alert(errorStrings.general, errorStrings.tryAgain);
   }
 
   return (
     <>
-      <ScrollView style={styles.container}>
-        <View style={styles.balanceContainer}>
-          <Label style={styles.walletName}>{walletName}</Label>
-          <Label style={styles.balanceText}>Available balance</Label>
-          <Label style={styles.balanceValue}>{formatDecimalDigits(userBalance)}</Label>
-          <AppActivityIndicator isLoading={isDataLoading} />
-        </View>
-        <RecentTransactions
-          isLoading={isDataLoading}
-          transactions={transactions}
-          title='Recent transactions'
-          nullScreen={<BalanceTransactionNullScreen />}
-        />
-      </ScrollView>
+      <FlatList
+        data={transactions}
+        renderItem={renderTransaction}
+        keyExtractor={transactionKeyExtractor}
+        ListEmptyComponent={<BalanceTransactionNullScreen />}
+        ListHeaderComponent={
+          <>
+            <WalletList />
+            <Label style={styles.recentTransactionsText}>Recent transactions</Label>
+          </>
+        }
+        ListFooterComponent={
+          <>
+            <View style={styles.allTransactionsBtn}>
+              <ButtonText title='View all transactions' onPress={navigateToTransactionSearch} />
+            </View>
+          </>
+        }
+        contentContainerStyle={styles.container}
+      />
       <AddButton />
     </>
   );
@@ -77,8 +81,10 @@ const BalanceScreen: React.FC = () => {
 export default BalanceScreen;
 
 const styles = StyleSheet.create({
-  container: { paddingHorizontal: 16 },
-  balanceContainer: {
+  container: {
+    paddingBottom: 100,
+  },
+  walletContainer: {
     marginVertical: 20,
     padding: 10,
     borderRadius: 20,
@@ -88,7 +94,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: colors.grey2,
   },
-  balanceValue: {
+  walletValue: {
     fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
@@ -98,5 +104,28 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     paddingBottom: 20,
     paddingLeft: 10,
+  },
+  transactionContainer: {
+    marginHorizontal: 16,
+    paddingVertical: 3,
+    paddingHorizontal: 10,
+    backgroundColor: colors.white,
+  },
+  recentTransactionsText: {
+    color: colors.black,
+    backgroundColor: colors.white,
+    fontSize: 18,
+    fontWeight: "500",
+    marginHorizontal: 16,
+    padding: 10,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  allTransactionsBtn: {
+    backgroundColor: colors.white,
+    marginHorizontal: 16,
+    padding: 5,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
   },
 });

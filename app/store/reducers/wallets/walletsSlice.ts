@@ -46,6 +46,9 @@ export const walletsSlice = createSlice({
       state.count = action.payload.count;
       state.activeWalletId = action.payload.wallets[0].walletId;
     },
+    setActiveWallet: (state, action: SliceAction<number>) => {
+      state.activeWalletId = action.payload;
+    }, 
   },
   extraReducers: (builder) => {
     builder.addMatcher(
@@ -62,6 +65,6 @@ export const walletsSlice = createSlice({
   },
 });
 
-export const { setUserWallets } = walletsSlice.actions;
+export const { setUserWallets, setActiveWallet } = walletsSlice.actions;
 
 export default walletsSlice.reducer;
