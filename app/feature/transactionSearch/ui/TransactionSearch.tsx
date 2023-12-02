@@ -66,9 +66,7 @@ const TransactionSearch = () => {
   }
 
   const renderItem = ({ item }: { item: TransactionType }) => (
-    <View key={item.id} style={styles.transactionContainer}>
-      <TransactionsRow transaction={item} />
-    </View>
+    <TransactionsRow key={item.id} transaction={item} />
   );
 
   return (
@@ -95,8 +93,5 @@ const styles = StyleSheet.create({
   text: {
     paddingHorizontal: 16,
     paddingVertical: 20,
-  },
-  transactionContainer: {
-    marginVertical: 3,
   },
 });

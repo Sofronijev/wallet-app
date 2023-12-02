@@ -13,7 +13,7 @@ export type MonthlyTransactionsReq = {
   walletIds: number[];
 };
 
-export type CreateTransactionReq = {
+type CreateTransactionReq = {
   amount: number;
   description: string;
   date: string;
@@ -23,7 +23,7 @@ export type CreateTransactionReq = {
   walletId: number;
 };
 
-export type EditTransactionReq = {
+type EditTransactionReq = {
   id: number;
   amount: number;
   description: string;
@@ -33,7 +33,7 @@ export type EditTransactionReq = {
   walletId: number;
 };
 
-export type DeleteTransactionReq = {
+type DeleteTransactionReq = {
   id: number;
 };
 
@@ -42,12 +42,9 @@ export type GetUserBalanceReq = {
   walletIds: number[];
 };
 
-export type GetUserBalanceResponse = {
-  balance: number;
-  recentTransactions: TransactionType[];
-};
+const RECENT_TRANSACTION_COUNT = 5;
 
-export type SearchTransactionsRequest = {
+type SearchTransactionsRequest = {
   userId: number;
   walletIds: number[];
   start?: number;
@@ -100,11 +97,11 @@ export const transactionsApi = apiSlice.injectEndpoints({
       // TODO: Currently, this will fetch all wallets, make it so it only refetches wallet that had changed transaction
       invalidatesTags: ["Transactions", "Wallets"], // Used to refetch transactions, connected to providesTags
     }),
-    getUserBalance: builder.query<GetUserBalanceResponse, GetUserBalanceReq>({
+    getUserRecentTransactions: builder.query<SearchTransactionsResponse, GetUserBalanceReq>({
       query: (data: GetUserBalanceReq) => ({
-        url: "/transaction/getUserBalance",
+        url: "/transaction/searchTransactions",
         method: "POST",
-        body: data,
+        body: { ...data, count: RECENT_TRANSACTION_COUNT },
       }),
       providesTags: ["Transactions"],
     }),
@@ -132,7 +129,7 @@ export const {
   useCreateNewTransactionMutation,
   useEditTransactionMutation,
   useDeleteTransactionMutation,
-  useGetUserBalanceQuery,
+  useGetUserRecentTransactionsQuery,
   useSearchTransactionsQuery,
   useSearchTransactionsMoreMutation,
 } = transactionsApi;

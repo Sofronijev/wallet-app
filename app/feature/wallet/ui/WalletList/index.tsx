@@ -5,7 +5,6 @@ import { getAllWallets } from "store/reducers/wallets/selectors";
 import { Wallet, setActiveWallet } from "store/reducers/wallets/walletsSlice";
 import Label from "components/Label";
 import { formatDecimalDigits } from "modules/numbers";
-import { getUserBalance } from "store/reducers/balance/selectors";
 import colors from "constants/colors";
 import { useDispatch } from "react-redux";
 import AppActivityIndicator from "components/AppActivityIndicator";
@@ -13,14 +12,12 @@ import { getUserId } from "store/reducers/userSlice";
 import { useGetUserWalletsQuery } from "app/middleware/wallets";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 
-type Props = {};
-
 const WALLET_SPACING = 8;
 const MARGIN = 16;
 
 const walletKeyExtractor = (item: Wallet) => `${item.walletId}`;
 
-const WalletList = (props: Props) => {
+const WalletList = () => {
   const { width } = useWindowDimensions();
   const dispatch = useDispatch();
 
@@ -34,7 +31,6 @@ const WalletList = (props: Props) => {
       : skipToken
   );
 
-  const userBalance = useAppSelector(getUserBalance);
   const wallets = useAppSelector(getAllWallets);
   const walletsArray = Object.values(wallets);
 

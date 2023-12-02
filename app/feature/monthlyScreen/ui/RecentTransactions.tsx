@@ -32,9 +32,7 @@ const RecentTransactions: React.FC<RecentTransactionsProps> = ({
 
   const renderTransactions = hasTransactions
     ? transactions?.map((transaction) => (
-        <View style={styles.transactionContainer} key={transaction.id}>
-          <TransactionsRow key={transaction.id} transaction={transaction} />
-        </View>
+        <TransactionsRow key={transaction.id} transaction={transaction} />
       ))
     : nullScreen;
 
@@ -62,9 +60,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     marginBottom: 100,
-  },
-  transactionContainer: {
-    marginVertical: 3,
   },
   loadingContainer: {
     paddingTop: 50,

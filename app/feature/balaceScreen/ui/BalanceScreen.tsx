@@ -4,7 +4,7 @@ import { skipToken } from "@reduxjs/toolkit/query/react";
 import colors from "constants/colors";
 import { useAppSelector } from "store/hooks";
 import { getUserId } from "store/reducers/userSlice";
-import { useGetUserBalanceQuery } from "app/middleware/transactions";
+import { useGetUserRecentTransactionsQuery } from "app/middleware/transactions";
 import { getUserRecentTransactions } from "store/reducers/balance/selectors";
 import { errorStrings } from "constants/strings";
 import BalanceTransactionNullScreen from "./BalanceTransactionNullScreen";
@@ -37,14 +37,16 @@ const BalanceScreen: React.FC = () => {
   const transactions = useAppSelector(getUserRecentTransactions);
   const activeWallet = useAppSelector(getActiveWallet);
   const walletId = activeWallet?.walletId;
+  const hasTransactions = !!transactions.length;
 
-  const { isError } = useGetUserBalanceQuery(
+  const { isError } = useGetUserRecentTransactionsQuery(
     userId && walletId
       ? {
           userId,
           walletIds: [walletId],
         }
-      : skipToken
+      : skipToken,
+    { refetchOnMountOrArgChange: true }
   );
 
   if (isError) {
@@ -61,14 +63,20 @@ const BalanceScreen: React.FC = () => {
         ListHeaderComponent={
           <>
             <WalletList />
-            <Label style={styles.recentTransactionsText}>Recent transactions</Label>
+            {/* HACK - This is a 'header' for data that is rendered in flatlist */}
+            {hasTransactions && (
+              <Label style={styles.recentTransactionsText}>Recent transactions</Label>
+            )}
           </>
         }
         ListFooterComponent={
           <>
-            <View style={styles.allTransactionsBtn}>
-              <ButtonText title='View all transactions' onPress={navigateToTransactionSearch} />
-            </View>
+            {/* HACK - This is a 'footer' for data that is rendered in flatlist */}
+            {hasTransactions && (
+              <View style={styles.allTransactionsBtn}>
+                <ButtonText title='View all transactions' onPress={navigateToTransactionSearch} />
+              </View>
+            )}
           </>
         }
         contentContainerStyle={styles.container}
@@ -107,7 +115,6 @@ const styles = StyleSheet.create({
   },
   transactionContainer: {
     marginHorizontal: 16,
-    paddingVertical: 3,
     paddingHorizontal: 10,
     backgroundColor: colors.white,
   },

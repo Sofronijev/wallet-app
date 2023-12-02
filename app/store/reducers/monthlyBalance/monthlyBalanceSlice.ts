@@ -13,6 +13,7 @@ export type TransactionType = {
   userId: number;
   typeId: number;
   categoryId: number;
+  walletId: number;
 };
 
 export type AccountBalance = { expense: number; income: number; balance: number };

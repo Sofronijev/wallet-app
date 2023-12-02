@@ -1,18 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { transactionsApi } from "app/middleware/transactions";
+import {
+  GetUserBalanceReq,
+  SearchTransactionsResponse,
+  transactionsApi,
+} from "app/middleware/transactions";
 import { TransactionType } from "../monthlyBalance/monthlyBalanceSlice";
 import { SliceAction } from "store/type";
 
-export type BalanceStoreType = {
-  balance: number;
-  recentTransactions: TransactionType[];
+type BalanceStoreType = {
+  recentTransactions: { transactions: TransactionType[]; count: number };
 };
 
 const initialBalanceState: BalanceStoreType = {
-  recentTransactions: [],
-  balance: 0,
+  recentTransactions: {
+    transactions: [],
+    count: 0,
+  },
 };
 
+// TODO - Change name if it is used only for Recent transactions
+// Used for balance screen
 export const balanceSlice = createSlice({
   name: "balance",
   initialState: initialBalanceState,
@@ -23,9 +30,9 @@ export const balanceSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(
-      transactionsApi.endpoints.getUserBalance.matchFulfilled,
-      (state, action: SliceAction<BalanceStoreType>) => {
-        return action.payload;
+      transactionsApi.endpoints.getUserRecentTransactions.matchFulfilled,
+      (state, action: SliceAction<SearchTransactionsResponse, GetUserBalanceReq>) => {
+        state.recentTransactions = action.payload;
       }
     );
     builder.addDefaultCase((state) => {
