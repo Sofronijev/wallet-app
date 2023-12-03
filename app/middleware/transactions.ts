@@ -37,7 +37,7 @@ type DeleteTransactionReq = {
   id: number;
 };
 
-export type GetUserBalanceReq = {
+export type GetUserRecentTransactionsReq = {
   userId: number;
   walletIds: number[];
 };
@@ -97,8 +97,8 @@ export const transactionsApi = apiSlice.injectEndpoints({
       // TODO: Currently, this will fetch all wallets, make it so it only refetches wallet that had changed transaction
       invalidatesTags: ["Transactions", "Wallets"], // Used to refetch transactions, connected to providesTags
     }),
-    getUserRecentTransactions: builder.query<SearchTransactionsResponse, GetUserBalanceReq>({
-      query: (data: GetUserBalanceReq) => ({
+    getUserRecentTransactions: builder.query<SearchTransactionsResponse, GetUserRecentTransactionsReq>({
+      query: (data: GetUserRecentTransactionsReq) => ({
         url: "/transaction/searchTransactions",
         method: "POST",
         body: { ...data, count: RECENT_TRANSACTION_COUNT },

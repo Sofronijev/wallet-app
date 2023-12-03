@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
-  GetUserBalanceReq,
+  GetUserRecentTransactionsReq,
   SearchTransactionsResponse,
   transactionsApi,
 } from "app/middleware/transactions";
@@ -31,7 +31,7 @@ export const balanceSlice = createSlice({
   extraReducers: (builder) => {
     builder.addMatcher(
       transactionsApi.endpoints.getUserRecentTransactions.matchFulfilled,
-      (state, action: SliceAction<SearchTransactionsResponse, GetUserBalanceReq>) => {
+      (state, action: SliceAction<SearchTransactionsResponse, GetUserRecentTransactionsReq>) => {
         state.recentTransactions = action.payload;
       }
     );
