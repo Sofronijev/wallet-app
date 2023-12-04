@@ -1,4 +1,4 @@
-import { Alert, FlatList, ListRenderItem, StyleSheet, View } from "react-native";
+import { ActivityIndicator, Alert, FlatList, ListRenderItem, StyleSheet, View } from "react-native";
 import React from "react";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import colors from "constants/colors";
@@ -39,7 +39,7 @@ const BalanceScreen: React.FC = () => {
   const walletId = activeWallet?.walletId;
   const hasTransactions = !!transactions.length;
 
-  const { isError } = useGetUserRecentTransactionsQuery(
+  const { isError, isLoading, isFetching } = useGetUserRecentTransactionsQuery(
     userId && walletId
       ? {
           userId,
@@ -48,6 +48,7 @@ const BalanceScreen: React.FC = () => {
       : skipToken,
     { refetchOnMountOrArgChange: true }
   );
+  const isTransactionLoading = isLoading || isFetching;
 
   if (isError) {
     Alert.alert(errorStrings.general, errorStrings.tryAgain);
@@ -64,9 +65,10 @@ const BalanceScreen: React.FC = () => {
           <>
             <WalletList />
             {/* HACK - This is a 'header' for data that is rendered in flatlist */}
-            {hasTransactions && (
+            <View style={styles.transactionHeader}>
               <Label style={styles.recentTransactionsText}>Recent transactions</Label>
-            )}
+              {isTransactionLoading && <ActivityIndicator color={colors.greenMint} />}
+            </View>
           </>
         }
         ListFooterComponent={
@@ -123,16 +125,23 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     fontSize: 18,
     fontWeight: "500",
-    marginHorizontal: 16,
-    padding: 10,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
   },
   allTransactionsBtn: {
     backgroundColor: colors.white,
     marginHorizontal: 16,
-    padding: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 16,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
+  },
+  transactionHeader: {
+    flexDirection: "row",
+    backgroundColor: colors.white,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    marginHorizontal: 16,
+    justifyContent: 'space-between',
   },
 });

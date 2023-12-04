@@ -1,4 +1,4 @@
-import { FlatList, ListRenderItem, StyleSheet, View, useWindowDimensions } from "react-native";
+import { ListRenderItem, StyleSheet, View, useWindowDimensions } from "react-native";
 import React from "react";
 import { useAppSelector } from "store/hooks";
 import { getAllWallets } from "store/reducers/wallets/selectors";
@@ -11,9 +11,10 @@ import AppActivityIndicator from "components/AppActivityIndicator";
 import { getUserId } from "store/reducers/userSlice";
 import { useGetUserWalletsQuery } from "app/middleware/wallets";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import Carousel from "components/Carousel";
 
 const WALLET_SPACING = 8;
-const MARGIN = 16;
+const HORIZONTAL_PADDING = 16;
 
 const walletKeyExtractor = (item: Wallet) => `${item.walletId}`;
 
@@ -34,16 +35,15 @@ const WalletList = () => {
   const wallets = useAppSelector(getAllWallets);
   const walletsArray = Object.values(wallets);
 
-  // const onWalletChange = (walletId: number) => () => {
-  //   dispatch(setActiveWallet(walletId));
-  // };
+  const onWalletChange = (item: Wallet) => {
+    dispatch(setActiveWallet(item.walletId));
+  };
 
-  const walletWidth = width - MARGIN * 2;
-  const interval = walletWidth + WALLET_SPACING;
+  const walletWidth = width - HORIZONTAL_PADDING * 2;
 
   const renderWallet: ListRenderItem<Wallet> = ({ item }) => {
     return (
-      <View style={[styles.walletContainer, { width: walletWidth, borderColor: item.color }]}>
+      <View style={[styles.walletContainer, { borderColor: item.color }]}>
         <Label style={styles.walletName}>{item.walletName}</Label>
         <Label style={styles.balanceText}>Available balance</Label>
         <Label style={styles.walletValue}>{formatDecimalDigits(item.currentBalance)}</Label>
@@ -52,17 +52,14 @@ const WalletList = () => {
   };
   return (
     <>
-      <FlatList
+      <Carousel
         data={walletsArray}
         renderItem={renderWallet}
         keyExtractor={walletKeyExtractor}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        snapToAlignment='start'
-        decelerationRate='fast'
-        snapToInterval={interval}
-        ItemSeparatorComponent={() => <View style={{ width: WALLET_SPACING }}></View>}
-        contentContainerStyle={styles.walletsFlatlist}
+        itemWidth={walletWidth}
+        itemSpacing={WALLET_SPACING}
+        style={styles.walletCarousel}
+        onSnapToItem={onWalletChange}
       />
       <AppActivityIndicator isLoading={isLoading || isFetching} />
     </>
@@ -72,8 +69,8 @@ const WalletList = () => {
 export default WalletList;
 
 const styles = StyleSheet.create({
-  walletsFlatlist: {
-    paddingHorizontal: MARGIN,
+  walletCarousel: {
+    paddingHorizontal: HORIZONTAL_PADDING,
   },
   walletContainer: {
     marginVertical: 20,
