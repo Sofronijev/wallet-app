@@ -50,17 +50,24 @@ const WalletList = () => {
       </View>
     );
   };
+
+  // This component is for initial load, so this part of the screen is not empty
+  const emptyWallet = <View style={[styles.nullWallet, { width: walletWidth }]}></View>;
   return (
     <>
-      <Carousel
-        data={walletsArray}
-        renderItem={renderWallet}
-        keyExtractor={walletKeyExtractor}
-        itemWidth={walletWidth}
-        itemSpacing={WALLET_SPACING}
-        style={styles.walletCarousel}
-        onSnapToItem={onWalletChange}
-      />
+      {!walletsArray.length ? (
+        emptyWallet
+      ) : (
+        <Carousel
+          data={walletsArray}
+          renderItem={renderWallet}
+          keyExtractor={walletKeyExtractor}
+          itemWidth={walletWidth}
+          itemSpacing={WALLET_SPACING}
+          style={styles.walletCarousel}
+          onSnapToItem={onWalletChange}
+        />
+      )}
       <AppActivityIndicator isLoading={isLoading || isFetching} />
     </>
   );
@@ -68,17 +75,27 @@ const WalletList = () => {
 
 export default WalletList;
 
+const walletStyle = {
+  marginVertical: 20,
+  padding: 10,
+  borderRadius: 20,
+  backgroundColor: colors.white,
+  height: 150,
+};
+
 const styles = StyleSheet.create({
   walletCarousel: {
     paddingHorizontal: HORIZONTAL_PADDING,
+    height: 190,
   },
   walletContainer: {
-    marginVertical: 20,
-    padding: 10,
-    borderRadius: 20,
-    backgroundColor: colors.white,
+    ...walletStyle,
     borderLeftWidth: 5,
     borderRightWidth: 5,
+  },
+  nullWallet: {
+    ...walletStyle,
+    marginHorizontal: HORIZONTAL_PADDING,
   },
   balanceText: {
     textAlign: "center",

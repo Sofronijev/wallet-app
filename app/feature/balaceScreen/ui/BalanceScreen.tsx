@@ -1,43 +1,23 @@
-import { ActivityIndicator, Alert, FlatList, ListRenderItem, StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import React from "react";
 import { skipToken } from "@reduxjs/toolkit/query/react";
-import colors from "constants/colors";
 import { useAppSelector } from "store/hooks";
 import { getUserId } from "store/reducers/userSlice";
 import { useGetUserRecentTransactionsQuery } from "app/middleware/transactions";
 import { getUserRecentTransactions } from "store/reducers/balance/selectors";
 import { errorStrings } from "constants/strings";
-import BalanceTransactionNullScreen from "./BalanceTransactionNullScreen";
 import AddButton from "components/AddButton";
 import { getActiveWallet } from "store/reducers/wallets/selectors";
-import TransactionsRow from "feature/monthlyScreen/ui/TransactionsRow";
-import { TransactionType } from "store/reducers/monthlyBalance/monthlyBalanceSlice";
 import WalletList from "feature/wallet/ui/WalletList";
-import Label from "components/Label";
-import ButtonText from "components/ButtonText";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { AppStackParamList } from "navigation/routes";
-
-const renderTransaction: ListRenderItem<TransactionType> = ({ item }) => (
-  <View style={styles.transactionContainer}>
-    <TransactionsRow transaction={item} />
-  </View>
-);
-const transactionKeyExtractor = (item: TransactionType) => `${item.id}`;
+import { ScrollView } from "react-native-gesture-handler";
+import RecentTransactions from "feature/monthlyScreen/ui/RecentTransactions";
 
 const BalanceScreen: React.FC = () => {
   const userId = useAppSelector(getUserId);
-  const navigation = useNavigation<StackNavigationProp<AppStackParamList>>();
-
-  const navigateToTransactionSearch = () => {
-    navigation.navigate("TransactionSearch");
-  };
 
   const transactions = useAppSelector(getUserRecentTransactions);
   const activeWallet = useAppSelector(getActiveWallet);
   const walletId = activeWallet?.walletId;
-  const hasTransactions = !!transactions.length;
 
   const { isError, isLoading, isFetching } = useGetUserRecentTransactionsQuery(
     userId && walletId
@@ -56,33 +36,16 @@ const BalanceScreen: React.FC = () => {
 
   return (
     <>
-      <FlatList
-        data={transactions}
-        renderItem={renderTransaction}
-        keyExtractor={transactionKeyExtractor}
-        ListEmptyComponent={<BalanceTransactionNullScreen />}
-        ListHeaderComponent={
-          <>
-            <WalletList />
-            {/* HACK - This is a 'header' for data that is rendered in flatlist */}
-            <View style={styles.transactionHeader}>
-              <Label style={styles.recentTransactionsText}>Recent transactions</Label>
-              {isTransactionLoading && <ActivityIndicator color={colors.greenMint} />}
-            </View>
-          </>
-        }
-        ListFooterComponent={
-          <>
-            {/* HACK - This is a 'footer' for data that is rendered in flatlist */}
-            {hasTransactions && (
-              <View style={styles.allTransactionsBtn}>
-                <ButtonText title='View all transactions' onPress={navigateToTransactionSearch} />
-              </View>
-            )}
-          </>
-        }
-        contentContainerStyle={styles.container}
-      />
+      <ScrollView style={styles.container}>
+        <WalletList />
+        <View style={{ marginHorizontal: 16 }}>
+          <RecentTransactions
+            transactions={transactions}
+            isLoading={isTransactionLoading}
+            title='Recent transactions'
+          />
+        </View>
+      </ScrollView>
       <AddButton />
     </>
   );
@@ -93,55 +56,5 @@ export default BalanceScreen;
 const styles = StyleSheet.create({
   container: {
     paddingBottom: 100,
-  },
-  walletContainer: {
-    marginVertical: 20,
-    padding: 10,
-    borderRadius: 20,
-    backgroundColor: colors.white,
-  },
-  balanceText: {
-    textAlign: "center",
-    color: colors.grey2,
-  },
-  walletValue: {
-    fontSize: 30,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  walletName: {
-    fontSize: 23,
-    fontWeight: "bold",
-    paddingBottom: 20,
-    paddingLeft: 10,
-  },
-  transactionContainer: {
-    marginHorizontal: 16,
-    paddingHorizontal: 10,
-    backgroundColor: colors.white,
-  },
-  recentTransactionsText: {
-    color: colors.black,
-    backgroundColor: colors.white,
-    fontSize: 18,
-    fontWeight: "500",
-  },
-  allTransactionsBtn: {
-    backgroundColor: colors.white,
-    marginHorizontal: 16,
-    paddingVertical: 5,
-    paddingHorizontal: 16,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-  },
-  transactionHeader: {
-    flexDirection: "row",
-    backgroundColor: colors.white,
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    marginHorizontal: 16,
-    justifyContent: 'space-between',
   },
 });
