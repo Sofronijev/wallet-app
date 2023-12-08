@@ -51,12 +51,10 @@ const WalletList = () => {
     );
   };
 
-  // This component is for initial load, so this part of the screen is not empty
-  const emptyWallet = <View style={[styles.nullWallet, { width: walletWidth }]}></View>;
   return (
     <>
       {!walletsArray.length ? (
-        emptyWallet
+        <View style={[styles.nullWallet, { width: walletWidth }]}></View>
       ) : (
         <Carousel
           data={walletsArray}

@@ -11,6 +11,7 @@ import { getActiveWallet } from "store/reducers/wallets/selectors";
 import WalletList from "feature/wallet/ui/WalletList";
 import { ScrollView } from "react-native-gesture-handler";
 import RecentTransactions from "feature/monthlyScreen/ui/RecentTransactions";
+import NullScreen from "components/NullScreen";
 
 const BalanceScreen: React.FC = () => {
   const userId = useAppSelector(getUserId);
@@ -43,6 +44,13 @@ const BalanceScreen: React.FC = () => {
             transactions={transactions}
             isLoading={isTransactionLoading}
             title='Recent transactions'
+            nullScreen={
+              <NullScreen
+                isLoading={isTransactionLoading}
+                title='There are no transactions for this wallet'
+                icon='wallet'
+              />
+            }
           />
         </View>
       </ScrollView>
