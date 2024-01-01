@@ -8,6 +8,7 @@ export const initialTransactionFormValues = {
   description: "",
   category: null,
   type: null,
+  walletId: "",
 };
 
 export type TransactionFromInputs = {
@@ -16,6 +17,7 @@ export type TransactionFromInputs = {
   description: string;
   category: Category | null;
   type: Transaction | null;
+  walletId: string;
 };
 
 export const transactionValidationSchema = Yup.object({
@@ -23,4 +25,5 @@ export const transactionValidationSchema = Yup.object({
   amount: Yup.number().required().label("Amount"),
   category: Yup.object().required().nullable().label("Category"),
   type: Yup.object().required().nullable().label("Type"),
+  walletId: Yup.number().required().nullable().label("Wallet"),
 });

@@ -1,17 +1,14 @@
-import { Keyboard, StyleSheet, View } from "react-native";
+import { Keyboard, StyleSheet, View, TouchableOpacity } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
-import LabelInput from "components/LabelInput";
+import StyledLabelInput from "components/StyledLabelInput";
 import InputErrorLabel from "components/InputErrorLabel";
 import DatePickerInput from "feature/transaction/ui/DatePickerInput";
-import CustomButton from "components/CustomButton";
 import TransactionBottomSheet from "./TransactionBottomSheet";
 import { Category, Transaction } from "modules/transactionCategories";
 import { TransactionBottomSheetType } from "../modules/transactionBottomSheet";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import colors from "constants/colors";
-import TextBox from "components/TextBox";
-import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { formatIsoDate } from "modules/timeAndDate";
 import AppActivityIndicator from "components/AppActivityIndicator";
 import {
@@ -27,13 +24,14 @@ import {
   transactionValidationSchema,
 } from "../modules/formValidation";
 import { RouteProp } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import HeaderIcon from "components/HeaderIcon";
 import { deleteTransactionAlert, formatFormAmountValue, handleTransactionError } from "../modules";
 import { useAppSelector } from "store/hooks";
 import { getUserId } from "store/reducers/userSlice";
 import { transactionStrings } from "constants/strings";
-import { getActiveWallet } from "store/reducers/wallets/selectors";
+import { getActiveWallet, getAllWallets } from "store/reducers/wallets/selectors";
+import CustomButton from "components/CustomButton";
 
 type Props = {
   navigation: StackNavigationProp<AppStackParamList>;
@@ -49,6 +47,8 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
   const [tryDeleteNewTransaction, { isLoading: deleteLoading }] = useDeleteTransactionMutation();
   const userId = useAppSelector(getUserId);
   const walletId = useAppSelector(getActiveWallet)?.walletId;
+  const walletName = useAppSelector(getActiveWallet)?.walletName;
+  const wallets = useAppSelector(getAllWallets);
 
   const onTransactionSubmit = async (values: TransactionFromInputs) => {
     Keyboard.dismiss();
@@ -102,7 +102,7 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
   };
 
   const formik = useFormik<TransactionFromInputs>({
-    initialValues: initialTransactionFormValues,
+    initialValues: {...initialTransactionFormValues, walletId: `${walletId}`},
     validationSchema: transactionValidationSchema,
     validateOnChange: hasSubmittedForm,
     onSubmit: (values) => onTransactionSubmit(values),
@@ -137,7 +137,7 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
 
   // In case amount is negative, remove minus sign for preview
   // TODO - add validation while typing
-  const formattedAmount = formik.values.amount.replace('-', '');
+  const formattedAmount = formik.values.amount.replace("-", "");
 
   const onDateChange = (date: string) => {
     formik.setFieldValue("date", date);
@@ -150,46 +150,62 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <DatePickerInput
-        date={new Date(formik.values.date)}
-        maximumDate={new Date()}
-        onDateSelect={onDateChange}
-      />
-      <LabelInput
-        value={formattedAmount}
-        placeholder='Amount'
-        onChangeText={formik.handleChange("amount")}
-        keyboardType='decimal-pad'
-        style={styles.input}
-        icon={<FontAwesome5 name='coins' size={24} color={colors.greenMint} />}
-        autoFocus={!editData}
-      />
-      <InputErrorLabel text={formik.errors.amount} isVisible={!!formik.errors.amount} />
-      <TouchableOpacity onPress={openSheet}>
-        <LabelInput
-          value={setCategoryText()}
-          icon={<MaterialIcons name='category' size={24} color={colors.greenMint} />}
-          disabled
-          placeholder='Category'
-          style={styles.input}
-          inputStyle={styles.category}
+      <View style={styles.inputsContainer}>
+        <DatePickerInput
+          date={new Date(formik.values.date)}
+          maximumDate={new Date()}
+          onDateSelect={onDateChange}
         />
-      </TouchableOpacity>
-      <InputErrorLabel
-        text={formik.errors.category}
-        isVisible={!!formik.errors.category || !!formik.errors.type}
-      />
-      <TextBox
-        placeholder='Transaction comment'
-        style={styles.input}
-        numberOfLines={6}
-        maxLength={300}
-        value={formik.values.description}
-        onChangeText={formik.handleChange("description")}
-      />
-      <CustomButton title='Submit' onPress={onSubmit} style={styles.button} />
-      <AppActivityIndicator isLoading={isLoading || editLoading || deleteLoading} />
+        <StyledLabelInput
+          value={formattedAmount}
+          placeholder='Amount'
+          onChangeText={formik.handleChange("amount")}
+          keyboardType='decimal-pad'
+          style={styles.input}
+          icon={<FontAwesome5 name='coins' size={24} color={colors.greenMint} />}
+          autoFocus={!editData}
+        />
+        <InputErrorLabel text={formik.errors.amount} isVisible={!!formik.errors.amount} />
+        <View style={styles.flexRow}>
+          <View style={styles.flex}>
+            <TouchableOpacity onPress={openSheet}>
+              <StyledLabelInput
+                value={setCategoryText()}
+                icon={<MaterialIcons name='category' size={24} color={colors.greenMint} />}
+                disabled
+                placeholder='Category'
+                style={styles.input}
+                inputStyle={styles.category}
+              />
+            </TouchableOpacity>
+            <InputErrorLabel
+              text={formik.errors.category}
+              isVisible={!!formik.errors.category || !!formik.errors.type}
+            />
+          </View>
+          <View style={styles.flex}>
+            <StyledLabelInput
+              value={walletName}
+              disabled
+              placeholder='Wallet'
+              style={styles.input}
+              inputStyle={styles.category}
+              icon={<Ionicons name='wallet' size={24} color={colors.greenMint} />}
+            />
+            <InputErrorLabel text={formik.errors.walletId} isVisible={!!formik.errors.amount} />
+          </View>
+        </View>
+        <StyledLabelInput
+          placeholder='Transaction comment'
+          style={styles.input}
+          maxLength={300}
+          value={formik.values.description}
+          onChangeText={formik.handleChange("description")}
+        />
+        <CustomButton title='Submit' onPress={onSubmit} style={styles.button} />
+      </View>
       <TransactionBottomSheet ref={sheetRef} onSelect={onSelectCategory} />
+      <AppActivityIndicator isLoading={isLoading || editLoading || deleteLoading} />
     </View>
   );
 };
@@ -199,8 +215,19 @@ export default TransactionForm;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 16,
+    backgroundColor: colors.white,
     paddingTop: 20,
+  },
+  inputsContainer: {
+    marginHorizontal: 16,
+    marginBottom: 40,
+  },
+  flexRow: {
+    flexDirection: "row",
+    columnGap: 10,
+  },
+  flex: {
+    flex: 1,
   },
   input: {
     marginTop: 20,

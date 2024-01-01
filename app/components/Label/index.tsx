@@ -1,16 +1,8 @@
-import { StyleProp, Text, TextProps, TextStyle } from "react-native";
+import { Text, TextProps } from "react-native";
 import React from "react";
 
-type LabelType = TextProps & {
-  style?: StyleProp<TextStyle>;
-};
-
-const Label: React.FC<LabelType> = ({ children, style, ...props }) => {
-  return (
-    <Text {...props} style={style}>
-      {children}
-    </Text>
-  );
+const Label: React.FC<TextProps> = ({ children, ...props }) => {
+  return <Text {...props}>{children}</Text>;
 };
 
 export default Label;
