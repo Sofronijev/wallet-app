@@ -10,6 +10,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { transactionStrings } from "constants/strings";
 import { getMonthlyBalance } from "store/reducers/monthlyBalance/selectors";
+import { getActiveWallet } from "store/reducers/wallets/selectors";
 
 type ThisMonthBalanceProps = {
   isLoading: boolean;
@@ -30,9 +31,12 @@ const ThisMonthBalance: React.FC<ThisMonthBalanceProps> = ({
 }) => {
   const { income, expense, balance } = useAppSelector(getMonthlyBalance(date));
   const formattedMonth = getMonthAndYear(date);
+  const activeWallet = useAppSelector(getActiveWallet);
+  const walletName = activeWallet?.walletName ?? "";
 
   return (
     <View style={styles.container}>
+      <Label style={styles.walletName}>{walletName}</Label>
       <View style={[styles.row, styles.titleContainer]}>
         <Label style={styles.title}>{formattedMonth}</Label>
         <View style={styles.icons}>
@@ -120,5 +124,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 30,
     alignItems: "center",
+  },
+  walletName: {
+    fontSize: 25,
+    fontWeight: "bold",
+    paddingBottom: 5,
+    paddingLeft: 30,
   },
 });

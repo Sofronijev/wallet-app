@@ -39,7 +39,7 @@ const BalanceScreen: React.FC = () => {
     <>
       <ScrollView style={styles.container}>
         <WalletList />
-        <View style={{ marginHorizontal: 16 }}>
+        <View style={styles.transactionsContainer}>
           <RecentTransactions
             transactions={transactions}
             isLoading={isTransactionLoading}
@@ -65,4 +65,7 @@ const styles = StyleSheet.create({
   container: {
     paddingBottom: 100,
   },
+  transactionsContainer: {
+    marginHorizontal: 16,
+  }
 });
