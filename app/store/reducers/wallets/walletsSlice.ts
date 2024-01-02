@@ -19,7 +19,7 @@ export type Wallet = {
 };
 
 type WalletStoreType = {
-  walletsById: Record<number, Wallet>;
+  walletsById: Record<number | string, Wallet>;
   activeWalletId: number;
   count: number;
 };

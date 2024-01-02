@@ -32,6 +32,7 @@ import { getUserId } from "store/reducers/userSlice";
 import { transactionStrings } from "constants/strings";
 import { getActiveWallet, getAllWallets } from "store/reducers/wallets/selectors";
 import CustomButton from "components/CustomButton";
+import WalletPicker from "./WalletPicker";
 
 type Props = {
   navigation: StackNavigationProp<AppStackParamList>;
@@ -47,7 +48,6 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
   const [tryDeleteNewTransaction, { isLoading: deleteLoading }] = useDeleteTransactionMutation();
   const userId = useAppSelector(getUserId);
   const walletId = useAppSelector(getActiveWallet)?.walletId;
-  const walletName = useAppSelector(getActiveWallet)?.walletName;
   const wallets = useAppSelector(getAllWallets);
 
   const onTransactionSubmit = async (values: TransactionFromInputs) => {
@@ -60,7 +60,7 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
           date: formatIsoDate(values.date),
           typeId: values.type.id,
           categoryId: values.category.id,
-          walletId,
+          walletId: Number(values.walletId),
         };
         if (editData) {
           await tryEditNewTransaction({
@@ -102,11 +102,13 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
   };
 
   const formik = useFormik<TransactionFromInputs>({
-    initialValues: {...initialTransactionFormValues, walletId: `${walletId}`},
+    initialValues: { ...initialTransactionFormValues, walletId: `${walletId}` },
     validationSchema: transactionValidationSchema,
     validateOnChange: hasSubmittedForm,
     onSubmit: (values) => onTransactionSubmit(values),
   });
+
+  const walletName = wallets[formik.values.walletId]?.walletName;
 
   useEffect(() => {
     if (editData) {
@@ -141,6 +143,10 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
 
   const onDateChange = (date: string) => {
     formik.setFieldValue("date", date);
+  };
+
+  const onWalletSelect = (walletId: number) => {
+    formik.setFieldValue("walletId", walletId);
   };
 
   const onSubmit = () => {
@@ -184,14 +190,7 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
             />
           </View>
           <View style={styles.flex}>
-            <StyledLabelInput
-              value={walletName}
-              disabled
-              placeholder='Wallet'
-              style={styles.input}
-              inputStyle={styles.category}
-              icon={<Ionicons name='wallet' size={24} color={colors.greenMint} />}
-            />
+            <WalletPicker value={walletName} style={styles.input} onSelect={onWalletSelect} />
             <InputErrorLabel text={formik.errors.walletId} isVisible={!!formik.errors.amount} />
           </View>
         </View>

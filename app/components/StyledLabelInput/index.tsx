@@ -1,4 +1,4 @@
-import { StyleProp, StyleSheet, TextInput, TextInputProps, TextStyle, View } from "react-native";
+import { StyleProp, StyleSheet, TextInputProps, TextStyle, View } from "react-native";
 import React from "react";
 import colors from "constants/colors";
 import LabelInput from "components/LabelInput";
@@ -10,11 +10,17 @@ type StyledLabelInputType = TextInputProps & {
   disabled?: boolean;
 };
 
-const StyledLabelInput: React.FC<StyledLabelInputType> = ({ icon, style, inputStyle, disabled, ...props }) => {
+const StyledLabelInput: React.FC<StyledLabelInputType> = ({
+  icon,
+  style,
+  inputStyle,
+  disabled,
+  ...props
+}) => {
   return (
-    <View style={[styles.container, style]} pointerEvents={disabled ? 'none' : 'auto'}>
+    <View style={[styles.container, style]} pointerEvents={disabled ? "none" : "auto"}>
       {icon && <View style={styles.icon}>{icon}</View>}
-      <LabelInput style={[styles.input, inputStyle]} editable={!disabled}  {...props} />
+      <LabelInput style={[styles.input, inputStyle]} editable={!disabled} {...props} />
     </View>
   );
 };
