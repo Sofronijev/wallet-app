@@ -109,9 +109,15 @@ const entertainment = {
   65: { name: "entertainment_gadgets", id: 65, label: "Gadgets" },
   66: { name: "entertainment_other", id: 66, label: "Other" },
 };
+
 const other = {
   67: { name: "expenses_other", id: 67, label: "Other" },
 };
+
+const balanceAdjust = {
+  68: { name: "balanceAdjust", id: 68, label: "Adjust balance" },
+};
+
 
 export enum CategoryNumber {
   "income" = 1,
@@ -127,6 +133,7 @@ export enum CategoryNumber {
   "obligation" = 11,
   "entertainment" = 12,
   "other" = 13,
+  "balanceAdjust" = 14,
 }
 
 export const transactionCategories: CategoriesType = {
@@ -144,4 +151,5 @@ export const transactionCategories: CategoriesType = {
   [CategoryNumber.obligation]: { name: "obligation", id: CategoryNumber.obligation, label: "Obligation", types: obligation },
   [CategoryNumber.entertainment]: { name: "entertainment", id: CategoryNumber.entertainment, label: "Entertainment", types: entertainment },
   [CategoryNumber.other]: { name: "other", id: CategoryNumber.other, label: "Other", types: other },
+  [CategoryNumber.balanceAdjust]: { name: "balanceAdjust", id: CategoryNumber.balanceAdjust, label: "Adjust balance", types: balanceAdjust },
 };

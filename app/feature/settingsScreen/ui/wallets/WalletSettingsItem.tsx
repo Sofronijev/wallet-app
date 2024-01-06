@@ -5,9 +5,13 @@ import { getWalletById } from "store/reducers/wallets/selectors";
 import colors from "constants/colors";
 import { formatDecimalDigits } from "modules/numbers";
 import ButtonText from "components/ButtonText";
-import { useSetWalletStartingBalanceMutation } from "app/middleware/wallets";
+import {
+  useSetWalletBalanceMutation,
+  useSetWalletStartingBalanceMutation,
+} from "app/middleware/wallets";
 import { getUserId } from "store/reducers/userSlice";
-import { showStartingBalancePrompt } from "feature/settingsScreen/modules";
+import { showBalancePrompt, showStartingBalancePrompt } from "feature/settingsScreen/modules";
+import { formatIsoDate } from "modules/timeAndDate";
 
 type Props = {
   walletId: number;
@@ -18,15 +22,31 @@ const WalletSettingsItem: React.FC<Props> = ({ walletId }) => {
   const userId = useAppSelector(getUserId);
   if (!wallet) return null;
   const [trySetStartingBalance, { isLoading }] = useSetWalletStartingBalanceMutation();
+  const [tryAdjustBalance] = useSetWalletBalanceMutation();
 
   const onStartingBalancePress = () => {
-    showStartingBalancePrompt((text: string) =>
+    showStartingBalancePrompt((value: string) =>
       trySetStartingBalance({
         walletId,
         userId,
         // TODO - format, validate number
-        value: parseFloat(text),
+        value: parseFloat(value),
       })
+    );
+  };
+
+  const onBalancePress = () => {
+    showBalancePrompt((value: string) =>
+      {
+        // TODO - don't call endpoint if value is same as current balance
+        return tryAdjustBalance({
+          walletId,
+          userId,
+          // TODO - format, validate number
+          value: parseFloat(value),
+          date: formatIsoDate(new Date()),
+        });
+      }
     );
   };
 
@@ -35,7 +55,11 @@ const WalletSettingsItem: React.FC<Props> = ({ walletId }) => {
       <Text style={styles.name}>{wallet.walletName}</Text>
       <View style={styles.row}>
         <Text style={styles.titleText}>Balance:</Text>
-        <Text>{formatDecimalDigits(wallet.currentBalance)}</Text>
+        <ButtonText
+          title={formatDecimalDigits(wallet.currentBalance)}
+          type='link'
+          onPress={onBalancePress}
+        />
       </View>
       <View style={styles.row}>
         <Text style={styles.titleText}>Starting balance:</Text>

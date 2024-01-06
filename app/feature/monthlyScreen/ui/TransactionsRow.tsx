@@ -31,6 +31,7 @@ const TransactionsRow: React.FC<Props> = ({ transaction }) => {
         description: transaction.description,
         category,
         type,
+        walletId: `${transaction.walletId}`,
       },
     });
   };

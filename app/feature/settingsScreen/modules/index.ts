@@ -51,3 +51,14 @@ export const showStartingBalancePrompt = (callback: (text: string) => void) => {
     { keyboardType: "numeric" }
   );
 };
+
+export const showBalancePrompt = (callback: (text: string) => void) => {
+  AlertPrompt.prompt(
+    "Adjust balance",
+    "Enter the correct balance. A correction transaction will be created to adjust it accordingly",
+    (text) => {
+      callback(text);
+    },
+    { keyboardType: "numeric" }
+  );
+};

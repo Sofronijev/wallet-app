@@ -6,14 +6,16 @@ import BottomSheet, {
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
 import colors from "constants/colors";
-import { Category, transactionCategories, Transaction } from "modules/transactionCategories";
+import { Category, transactionCategories, Transaction, CategoryNumber } from "modules/transactionCategories";
 import Separator from "components/Separator";
 import TransactionRowSelect from "./TransactionRowSelect";
 import TransactionItem, { TRANSACTION_ITEM_HEIGHT } from "./TransactionItem";
 import { CATEGORIES_NUMBER_OF_ROWS, HEADER_TEXT_HEIGH } from "feature/transaction/modules";
 import TransactionSheetHeader from "./TransactionSheetHeader";
 
-const categoriesData = Object.values(transactionCategories).map((item) => ({
+const removeCategories = (data: Category) => data.id !== CategoryNumber.balanceAdjust;
+
+const categoriesData = Object.values(transactionCategories).filter(removeCategories).map((item) => ({
   name: item.name,
   id: item.id,
   label: item.label,

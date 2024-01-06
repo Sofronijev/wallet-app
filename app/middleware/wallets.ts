@@ -20,6 +20,17 @@ export type SetWalletStartingBalanceRes = {
   message: string;
 };
 
+export type SetWalletBalanceReq = {
+  userId: number;
+  walletId: number;
+  value: number;
+  date: string;
+};
+
+export type SetWalletBalanceRes = {
+  message: string;
+};
+
 export const walletsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // builder.query<ReturnValueHere, ArgumentTypeHere>. If there is no argument, use void
@@ -42,7 +53,19 @@ export const walletsApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Wallets"],
     }),
+    setWalletBalance: builder.mutation<SetWalletBalanceRes, SetWalletBalanceReq>({
+      query: (data: SetWalletBalanceReq) => ({
+        url: "/wallets/adjustBalance",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Wallets", "Transactions"],
+    }),
   }),
 });
 
-export const { useGetUserWalletsQuery, useSetWalletStartingBalanceMutation } = walletsApi;
+export const {
+  useGetUserWalletsQuery,
+  useSetWalletStartingBalanceMutation,
+  useSetWalletBalanceMutation,
+} = walletsApi;

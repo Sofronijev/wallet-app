@@ -9,9 +9,12 @@ import colors from "constants/colors";
 import { useDispatch } from "react-redux";
 import AppActivityIndicator from "components/AppActivityIndicator";
 import { getUserId } from "store/reducers/userSlice";
-import { useGetUserWalletsQuery } from "app/middleware/wallets";
+import { useGetUserWalletsQuery, useSetWalletBalanceMutation } from "app/middleware/wallets";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import Carousel from "components/Carousel";
+import ButtonText from "components/ButtonText";
+import { showBalancePrompt } from "feature/settingsScreen/modules";
+import { formatIsoDate } from "modules/timeAndDate";
 
 const WALLET_SPACING = 8;
 const HORIZONTAL_PADDING = 16;
@@ -31,12 +34,26 @@ const WalletList: React.FC = () => {
         }
       : skipToken
   );
+  const [tryAdjustBalance] = useSetWalletBalanceMutation();
 
   const wallets = useAppSelector(getAllWallets);
   const walletsArray = Object.values(wallets);
 
   const onWalletChange = (item: Wallet) => {
     dispatch(setActiveWallet(item.walletId));
+  };
+
+  const onBalancePress = (walletId: number) => {
+    showBalancePrompt((value: string) => {
+      // TODO - don't call endpoint if value is same as current balance
+      return tryAdjustBalance({
+        walletId,
+        userId,
+        // TODO - format, validate number
+        value: parseFloat(value),
+        date: formatIsoDate(new Date()),
+      });
+    });
   };
 
   const walletWidth = width - HORIZONTAL_PADDING * 2;
@@ -47,6 +64,11 @@ const WalletList: React.FC = () => {
         <Label style={styles.walletName}>{item.walletName}</Label>
         <Label style={styles.balanceText}>Available balance</Label>
         <Label style={styles.walletValue}>{formatDecimalDigits(item.currentBalance)}</Label>
+        <ButtonText
+          title='Adjust balance'
+          onPress={() => onBalancePress(item.walletId)}
+          style={styles.adjustBalance}
+        />
       </View>
     );
   };
@@ -78,13 +100,13 @@ const walletStyle = {
   padding: 10,
   borderRadius: 20,
   backgroundColor: colors.white,
-  height: 150,
+  height: 160,
 };
 
 const styles = StyleSheet.create({
   walletCarousel: {
     paddingHorizontal: HORIZONTAL_PADDING,
-    height: 190,
+    height: 200,
   },
   walletContainer: {
     ...walletStyle,
@@ -103,6 +125,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
+    paddingBottom: 10,
   },
   walletName: {
     fontSize: 23,
@@ -112,5 +135,8 @@ const styles = StyleSheet.create({
   },
   transactionContainer: {
     marginHorizontal: 16,
+  },
+  adjustBalance: {
+    alignSelf: "flex-end",
   },
 });
