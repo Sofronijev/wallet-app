@@ -12,6 +12,8 @@ import WalletList from "feature/wallet/ui/WalletList";
 import { ScrollView } from "react-native-gesture-handler";
 import RecentTransactions from "feature/monthlyScreen/ui/RecentTransactions";
 import NullScreen from "components/NullScreen";
+import { useSetWalletStartingBalanceMutation } from "app/middleware/wallets";
+import { showStartingBalancePrompt } from "feature/settingsScreen/modules";
 
 const BalanceScreen: React.FC = () => {
   const userId = useAppSelector(getUserId);
@@ -19,6 +21,7 @@ const BalanceScreen: React.FC = () => {
   const transactions = useAppSelector(getUserRecentTransactions);
   const activeWallet = useAppSelector(getActiveWallet);
   const walletId = activeWallet?.walletId;
+  const hasStartingBalance = !!activeWallet?.startingBalance;
 
   const { isError, isLoading, isFetching } = useGetUserRecentTransactionsQuery(
     userId && walletId
@@ -29,11 +32,26 @@ const BalanceScreen: React.FC = () => {
       : skipToken,
     { refetchOnMountOrArgChange: true }
   );
-  const isTransactionLoading = isLoading || isFetching;
+  const [trySetStartingBalance, { isLoading: isStartingBalanceLoading }] =
+    useSetWalletStartingBalanceMutation();
+
+  const isTransactionLoading = isLoading || isFetching || isStartingBalanceLoading;
 
   if (isError) {
     Alert.alert(errorStrings.general, errorStrings.tryAgain);
   }
+
+  const onChangeStartingBalance = () => {
+    if (!walletId) return;
+    showStartingBalancePrompt((text: string) =>
+      trySetStartingBalance({
+        walletId,
+        userId,
+        // TODO - format, validate number
+        value: parseFloat(text),
+      })
+    );
+  };
 
   return (
     <>
@@ -47,8 +65,11 @@ const BalanceScreen: React.FC = () => {
             nullScreen={
               <NullScreen
                 isLoading={isTransactionLoading}
-                title='There are no transactions for this wallet'
+                title='No transactions'
+                subtitle='Tap the plus sign (+) button to start tracking your expenses and incomes to gain better control of your finances.'
                 icon='wallet'
+                buttonText={hasStartingBalance ? undefined : "Add starting balance"}
+                onPress={onChangeStartingBalance}
               />
             }
           />
@@ -67,5 +88,5 @@ const styles = StyleSheet.create({
   },
   transactionsContainer: {
     marginHorizontal: 16,
-  }
+  },
 });

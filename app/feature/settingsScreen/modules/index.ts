@@ -1,4 +1,5 @@
 import { alertButtonStrings, deleteUserDataStrings, logoutAlertStrings } from "constants/strings";
+import AlertPrompt from "modules/AlertPrompt";
 import { Alert } from "react-native";
 
 export const showLogoutAlert = (onLogout: () => void) => {
@@ -21,21 +22,32 @@ export const showLogoutAlert = (onLogout: () => void) => {
 };
 
 export const showDeleteUserDataALert = (onDelete: () => void) => {
-    Alert.alert(
-      deleteUserDataStrings.title,
-      deleteUserDataStrings.subtitle,
-      [
-        {
-          text: alertButtonStrings.cancel,
-        },
-        {
-          text: alertButtonStrings.delete,
-          onPress: onDelete,
-          style: 'cancel',
-        },
-      ],
+  Alert.alert(
+    deleteUserDataStrings.title,
+    deleteUserDataStrings.subtitle,
+    [
       {
-        cancelable: true,
-      }
-    );
-  };
+        text: alertButtonStrings.cancel,
+      },
+      {
+        text: alertButtonStrings.delete,
+        onPress: onDelete,
+        style: "cancel",
+      },
+    ],
+    {
+      cancelable: true,
+    }
+  );
+};
+
+export const showStartingBalancePrompt = (callback: (text: string) => void) => {
+  AlertPrompt.prompt(
+    "Change starting balance",
+    "Enter the amount you want to use as a starting balance. This change will also affect your current balance",
+    (text) => {
+      callback(text);
+    },
+    { keyboardType: "numeric" }
+  );
+};

@@ -44,9 +44,10 @@ export const walletsSlice = createSlice({
   initialState: initialWalletsState,
   reducers: {
     setUserWallets: (state, action: SliceAction<GetWalletResponse>) => {
+      console.log(action.payload);
       state.walletsById = transformWallets(action.payload.wallets);
       state.count = action.payload.count;
-      state.activeWalletId = action.payload.wallets[0].walletId;
+      state.activeWalletId = state.activeWalletId || action.payload.wallets[0].walletId;
     },
     setActiveWallet: (state, action: SliceAction<number>) => {
       state.activeWalletId = action.payload;
@@ -58,7 +59,9 @@ export const walletsSlice = createSlice({
       (state, action: SliceAction<GetWalletResponse, GetWalletRequest>) => {
         state.walletsById = transformWallets(action.payload.wallets);
         state.count = action.payload.count;
-        state.activeWalletId = action.payload.wallets[0].walletId;
+        // If active wallet is already set, don't change it on refetch
+        // TODO : fix it to fetch only wallet that is updated
+        state.activeWalletId = state.activeWalletId || action.payload.wallets[0].walletId;
       }
     );
     builder.addDefaultCase((state) => {

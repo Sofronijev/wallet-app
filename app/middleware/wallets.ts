@@ -10,6 +10,16 @@ export type GetWalletResponse = {
   count: number;
 };
 
+export type SetWalletStartingBalanceReq = {
+  userId: number;
+  walletId: number;
+  value: number;
+};
+
+export type SetWalletStartingBalanceRes = {
+  message: string;
+};
+
 export const walletsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // builder.query<ReturnValueHere, ArgumentTypeHere>. If there is no argument, use void
@@ -21,7 +31,18 @@ export const walletsApi = apiSlice.injectEndpoints({
       }),
       providesTags: ["Wallets"],
     }),
+    setWalletStartingBalance: builder.mutation<
+      SetWalletStartingBalanceRes,
+      SetWalletStartingBalanceReq
+    >({
+      query: (data: SetWalletStartingBalanceReq) => ({
+        url: "/wallets/setStartingBalance",
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Wallets"],
+    }),
   }),
 });
 
-export const { useGetUserWalletsQuery } = walletsApi;
+export const { useGetUserWalletsQuery, useSetWalletStartingBalanceMutation } = walletsApi;

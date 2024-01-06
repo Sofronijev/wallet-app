@@ -18,7 +18,7 @@ const HORIZONTAL_PADDING = 16;
 
 const walletKeyExtractor = (item: Wallet) => `${item.walletId}`;
 
-const WalletList = () => {
+const WalletList: React.FC = () => {
   const { width } = useWindowDimensions();
   const dispatch = useDispatch();
 

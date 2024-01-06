@@ -45,6 +45,6 @@ export const logoutAlertStrings = {
 };
 
 export const deleteUserDataStrings = {
-  title: "Are you sure you want to delete your data?",
-  subtitle: "All user data will permanently be deleted. This action cannot be undone.",
+  title: "Are you sure you want to delete your account?",
+  subtitle: "All your data will permanently be deleted. This action cannot be undone.",
 }
