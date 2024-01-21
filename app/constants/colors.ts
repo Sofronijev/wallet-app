@@ -26,6 +26,7 @@ const colors = {
   disabled: "#c2c7cc",
   danger: "#DB3545",
   delete: "#FF5366",
+  transfer: "#86A789",
 };
 
 export default colors;

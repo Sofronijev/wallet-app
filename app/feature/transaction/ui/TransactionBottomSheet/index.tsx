@@ -6,20 +6,28 @@ import BottomSheet, {
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
 import colors from "constants/colors";
-import { Category, transactionCategories, Transaction, CategoryNumber } from "modules/transactionCategories";
+import {
+  Category,
+  transactionCategories,
+  Transaction,
+  CategoryNumber,
+} from "modules/transactionCategories";
 import Separator from "components/Separator";
 import TransactionRowSelect from "./TransactionRowSelect";
 import TransactionItem, { TRANSACTION_ITEM_HEIGHT } from "./TransactionItem";
 import { CATEGORIES_NUMBER_OF_ROWS, HEADER_TEXT_HEIGH } from "feature/transaction/modules";
 import TransactionSheetHeader from "./TransactionSheetHeader";
 
-const removeCategories = (data: Category) => data.id !== CategoryNumber.balanceAdjust;
+const removeCategories = (data: Category) =>
+  !(data.id === CategoryNumber.balanceAdjust || data.id === CategoryNumber.transfer);
 
-const categoriesData = Object.values(transactionCategories).filter(removeCategories).map((item) => ({
-  name: item.name,
-  id: item.id,
-  label: item.label,
-}));
+const categoriesData = Object.values(transactionCategories)
+  .filter(removeCategories)
+  .map((item) => ({
+    name: item.name,
+    id: item.id,
+    label: item.label,
+  }));
 
 const HANDLE_HEIGHT = 24;
 const CATEGORIES_PADDING = 10;
@@ -93,7 +101,7 @@ const TransactionBottomSheet: React.ForwardRefRenderFunction<refProps, Props> = 
     return data.map((item) => (
       <View key={item.id}>
         <TransactionRowSelect item={item} onPress={onRowPress} />
-        <Separator offset={16}/>
+        <Separator offset={16} />
       </View>
     ));
   };

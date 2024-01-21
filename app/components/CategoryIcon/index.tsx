@@ -116,9 +116,18 @@ const getIcon = (type: string, iconSize?: number) => {
     case "balanceAdjust":
       return {
         icon: (
-          <MaterialCommunityIcons name='auto-fix' size={iconSize ?? ICON_SIZE} color={colors.white} />
+          <MaterialCommunityIcons
+            name='auto-fix'
+            size={iconSize ?? ICON_SIZE}
+            color={colors.white}
+          />
         ),
         backgroundColor: colors.otherCategory,
+      };
+    case "transfer":
+      return {
+        icon: <Fontisto  name='arrow-swap' size={iconSize ?? ICON_SIZE} color={colors.white} />,
+        backgroundColor: colors.transfer,
       };
     default:
       return {

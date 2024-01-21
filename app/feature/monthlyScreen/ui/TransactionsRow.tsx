@@ -4,7 +4,7 @@ import colors from "constants/colors";
 import Label from "components/Label";
 import CategoryIcon from "components/CategoryIcon";
 import { formatDecimalDigits } from "modules/numbers";
-import { CategoryNumber, transactionCategories } from "modules/transactionCategories";
+import { CategoryNumber, transactionCategories, transfer } from "modules/transactionCategories";
 import { TransactionType } from "store/reducers/monthlyBalance/monthlyBalanceSlice";
 import { formatDayString } from "modules/timeAndDate";
 import { useNavigation } from "@react-navigation/native";
@@ -20,7 +20,11 @@ const TransactionsRow: React.FC<Props> = ({ transaction }) => {
   const category = transactionCategories[transaction.categoryId];
   const type = category.types[transaction.typeId];
   const hasDescription = !!transaction.description;
-  const isIncome = transaction.categoryId === CategoryNumber.income;
+  // TODO!! get type from modules
+  const transactionReceivedId = 70;
+  const isIncome =
+    transaction.categoryId === CategoryNumber.income ||
+    transaction.typeId === transactionReceivedId;
 
   const openEditTransaction = () => {
     navigation.navigate("Transaction", {
@@ -53,7 +57,7 @@ const TransactionsRow: React.FC<Props> = ({ transaction }) => {
       </View>
       <View>
         <Label style={[styles.price, isIncome && styles.incomeColor]}>
-          {`${formatDecimalDigits((transaction.amount))}`}
+          {`${formatDecimalDigits(transaction.amount)}`}
         </Label>
         <View style={styles.dateContainer}>
           <Label style={styles.date} numberOfLines={1}>
