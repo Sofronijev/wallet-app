@@ -38,6 +38,7 @@ export const transactionStrings = {
   editTransaction: "Edit transaction",
   addTransaction: "Add transaction",
   transactionSearch: "All transactions",
+  createTransfer: "Create transfer",
 };
 
 export const logoutAlertStrings = {

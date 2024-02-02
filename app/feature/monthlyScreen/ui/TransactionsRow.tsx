@@ -4,7 +4,7 @@ import colors from "constants/colors";
 import Label from "components/Label";
 import CategoryIcon from "components/CategoryIcon";
 import { formatDecimalDigits } from "modules/numbers";
-import { CategoryNumber, transactionCategories, transfer } from "modules/transactionCategories";
+import { CategoryNumber, transactionCategories } from "modules/transactionCategories";
 import { TransactionType } from "store/reducers/monthlyBalance/monthlyBalanceSlice";
 import { formatDayString } from "modules/timeAndDate";
 import { useNavigation } from "@react-navigation/native";
@@ -27,17 +27,21 @@ const TransactionsRow: React.FC<Props> = ({ transaction }) => {
     transaction.typeId === transactionReceivedId;
 
   const openEditTransaction = () => {
-    navigation.navigate("Transaction", {
-      editData: {
-        id: transaction.id,
-        date: transaction.date,
-        amount: `${transaction.amount}`,
-        description: transaction.description,
-        category,
-        type,
-        walletId: `${transaction.walletId}`,
-      },
-    });
+    if (transaction.categoryId === CategoryNumber.transfer) {
+      navigation.navigate("TransferForm");
+    } else {
+      navigation.navigate("Transaction", {
+        editData: {
+          id: transaction.id,
+          date: transaction.date,
+          amount: `${transaction.amount}`,
+          description: transaction.description,
+          category,
+          type,
+          walletId: `${transaction.walletId}`,
+        },
+      });
+    }
   };
 
   return (
