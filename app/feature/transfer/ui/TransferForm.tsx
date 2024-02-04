@@ -15,6 +15,8 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { useCreateNewTransferMutation } from "app/middleware/transfers";
 import { getUserId } from "store/reducers/userSlice";
 import AppActivityIndicator from "components/AppActivityIndicator";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import { AppStackParamList } from "navigation/routes";
 
 export type TransferFromInputs = {
   date: string;
@@ -34,22 +36,33 @@ export const initialTransferFormValues = {
 
 export const transactionValidationSchema = Yup.object({
   date: Yup.string().required().label("Date"),
-  amountTo: Yup.number().required("Please enter the amount to transfer").label("Amount"),
-  amountFrom: Yup.number()
+  amountTo: Yup.number()
+    .typeError("Please enter a valid number for the amount")
     .required("Please enter the amount to transfer")
-    .nullable()
     .label("Amount"),
-  walletIdTo: Yup.number().required("Please select the wallet").nullable().label("Wallet"),
-  walletIdFrom: Yup.number().required("Please select the wallet").nullable().label("Wallet"),
+  amountFrom: Yup.number()
+    .typeError("Please enter a valid number for the amount")
+    .required("Please enter the amount to transfer")
+    .label("Amount"),
+  walletIdTo: Yup.number().required("Please select the wallet").label("Wallet"),
+  walletIdFrom: Yup.number()
+    .required("Please select the wallet")
+    .label("Wallet")
+    .test("notEqual", "Can't transfer funds to the same wallet", function (value) {
+      const { walletIdTo } = this.parent;
+      return value !== walletIdTo;
+    }),
 });
 
 const TransferForm: React.FC = () => {
   const [hasSubmittedForm, setHasSubmittedForm] = useState(false);
+  const { params } = useRoute<RouteProp<AppStackParamList, "TransferForm">>();
+  const walletIdFromParam = params.walletIdFrom;
 
   const wallets = useAppSelector(getAllWallets);
   const userId = useAppSelector(getUserId);
 
-  const [tryCreateNewTransfer, {isLoading}] = useCreateNewTransferMutation();
+  const [tryCreateNewTransfer, { isLoading }] = useCreateNewTransferMutation();
 
   const onTransactionSubmit = async (values: TransferFromInputs) => {
     Keyboard.dismiss();
@@ -68,7 +81,7 @@ const TransferForm: React.FC = () => {
   };
 
   const formik = useFormik<TransferFromInputs>({
-    initialValues: initialTransferFormValues,
+    initialValues: { ...initialTransferFormValues, walletIdFrom: `${walletIdFromParam}` },
     validationSchema: transactionValidationSchema,
     validateOnChange: hasSubmittedForm,
     onSubmit: (values) => onTransactionSubmit(values),
@@ -121,7 +134,10 @@ const TransferForm: React.FC = () => {
           />
         </View>
       </View>
-      <InputErrorLabel text={formik.errors.amountTo} isVisible={!!formik.errors.amountFrom} />
+      <InputErrorLabel
+        text={formik.errors.amountTo || formik.errors.amountFrom}
+        isVisible={!!formik.errors.amountTo || !!formik.errors.amountFrom}
+      />
       <View style={styles.row}>
         <View style={styles.flex}>
           <WalletPicker
@@ -138,7 +154,10 @@ const TransferForm: React.FC = () => {
           />
         </View>
       </View>
-      <InputErrorLabel text={formik.errors.walletIdFrom} isVisible={!!formik.errors.walletIdFrom} />
+      <InputErrorLabel
+        text={formik.errors.walletIdFrom || formik.errors.walletIdTo}
+        isVisible={!!formik.errors.walletIdFrom || !!formik.errors.walletIdTo}
+      />
       <CustomButton title='Submit' onPress={onSubmit} style={styles.submitBtn} />
       <AppActivityIndicator isLoading={isLoading} />
     </View>

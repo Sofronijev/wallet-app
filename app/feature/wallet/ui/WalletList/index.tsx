@@ -15,6 +15,9 @@ import Carousel from "components/Carousel";
 import ButtonText from "components/ButtonText";
 import { showBalancePrompt } from "feature/settingsScreen/modules";
 import { formatIsoDate } from "modules/timeAndDate";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { AppStackParamList } from "navigation/routes";
 
 const WALLET_SPACING = 8;
 const HORIZONTAL_PADDING = 16;
@@ -24,6 +27,7 @@ const walletKeyExtractor = (item: Wallet) => `${item.walletId}`;
 const WalletList: React.FC = () => {
   const { width } = useWindowDimensions();
   const dispatch = useDispatch();
+  const navigation = useNavigation<StackNavigationProp<AppStackParamList>>();
 
   const userId = useAppSelector(getUserId);
 
@@ -64,11 +68,18 @@ const WalletList: React.FC = () => {
         <Label style={styles.walletName}>{item.walletName}</Label>
         <Label style={styles.balanceText}>Available balance</Label>
         <Label style={styles.walletValue}>{formatDecimalDigits(item.currentBalance)}</Label>
-        <ButtonText
-          title='Adjust balance'
-          onPress={() => onBalancePress(item.walletId)}
-          style={styles.adjustBalance}
-        />
+        <View style={styles.row}>
+          <ButtonText
+            title='Transfer funds'
+            onPress={() => navigation.navigate("TransferForm", { walletIdFrom: item.walletId })}
+            style={styles.button}
+          />
+          <ButtonText
+            title='Adjust balance'
+            onPress={() => onBalancePress(item.walletId)}
+            style={styles.button}
+          />
+        </View>
       </View>
     );
   };
@@ -100,13 +111,13 @@ const walletStyle = {
   padding: 10,
   borderRadius: 20,
   backgroundColor: colors.white,
-  height: 160,
+  height: 170,
 };
 
 const styles = StyleSheet.create({
   walletCarousel: {
     paddingHorizontal: HORIZONTAL_PADDING,
-    height: 200,
+    height: walletStyle.height + 40,
   },
   walletContainer: {
     ...walletStyle,
@@ -136,7 +147,15 @@ const styles = StyleSheet.create({
   transactionContainer: {
     marginHorizontal: 16,
   },
-  adjustBalance: {
-    alignSelf: "flex-end",
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  button: {
+    borderWidth: 1,
+    paddingVertical: 3,
+    paddingHorizontal: 5,
+    borderRadius: 20,
+    borderColor: colors.grey,
   },
 });
