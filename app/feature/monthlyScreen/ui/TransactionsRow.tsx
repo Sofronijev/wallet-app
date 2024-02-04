@@ -28,7 +28,13 @@ const TransactionsRow: React.FC<Props> = ({ transaction }) => {
 
   const openEditTransaction = () => {
     if (transaction.categoryId === CategoryNumber.transfer) {
-      navigation.navigate("TransferForm");
+      navigation.navigate("TransferForm", {
+        walletId: transaction.walletId,
+        editData: {
+          amount: transaction.amount,
+          transactionId: transaction.id,
+        },
+      });
     } else {
       navigation.navigate("Transaction", {
         editData: {

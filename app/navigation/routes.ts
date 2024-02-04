@@ -16,5 +16,5 @@ export type AppStackParamList = {
   Transaction: { editData: TransactionFromInputs & { id: number } } | undefined;
   TransactionSearch: undefined;
   WalletSettings: undefined;
-  TransferForm: { walletIdFrom: number };
+  TransferForm: { walletId: number; editData?: { amount: number; transactionId: number } };
 };

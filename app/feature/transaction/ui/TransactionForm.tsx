@@ -109,6 +109,7 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
   });
 
   const walletName = wallets[formik.values.walletId]?.walletName;
+  const walletCurrency = wallets[formik.values.walletId]?.currencySymbol || wallets[formik.values.walletId]?.currencyCode;
 
   useEffect(() => {
     if (editData) {
@@ -170,6 +171,7 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
           style={styles.input}
           icon={<FontAwesome5 name='coins' size={24} color={colors.greenMint} />}
           autoFocus={!editData}
+          rightText={walletCurrency}
         />
         <InputErrorLabel text={formik.errors.amount} isVisible={!!formik.errors.amount} />
         <View style={styles.flexRow}>

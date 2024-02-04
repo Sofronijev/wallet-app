@@ -71,7 +71,7 @@ const WalletList: React.FC = () => {
         <View style={styles.row}>
           <ButtonText
             title='Transfer funds'
-            onPress={() => navigation.navigate("TransferForm", { walletIdFrom: item.walletId })}
+            onPress={() => navigation.navigate("TransferForm", { walletId: item.walletId })}
             style={styles.button}
           />
           <ButtonText
