@@ -11,13 +11,18 @@ import { useAppSelector } from "store/hooks";
 import { getAllWallets } from "store/reducers/wallets/selectors";
 import CustomButton from "components/CustomButton";
 import colors from "constants/colors";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { useCreateNewTransferMutation } from "app/middleware/transfers";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import {
+  useCreateNewTransferMutation,
+  useGetTransferByTransactionQuery,
+} from "app/middleware/transfers";
 import { getUserId } from "store/reducers/userSlice";
 import AppActivityIndicator from "components/AppActivityIndicator";
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { AppStackParamList } from "navigation/routes";
 import Label from "components/Label";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
+import HeaderIcon from "components/HeaderIcon";
 
 export type TransferFromInputs = {
   date: string;
@@ -43,10 +48,12 @@ export const transactionValidationSchema = (isSameCurrency: boolean) =>
       : Yup.number()
           .typeError("Please enter a valid number for the amount")
           .required("Please enter the amount to transfer")
+          .moreThan(0, "Amount must be greater than 0")
           .label("Amount"),
     amountFrom: Yup.number()
       .typeError("Please enter a valid number for the amount")
       .required("Please enter the amount to transfer")
+      .moreThan(0, "Amount must be greater than 0")
       .label("Amount"),
     walletIdTo: Yup.number().required("Please select the wallet").label("Wallet"),
     walletIdFrom: Yup.number()
@@ -64,13 +71,26 @@ const TransferForm: React.FC = () => {
   const { params } = useRoute<RouteProp<AppStackParamList, "TransferForm">>();
   const walletIdFromParam = params.walletId;
   const editData = params.editData;
-
+  const navigation = useNavigation();
   const wallets = useAppSelector(getAllWallets);
   const userId = useAppSelector(getUserId);
-
+  const {
+    data,
+    isLoading: isLoadingTransfer,
+    isFetching,
+  } = useGetTransferByTransactionQuery(
+    userId && walletIdFromParam && editData
+      ? {
+          userId,
+          transactionIdFrom: editData.transactionIdFrom,
+          transactionIdTo: editData.transactionIdTo,
+        }
+      : skipToken,
+    { refetchOnMountOrArgChange: true }
+  );
   const [tryCreateNewTransfer, { isLoading }] = useCreateNewTransferMutation();
 
-  const onTransactionSubmit = async (values: TransferFromInputs) => {
+  const onTransferSubmit = async (values: TransferFromInputs) => {
     Keyboard.dismiss();
     try {
       const transferData = {
@@ -82,15 +102,43 @@ const TransferForm: React.FC = () => {
         userId,
       };
 
-      await tryCreateNewTransfer(transferData).unwrap();
+      if (editData) {
+      } else {
+        await tryCreateNewTransfer(transferData);
+      }
+
+      navigation.goBack();
     } catch (error) {}
   };
+
+  const onDelete = () => {};
+
+  useEffect(() => {
+    if (editData && data) {
+      formik.setValues({
+        ...initialTransferFormValues,
+        walletIdFrom: `${data.fromWalletId}`,
+        walletIdTo: `${data.toWalletId}`,
+        amountFrom: `${Math.abs(data.fromTransaction.amount)}`,
+        amountTo: `${data.toTransaction.amount}`,
+        date: data.date,
+      });
+      navigation.setOptions({
+        title: "Edit transfer",
+        headerRight: () => (
+          <HeaderIcon onPress={onDelete}>
+            <Ionicons name='trash-sharp' size={24} color={colors.white} />
+          </HeaderIcon>
+        ),
+      });
+    }
+  }, [editData, data]);
 
   const formik = useFormik<TransferFromInputs>({
     initialValues: { ...initialTransferFormValues, walletIdFrom: `${walletIdFromParam}` },
     validationSchema: transactionValidationSchema(isSameCurrency),
     validateOnChange: hasSubmittedForm,
-    onSubmit: (values) => onTransactionSubmit(values),
+    onSubmit: (values) => onTransferSubmit(values),
   });
 
   useEffect(() => {
@@ -109,7 +157,8 @@ const TransferForm: React.FC = () => {
   const formattedAmount = (amount: string) => amount.replace("-", "");
 
   const walletName = (walledValue: string) => wallets[walledValue]?.walletName;
-  const walletCurrency = (walledValue: string) => wallets[walledValue]?.currencySymbol || wallets[walledValue]?.currencyCode;
+  const walletCurrency = (walledValue: string) =>
+    wallets[walledValue]?.currencySymbol || wallets[walledValue]?.currencyCode;
 
   const onWalletSelect = (fieldName: string) => (walletId: number) => {
     formik.setFieldValue(fieldName, walletId);
@@ -132,7 +181,7 @@ const TransferForm: React.FC = () => {
         <View style={styles.flex}>
           <StyledLabelInput
             value={formattedAmount(formik.values.amountFrom)}
-            placeholder={isSameCurrency ? 'Amount' : 'Sending'}
+            placeholder={isSameCurrency ? "Amount" : "Sending"}
             onChangeText={formik.handleChange("amountFrom")}
             keyboardType='decimal-pad'
             style={styles.input}
@@ -185,7 +234,7 @@ const TransferForm: React.FC = () => {
         isVisible={!!formik.errors.walletIdFrom || !!formik.errors.walletIdTo}
       />
       <CustomButton title='Submit' onPress={onSubmit} style={styles.submitBtn} />
-      <AppActivityIndicator isLoading={isLoading} />
+      <AppActivityIndicator isLoading={isLoading || isLoadingTransfer || isFetching} />
     </View>
   );
 };
@@ -215,5 +264,5 @@ const styles = StyleSheet.create({
   differentCurrency: {
     color: colors.grey2,
     fontSize: 13,
-  }
+  },
 });

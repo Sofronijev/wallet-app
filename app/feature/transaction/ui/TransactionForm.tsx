@@ -193,7 +193,7 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
           </View>
           <View style={styles.flex}>
             <WalletPicker value={walletName} style={styles.input} onSelect={onWalletSelect} />
-            <InputErrorLabel text={formik.errors.walletId} isVisible={!!formik.errors.amount} />
+            <InputErrorLabel text={formik.errors.walletId} isVisible={!!formik.errors.walletId} />
           </View>
         </View>
         <StyledLabelInput

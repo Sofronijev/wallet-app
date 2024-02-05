@@ -1,4 +1,5 @@
 import { apiSlice } from "./apiSlice";
+import { TransactionType } from "store/reducers/monthlyBalance/monthlyBalanceSlice";
 
 type CreateTransferRes = {
   message: string;
@@ -13,6 +14,21 @@ type CreateTransferReq = {
   walletIdFrom: number;
 };
 
+type GetTransferByTransactionReq = {
+  userId: number;
+  transactionIdTo?: number;
+  transactionIdFrom?: number;
+};
+
+type GetTransferByTransactionRes = {
+  id: number;
+  date: string;
+  fromWalletId: number;
+  toWalletId: number;
+  fromTransaction: TransactionType;
+  toTransaction: TransactionType;
+};
+
 export const transfersApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     createNewTransfer: builder.mutation<CreateTransferRes, CreateTransferReq>({
@@ -24,6 +40,16 @@ export const transfersApi = apiSlice.injectEndpoints({
       // TODO: Currently, this will fetch all wallets, make it so it only refetches wallet that had changed transaction
       invalidatesTags: ["Transactions", "Wallets"],
     }),
+    getTransferByTransaction: builder.query<
+      GetTransferByTransactionRes,
+      GetTransferByTransactionReq
+    >({
+      query: (body: GetTransferByTransactionReq) => ({
+        url: "/transfer/getByTransaction",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
-export const { useCreateNewTransferMutation } = transfersApi;
+export const { useCreateNewTransferMutation, useGetTransferByTransactionQuery } = transfersApi;

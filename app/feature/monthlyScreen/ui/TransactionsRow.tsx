@@ -22,6 +22,7 @@ const TransactionsRow: React.FC<Props> = ({ transaction }) => {
   const hasDescription = !!transaction.description;
   // TODO!! get type from modules
   const transactionReceivedId = 70;
+  const transactionSentId = 69;
   const isIncome =
     transaction.categoryId === CategoryNumber.income ||
     transaction.typeId === transactionReceivedId;
@@ -32,7 +33,8 @@ const TransactionsRow: React.FC<Props> = ({ transaction }) => {
         walletId: transaction.walletId,
         editData: {
           amount: transaction.amount,
-          transactionId: transaction.id,
+          transactionIdFrom: transaction.typeId === transactionSentId ? transaction.id : undefined,
+          transactionIdTo: transaction.typeId === transactionReceivedId ? transaction.id : undefined,
         },
       });
     } else {
@@ -40,7 +42,7 @@ const TransactionsRow: React.FC<Props> = ({ transaction }) => {
         editData: {
           id: transaction.id,
           date: transaction.date,
-          amount: `${transaction.amount}`,
+          amount: `${Math.abs(transaction.amount)}`,
           description: transaction.description,
           category,
           type,

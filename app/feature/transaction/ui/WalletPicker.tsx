@@ -1,8 +1,8 @@
 import {
   FlatList,
+  Keyboard,
   StyleProp,
   StyleSheet,
-  Text,
   TextStyle,
   TouchableOpacity,
   View,
@@ -54,7 +54,7 @@ const WalletPicker: React.FC<Props> = ({ value, onSelect, style }) => {
           preferredPlacement: "bottom",
         }}
       >
-        <MenuTrigger customStyles={customTriggerStyle}>
+        <MenuTrigger customStyles={customTriggerStyle} onPress={Keyboard.dismiss}>
           <StyledLabelInput
             value={value}
             disabled
