@@ -10,41 +10,43 @@ export type MonthlyTransactionsReq = {
   start: number;
   count: number;
   date: string;
+  walletIds: number[];
 };
 
-export type CreateTransactionReq = {
+type CreateTransactionReq = {
   amount: number;
   description: string;
   date: string;
   userId: number;
   typeId: number;
   categoryId: number;
+  walletId: number;
 };
 
-export type EditTransactionReq = {
+type EditTransactionReq = {
   id: number;
   amount: number;
   description: string;
   date: string;
   typeId: number;
   categoryId: number;
+  walletId: number;
 };
 
-export type DeleteTransactionReq = {
+type DeleteTransactionReq = {
   id: number;
 };
 
-export type GetUserBalanceReq = {
+export type GetUserRecentTransactionsReq = {
   userId: number;
+  walletIds: number[];
 };
 
-export type GetUserBalanceResponse = {
-  balance: number;
-  recentTransactions: TransactionType[];
-};
+const RECENT_TRANSACTION_COUNT = 5;
 
-export type SearchTransactionsRequest = {
+type SearchTransactionsRequest = {
   userId: number;
+  walletIds: number[];
   start?: number;
   count?: number;
   startDate?: string;
@@ -74,7 +76,8 @@ export const transactionsApi = apiSlice.injectEndpoints({
         method: "POST",
         body: transactionData,
       }),
-      invalidatesTags: ["Transactions"], // Used to refetch transactions, connected to providesTags
+      // TODO: Currently, this will fetch all wallets, make it so it only refetches wallet that had changed transaction
+      invalidatesTags: ["Transactions", "Wallets"], // Used to refetch transactions, connected to providesTags
     }),
     editTransaction: builder.mutation<SimpleResponse, EditTransactionReq>({
       query: (transactionData: EditTransactionReq) => ({
@@ -82,7 +85,8 @@ export const transactionsApi = apiSlice.injectEndpoints({
         method: "PUT",
         body: transactionData,
       }),
-      invalidatesTags: ["Transactions"], // Used to refetch transactions, connected to providesTags
+      // TODO: Currently, this will fetch all wallets, make it so it only refetches wallet that had changed transaction
+      invalidatesTags: ["Transactions", "Wallets"], // Used to refetch transactions, connected to providesTags
     }),
     deleteTransaction: builder.mutation<SimpleResponse, DeleteTransactionReq>({
       query: (transactionData: DeleteTransactionReq) => ({
@@ -90,13 +94,14 @@ export const transactionsApi = apiSlice.injectEndpoints({
         method: "DELETE",
         body: transactionData,
       }),
-      invalidatesTags: ["Transactions"], // Used to refetch transactions, connected to providesTags
+      // TODO: Currently, this will fetch all wallets, make it so it only refetches wallet that had changed transaction
+      invalidatesTags: ["Transactions", "Wallets"], // Used to refetch transactions, connected to providesTags
     }),
-    getUserBalance: builder.query<GetUserBalanceResponse, GetUserBalanceReq>({
-      query: (data: GetUserBalanceReq) => ({
-        url: "/transaction/getUserBalance",
+    getUserRecentTransactions: builder.query<SearchTransactionsResponse, GetUserRecentTransactionsReq>({
+      query: (data: GetUserRecentTransactionsReq) => ({
+        url: "/transaction/searchTransactions",
         method: "POST",
-        body: data,
+        body: { ...data, count: RECENT_TRANSACTION_COUNT },
       }),
       providesTags: ["Transactions"],
     }),
@@ -108,13 +113,15 @@ export const transactionsApi = apiSlice.injectEndpoints({
       }),
       providesTags: ["Transactions"],
     }),
-    searchTransactionsMore: builder.mutation<SearchTransactionsResponse, SearchTransactionsRequest>({
-      query: (data: SearchTransactionsRequest) => ({
-        url: "/transaction/searchTransactions",
-        method: "POST",
-        body: data,
-      }),
-    }),
+    searchTransactionsMore: builder.mutation<SearchTransactionsResponse, SearchTransactionsRequest>(
+      {
+        query: (data: SearchTransactionsRequest) => ({
+          url: "/transaction/searchTransactions",
+          method: "POST",
+          body: data,
+        }),
+      }
+    ),
   }),
 });
 export const {
@@ -122,7 +129,7 @@ export const {
   useCreateNewTransactionMutation,
   useEditTransactionMutation,
   useDeleteTransactionMutation,
-  useGetUserBalanceQuery,
+  useGetUserRecentTransactionsQuery,
   useSearchTransactionsQuery,
   useSearchTransactionsMoreMutation,
 } = transactionsApi;

@@ -21,7 +21,13 @@ const getIcon = (type: string, iconSize?: number) => {
       };
     case "saving":
       return {
-        icon: <MaterialCommunityIcons name='piggy-bank' size={iconSize ?? ICON_SIZE} color={colors.white} />,
+        icon: (
+          <MaterialCommunityIcons
+            name='piggy-bank'
+            size={iconSize ?? ICON_SIZE}
+            color={colors.white}
+          />
+        ),
         backgroundColor: colors.saving,
       };
     case "gifts":
@@ -36,32 +42,58 @@ const getIcon = (type: string, iconSize?: number) => {
       };
     case "utilities":
       return {
-        icon: <MaterialCommunityIcons name='water-pump' size={iconSize ?? ICON_SIZE} color={colors.white} />,
+        icon: (
+          <MaterialCommunityIcons
+            name='water-pump'
+            size={iconSize ?? ICON_SIZE}
+            color={colors.white}
+          />
+        ),
         backgroundColor: colors.utilities,
       };
     case "food":
       return {
-        icon: <MaterialCommunityIcons name='food-apple' size={iconSize ?? ICON_SIZE} color={colors.white} />,
+        icon: (
+          <MaterialCommunityIcons
+            name='food-apple'
+            size={iconSize ?? ICON_SIZE}
+            color={colors.white}
+          />
+        ),
         backgroundColor: colors.food,
       };
     case "transportation":
       return {
-        icon: <FontAwesome5 name="car" size={iconSize ?? ICON_SIZE} color={colors.white} />,
+        icon: <FontAwesome5 name='car' size={iconSize ?? ICON_SIZE} color={colors.white} />,
         backgroundColor: colors.transportation,
       };
     case "health":
       return {
-        icon: <MaterialCommunityIcons name='pill' size={iconSize ?? ICON_SIZE} color={colors.white} />,
+        icon: (
+          <MaterialCommunityIcons name='pill' size={iconSize ?? ICON_SIZE} color={colors.white} />
+        ),
         backgroundColor: colors.health,
       };
     case "dailyLiving":
       return {
-        icon: <MaterialCommunityIcons name='human-greeting' size={iconSize ?? ICON_SIZE} color={colors.white} />,
+        icon: (
+          <MaterialCommunityIcons
+            name='human-greeting'
+            size={iconSize ?? ICON_SIZE}
+            color={colors.white}
+          />
+        ),
         backgroundColor: colors.dailyLiving,
       };
     case "children":
       return {
-        icon: <MaterialCommunityIcons name='baby-carriage' size={iconSize ?? ICON_SIZE} color={colors.white} />,
+        icon: (
+          <MaterialCommunityIcons
+            name='baby-carriage'
+            size={iconSize ?? ICON_SIZE}
+            color={colors.white}
+          />
+        ),
         backgroundColor: colors.children,
       };
     case "obligation":
@@ -76,12 +108,32 @@ const getIcon = (type: string, iconSize?: number) => {
       };
     case "other":
       return {
-        icon: <MaterialIcons name='attach-money' size={iconSize ?? ICON_SIZE} color={colors.white} />,
+        icon: (
+          <MaterialIcons name='attach-money' size={iconSize ?? ICON_SIZE} color={colors.white} />
+        ),
         backgroundColor: colors.otherCategory,
+      };
+    case "balanceAdjust":
+      return {
+        icon: (
+          <MaterialCommunityIcons
+            name='auto-fix'
+            size={iconSize ?? ICON_SIZE}
+            color={colors.white}
+          />
+        ),
+        backgroundColor: colors.otherCategory,
+      };
+    case "transfer":
+      return {
+        icon: <Fontisto  name='arrow-swap' size={iconSize ?? ICON_SIZE} color={colors.white} />,
+        backgroundColor: colors.transfer,
       };
     default:
       return {
-        icon: <MaterialIcons name='attach-money' size={iconSize ?? ICON_SIZE} color={colors.white} />,
+        icon: (
+          <MaterialIcons name='attach-money' size={iconSize ?? ICON_SIZE} color={colors.white} />
+        ),
         backgroundColor: colors.otherCategory,
       };
   }

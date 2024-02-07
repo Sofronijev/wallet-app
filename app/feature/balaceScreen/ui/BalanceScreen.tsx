@@ -1,50 +1,79 @@
-import { Alert, ScrollView, StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import React from "react";
 import { skipToken } from "@reduxjs/toolkit/query/react";
-import Label from "components/Label";
-import colors from "constants/colors";
 import { useAppSelector } from "store/hooks";
 import { getUserId } from "store/reducers/userSlice";
-import { useGetUserBalanceQuery } from "app/middleware/transactions";
-import { getUserBalance, getUserRecentTransactions } from "store/reducers/balance/selectors";
-import { formatDecimalDigits } from "modules/numbers";
+import { useGetUserRecentTransactionsQuery } from "app/middleware/transactions";
+import { getUserRecentTransactions } from "store/reducers/balance/selectors";
 import { errorStrings } from "constants/strings";
-import AppActivityIndicator from "components/AppActivityIndicator";
-import RecentTransactions from "feature/monthlyScreen/ui/RecentTransactions";
-import BalanceTransactionNullScreen from "./BalanceTransactionNullScreen";
 import AddButton from "components/AddButton";
+import { getActiveWallet } from "store/reducers/wallets/selectors";
+import WalletList from "feature/wallet/ui/WalletList";
+import { ScrollView } from "react-native-gesture-handler";
+import RecentTransactions from "feature/monthlyScreen/ui/RecentTransactions";
+import NullScreen from "components/NullScreen";
+import { useSetWalletStartingBalanceMutation } from "app/middleware/wallets";
+import { showStartingBalancePrompt } from "feature/settingsScreen/modules";
 
 const BalanceScreen: React.FC = () => {
   const userId = useAppSelector(getUserId);
-  const { isLoading, isError, isFetching } = useGetUserBalanceQuery(
-    userId
+
+  const transactions = useAppSelector(getUserRecentTransactions);
+  const activeWallet = useAppSelector(getActiveWallet);
+  const walletId = activeWallet?.walletId;
+  const hasStartingBalance = !!activeWallet?.startingBalance;
+
+  const { isError, isLoading, isFetching } = useGetUserRecentTransactionsQuery(
+    userId && walletId
       ? {
           userId,
+          walletIds: [walletId],
         }
-      : skipToken
+      : skipToken,
+    { refetchOnMountOrArgChange: true }
   );
+  const [trySetStartingBalance, { isLoading: isStartingBalanceLoading }] =
+    useSetWalletStartingBalanceMutation();
 
-  const userBalance = useAppSelector(getUserBalance);
-  const transactions = useAppSelector(getUserRecentTransactions);
+  const isTransactionLoading = isLoading || isFetching || isStartingBalanceLoading;
 
   if (isError) {
     Alert.alert(errorStrings.general, errorStrings.tryAgain);
   }
 
+  const onChangeStartingBalance = () => {
+    if (!walletId) return;
+    showStartingBalancePrompt((text: string) =>
+      trySetStartingBalance({
+        walletId,
+        userId,
+        // TODO - format, validate number
+        value: parseFloat(text),
+      })
+    );
+  };
+
   return (
     <>
       <ScrollView style={styles.container}>
-        <View style={styles.balanceContainer}>
-          <Label style={styles.balanceText}>Available balance</Label>
-          <Label style={styles.balanceValue}>{formatDecimalDigits(userBalance)}</Label>
-          <AppActivityIndicator isLoading={isLoading || isFetching} />
+        <WalletList />
+        <View style={styles.transactionsContainer}>
+          <RecentTransactions
+            transactions={transactions}
+            isLoading={isTransactionLoading}
+            title='Recent transactions'
+            nullScreen={
+              <NullScreen
+                isLoading={isTransactionLoading}
+                title='No transactions'
+                subtitle='Tap the plus sign (+) button to start tracking your expenses and incomes to gain better control of your finances.'
+                icon='wallet'
+                buttonText={hasStartingBalance ? undefined : "Add starting balance"}
+                onPress={onChangeStartingBalance}
+              />
+            }
+          />
         </View>
-        <RecentTransactions
-          isLoading={isLoading || isFetching}
-          transactions={transactions}
-          title='Recent transactions'
-          nullScreen={<BalanceTransactionNullScreen />}
-        />
       </ScrollView>
       <AddButton />
     </>
@@ -54,20 +83,10 @@ const BalanceScreen: React.FC = () => {
 export default BalanceScreen;
 
 const styles = StyleSheet.create({
-  container: { paddingHorizontal: 16 },
-  balanceContainer: {
-    marginVertical: 20,
-    padding: 10,
-    borderRadius: 20,
-    backgroundColor: colors.white,
+  container: {
+    paddingBottom: 100,
   },
-  balanceText: {
-    textAlign: "center",
-    color: colors.grey2,
-  },
-  balanceValue: {
-    fontSize: 30,
-    fontWeight: "bold",
-    textAlign: "center",
+  transactionsContainer: {
+    marginHorizontal: 16,
   },
 });

@@ -8,6 +8,8 @@ import { transactionStrings } from "constants/strings";
 import TransactionSearch from "feature/transactionSearch/ui/TransactionSearch";
 import HeaderIcon from "components/HeaderIcon";
 import { Ionicons } from "@expo/vector-icons";
+import WalletSettings from "feature/settingsScreen/ui/wallets";
+import TransferForm from "feature/transfer/ui/TransferForm";
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
 
@@ -45,6 +47,22 @@ const AppNavigator: React.FC = () => {
               <Ionicons name='filter' size={24} color={colors.white} />
             </HeaderIcon>
           ),
+        }}
+      />
+      <Stack.Screen
+        name='WalletSettings'
+        component={WalletSettings}
+        options={{
+          animation: "default",
+          title: "Wallet settings",
+        }}
+      />
+      <Stack.Screen
+        name='TransferForm'
+        component={TransferForm}
+        options={{
+          animation: "slide_from_bottom",
+          title: transactionStrings.createTransfer,
         }}
       />
     </Stack.Navigator>

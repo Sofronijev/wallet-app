@@ -13,7 +13,7 @@ import { AppStackParamList } from "navigation/routes";
 type RecentTransactionsProps = {
   isLoading: boolean;
   transactions: TransactionType[];
-  title: string;
+  title?: string;
   nullScreen?: JSX.Element;
 };
 
@@ -43,7 +43,7 @@ const RecentTransactions: React.FC<RecentTransactionsProps> = ({
   );
   return (
     <View style={styles.container}>
-      <Label style={styles.title}>{title}</Label>
+      {title && <Label style={styles.title}>{title}</Label>}
       {isLoading ? renderLoading : renderTransactions}
       <View style={styles.button}>
         <ButtonText title='View all transactions' onPress={navigateToTransactionSearch} />

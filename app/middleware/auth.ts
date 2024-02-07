@@ -11,10 +11,7 @@ type TokenType = {
   accessToken: string;
 };
 
-export type LoginResponseType = {
-  data: UserDataType;
-  token: TokenType;
-};
+export type LoginResponseType = UserDataType & { token: TokenType; };
 
 export type RegisterResponseType = LoginResponseType & { message: string };
 export type DeleteUserResponseType = { message: string };

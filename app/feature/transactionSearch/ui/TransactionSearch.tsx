@@ -16,12 +16,23 @@ import AppActivityIndicator from "components/AppActivityIndicator";
 import { errorStrings } from "constants/strings";
 import colors from "constants/colors";
 import NullScreen from "components/NullScreen";
+import { getActiveWallet } from "store/reducers/wallets/selectors";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 
 const TransactionSearch = () => {
   const userId = useAppSelector(getUserId);
-  const { isLoading, isError, isFetching } = useSearchTransactionsQuery({
-    userId,
-  });
+  const activeWallet = useAppSelector(getActiveWallet);
+  const walletId = activeWallet?.walletId;
+
+  const { isLoading, isError, isFetching } = useSearchTransactionsQuery(
+    userId && walletId
+      ? {
+          userId,
+          walletIds: [walletId],
+        }
+      : skipToken
+  );
+
   const [tryTransactionSearchMore, { isLoading: isLoadingMore }] =
     useSearchTransactionsMoreMutation();
 
@@ -34,9 +45,10 @@ const TransactionSearch = () => {
   }
 
   const searchMoreTransactions = () => {
-    if (transactionNumber < count) {
+    if (transactionNumber < count && walletId) {
       tryTransactionSearchMore({
         userId,
+        walletIds: [walletId],
         start: transactionNumber,
       });
     }

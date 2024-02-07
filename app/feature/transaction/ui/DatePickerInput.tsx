@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Platform, StyleSheet, TextStyle, TouchableOpacity, View } from "react-native";
+import { Keyboard, Platform, StyleSheet, TextStyle, TouchableOpacity, View } from "react-native";
 import DateTimePicker, { Event } from "@react-native-community/datetimepicker";
 import { calendarDateFormat, formatIsoDate, getFormattedDate } from "modules/timeAndDate";
 import colors from "constants/colors";
-import LabelInput from "components/LabelInput";
+import StyledLabelInput from "components/StyledLabelInput";
 import { FontAwesome } from "@expo/vector-icons";
 
 const isIosDevice = Platform.OS === "ios";
@@ -32,6 +32,7 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
     if (typeof onDateSelect === "function") onDateSelect(formatIsoDate(currentDate));
   };
   const showCalendar = () => {
+    Keyboard.dismiss();
     setShow(true);
   };
   // BUG - IOS BUG - Calendar for IOS doesn't look good
@@ -39,7 +40,7 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
     <View>
       {!isIosDevice && (
         <TouchableOpacity onPress={showCalendar} style={styles.dateLabel}>
-          <LabelInput
+          <StyledLabelInput
             value={getFormattedDate(value, calendarDateFormat)}
             icon={<FontAwesome name='calendar' size={24} color={colors.greenMint} />}
             editable={false}

@@ -17,12 +17,13 @@ export const income = {
   6: { name: "income_other", id: 6, label: "Other" },
 };
 
-const saving = {
-  7: { name: "saving_emergency", id: 7, label: "Emergency" },
-  8: { name: "saving_retirement", id: 8, label: "Retirement" },
-  9: { name: "saving_vacation", id: 9, label: "Vacation" },
-  10: { name: "saving_others", id: 10, label: "Other" },
-};
+// Not used for now
+// const saving = {
+//   7: { name: "saving_emergency", id: 7, label: "Emergency" },
+//   8: { name: "saving_retirement", id: 8, label: "Retirement" },
+//   9: { name: "saving_vacation", id: 9, label: "Vacation" },
+//   10: { name: "saving_others", id: 10, label: "Other" },
+// };
 
 const gifts = {
   11: { name: "charity_donations", id: 11, label: "Donation" },
@@ -109,8 +110,18 @@ const entertainment = {
   65: { name: "entertainment_gadgets", id: 65, label: "Gadgets" },
   66: { name: "entertainment_other", id: 66, label: "Other" },
 };
+
 const other = {
   67: { name: "expenses_other", id: 67, label: "Other" },
+};
+
+const balanceAdjust = {
+  68: { name: "balanceAdjust", id: 68, label: "Adjust balance" },
+};
+
+export const transfer = {
+  69: { name: "transfer_send", id: 69, label: "Transfer" },
+  70: { name: "transfer_received", id: 70, label: "Transfer" },
 };
 
 export enum CategoryNumber {
@@ -127,21 +138,85 @@ export enum CategoryNumber {
   "obligation" = 11,
   "entertainment" = 12,
   "other" = 13,
+  "balanceAdjust" = 14,
+  "transfer" = 15,
 }
 
 export const transactionCategories: CategoriesType = {
-  [CategoryNumber.income]: { name: "income", id: CategoryNumber.income, label: "Income", types: income },
+  [CategoryNumber.income]: {
+    name: "income",
+    id: CategoryNumber.income,
+    label: "Income",
+    types: income,
+  },
   // TODO: Hide Saving until feature for handling savings is added
   // [CategoryNumber.saving]: { name: "saving", id: CategoryNumber.saving, label: "Saving", types: saving },
-  [CategoryNumber.gifts]: { name: "gifts", id: CategoryNumber.gifts, label: "Gifts/Charity", types: gifts },
-  [CategoryNumber.housing]: { name: "housing", id: CategoryNumber.housing, label: "Housing", types: housing },
-  [CategoryNumber.utilities]: { name: "utilities", id: CategoryNumber.utilities, label: "Utilities", types: utilities },
+  [CategoryNumber.gifts]: {
+    name: "gifts",
+    id: CategoryNumber.gifts,
+    label: "Gifts/Charity",
+    types: gifts,
+  },
+  [CategoryNumber.housing]: {
+    name: "housing",
+    id: CategoryNumber.housing,
+    label: "Housing",
+    types: housing,
+  },
+  [CategoryNumber.utilities]: {
+    name: "utilities",
+    id: CategoryNumber.utilities,
+    label: "Utilities",
+    types: utilities,
+  },
   [CategoryNumber.food]: { name: "food", id: CategoryNumber.food, label: "Food", types: food },
-  [CategoryNumber.transportation]: { name: "transportation", id: CategoryNumber.transportation, label: "Transportation", types: transportation },
-  [CategoryNumber.health]: { name: "health", id: CategoryNumber.health, label: "Health", types: health },
-  [CategoryNumber.dailyLiving]: { name: "dailyLiving", id: CategoryNumber.dailyLiving, label: "Daily living", types: dailyLiving },
-  [CategoryNumber.children]: { name: "children", id: CategoryNumber.children, label: "Children", types: children },
-  [CategoryNumber.obligation]: { name: "obligation", id: CategoryNumber.obligation, label: "Obligation", types: obligation },
-  [CategoryNumber.entertainment]: { name: "entertainment", id: CategoryNumber.entertainment, label: "Entertainment", types: entertainment },
+  [CategoryNumber.transportation]: {
+    name: "transportation",
+    id: CategoryNumber.transportation,
+    label: "Transportation",
+    types: transportation,
+  },
+  [CategoryNumber.health]: {
+    name: "health",
+    id: CategoryNumber.health,
+    label: "Health",
+    types: health,
+  },
+  [CategoryNumber.dailyLiving]: {
+    name: "dailyLiving",
+    id: CategoryNumber.dailyLiving,
+    label: "Daily living",
+    types: dailyLiving,
+  },
+  [CategoryNumber.children]: {
+    name: "children",
+    id: CategoryNumber.children,
+    label: "Children",
+    types: children,
+  },
+  [CategoryNumber.obligation]: {
+    name: "obligation",
+    id: CategoryNumber.obligation,
+    label: "Obligation",
+    types: obligation,
+  },
+  [CategoryNumber.entertainment]: {
+    name: "entertainment",
+    id: CategoryNumber.entertainment,
+    label: "Entertainment",
+    types: entertainment,
+  },
   [CategoryNumber.other]: { name: "other", id: CategoryNumber.other, label: "Other", types: other },
+  [CategoryNumber.balanceAdjust]: {
+    name: "balanceAdjust",
+    id: CategoryNumber.balanceAdjust,
+    label: "Adjust balance",
+    types: balanceAdjust,
+  },
+  [CategoryNumber.transfer]: {
+    name: "transfer",
+    id: CategoryNumber.transfer,
+    label: "Transfer",
+    types: transfer,
+  },
 };

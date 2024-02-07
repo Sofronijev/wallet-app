@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import colors from "constants/colors";
 import { HomeStackParamList } from "./routes";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import SettingsScreen from "feature/settingsScreen/ui";
+import SettingsScreen from "feature/settingsScreen";
 import MonthlyScreen from "feature/monthlyScreen/ui";
 import BalanceScreen from "feature/balaceScreen/ui/BalanceScreen";
 

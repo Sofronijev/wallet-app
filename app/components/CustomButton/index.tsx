@@ -28,7 +28,7 @@ const CustomButton: React.FC<CustomButtonType> = ({
   const buttonStyle = getButtonStyle(type, outline);
   const color = buttonColor[type];
   return (
-    <TouchableOpacity onPress={onPress} style={[styles.container, buttonStyle, style]}>
+    <TouchableOpacity onPress={onPress} style={[styles.container, buttonStyle, style]} activeOpacity={0.5}>
       <Text style={[styles.text, outline && { color }]}>{title}</Text>
     </TouchableOpacity>
   );

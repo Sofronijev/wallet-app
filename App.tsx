@@ -6,14 +6,19 @@ import { StatusBar } from "react-native";
 import colors from "constants/colors";
 import store from "store/index";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { MenuProvider } from "react-native-popup-menu";
+import AlertPromptProvider from "modules/AlertPrompt/AlertPrompt";
 
 const App = () => (
-  <GestureHandlerRootView style={{flex: 1}}>
+  <GestureHandlerRootView style={{ flex: 1 }}>
     <Provider store={store}>
-      <NavigationContainer>
-        <StatusBar animated={true} backgroundColor={colors.greenMint} />
-        <RootNavigator />
-      </NavigationContainer>
+      <MenuProvider>
+        <NavigationContainer>
+          <StatusBar animated={true} backgroundColor={colors.greenMint} />
+          <RootNavigator />
+        </NavigationContainer>
+        <AlertPromptProvider />
+      </MenuProvider>
     </Provider>
   </GestureHandlerRootView>
 );

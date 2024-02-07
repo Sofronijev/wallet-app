@@ -10,7 +10,6 @@ import { formatDayString } from "modules/timeAndDate";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { AppStackParamList } from "navigation/routes";
-import { transactionStrings } from "constants/strings";
 
 type Props = {
   transaction: TransactionType;
@@ -21,19 +20,36 @@ const TransactionsRow: React.FC<Props> = ({ transaction }) => {
   const category = transactionCategories[transaction.categoryId];
   const type = category.types[transaction.typeId];
   const hasDescription = !!transaction.description;
-  const isIncome = transaction.categoryId === CategoryNumber.income;
+  // TODO!! get type from modules
+  const transactionReceivedId = 70;
+  const transactionSentId = 69;
+  const isIncome =
+    transaction.categoryId === CategoryNumber.income ||
+    transaction.typeId === transactionReceivedId;
 
   const openEditTransaction = () => {
-    navigation.navigate("Transaction", {
-      editData: {
-        id: transaction.id,
-        date: transaction.date,
-        amount: `${transaction.amount}`,
-        description: transaction.description,
-        category,
-        type,
-      },
-    });
+    if (transaction.categoryId === CategoryNumber.transfer) {
+      navigation.navigate("TransferForm", {
+        walletId: transaction.walletId,
+        editData: {
+          amount: transaction.amount,
+          transactionIdFrom: transaction.typeId === transactionSentId ? transaction.id : undefined,
+          transactionIdTo: transaction.typeId === transactionReceivedId ? transaction.id : undefined,
+        },
+      });
+    } else {
+      navigation.navigate("Transaction", {
+        editData: {
+          id: transaction.id,
+          date: transaction.date,
+          amount: `${Math.abs(transaction.amount)}`,
+          description: transaction.description,
+          category,
+          type,
+          walletId: `${transaction.walletId}`,
+        },
+      });
+    }
   };
 
   return (
@@ -53,7 +69,7 @@ const TransactionsRow: React.FC<Props> = ({ transaction }) => {
       </View>
       <View>
         <Label style={[styles.price, isIncome && styles.incomeColor]}>
-          {`${transactionStrings.showMinus(isIncome)}${formatDecimalDigits(transaction.amount)}`}
+          {`${formatDecimalDigits(transaction.amount)}`}
         </Label>
         <View style={styles.dateContainer}>
           <Label style={styles.date} numberOfLines={1}>
@@ -69,12 +85,9 @@ export default TransactionsRow;
 
 const styles = StyleSheet.create({
   container: {
-    borderColor: colors.grey3,
-    borderWidth: 1,
-    borderRadius: 10,
+    backgroundColor: colors.white,
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 3,
     paddingVertical: 10,
     justifyContent: "space-between",
     flex: 1,

@@ -5,14 +5,19 @@ import colors from "constants/colors";
 type AppActivityIndicatorProps = {
   isLoading: boolean;
   hideScreen?: boolean;
+  size?: number | "large" | "small" | undefined;
 };
 
-const AppActivityIndicator: React.FC<AppActivityIndicatorProps> = ({ isLoading, hideScreen }) => {
+const AppActivityIndicator: React.FC<AppActivityIndicatorProps> = ({
+  isLoading,
+  hideScreen,
+  size = "large",
+}) => {
   if (!isLoading) return null;
   return (
     <ActivityIndicator
       style={[styles.activityIndicator, hideScreen && styles.hideScreen]}
-      size='large'
+      size={size}
       color={colors.greenMint}
     />
   );

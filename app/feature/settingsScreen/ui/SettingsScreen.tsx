@@ -10,13 +10,29 @@ import { useDeleteUserMutation } from "app/middleware/auth";
 import { errorStrings } from "constants/strings";
 import { showDeleteUserDataALert, showLogoutAlert } from "../modules";
 import AppActivityIndicator from "components/AppActivityIndicator";
+import SettingsListItem from "./SettingsListItem";
+import { Ionicons } from "@expo/vector-icons";
+import colors from "constants/colors";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { AppStackParamList } from "navigation/routes";
 
 type SettingsScreenProps = {};
 
 const SettingsScreen: React.FC<SettingsScreenProps> = () => {
+  const navigation = useNavigation<StackNavigationProp<AppStackParamList>>();
   const user = useAppSelector(getUserData);
   const dispatch = useAppDispatch();
   const [tryDeleteUser, { isLoading }] = useDeleteUserMutation();
+
+  const settingsListItems = [
+    {
+      id: 1,
+      title: "Wallets",
+      icon: <Ionicons name='wallet-outline' size={24} color={colors.black} />,
+      onPress: () => navigation.navigate("WalletSettings"),
+    },
+  ];
 
   const logout = async () => {
     dispatch(clearUserData());
@@ -32,15 +48,20 @@ const SettingsScreen: React.FC<SettingsScreenProps> = () => {
     }
   };
 
+  const renderItems = () =>
+    settingsListItems.map((item) => (
+      <SettingsListItem key={item.id} title={item.title} icon={item.icon} onPress={item.onPress} />
+    ));
   const onLogout = () => showLogoutAlert(logout);
-  const onDeleteUserData = () => showDeleteUserDataALert(deleteUser)
+  const onDeleteUserData = () => showDeleteUserDataALert(deleteUser);
 
   return (
     <View style={styles.container}>
       <Label style={styles.email}>{user.email}</Label>
-      <CustomButton type='danger' title='Sign out' onPress={onLogout} />
+      {renderItems()}
+      <CustomButton type='danger' title='Sign out' onPress={onLogout} style={styles.signOut} />
       <ButtonText
-        title='Delete user data'
+        title='Delete account'
         onPress={onDeleteUserData}
         type='danger'
         style={styles.deleteData}
@@ -65,5 +86,8 @@ const styles = StyleSheet.create({
   deleteData: {
     paddingTop: 10,
     alignSelf: "center",
+  },
+  signOut: {
+    marginTop: 20,
   },
 });

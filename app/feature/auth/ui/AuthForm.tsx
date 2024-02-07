@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import Label from "components/Label";
-import LabelInput from "components/LabelInput";
+import StyledLabelInput from "components/StyledLabelInput";
 import CustomButton from "components/CustomButton";
 import colors from "constants/colors";
 import InputErrorLabel from "components/InputErrorLabel";
@@ -51,7 +51,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
       {({ handleChange, handleSubmit, values, errors }) => (
         <View>
           <Label style={styles.text}>{signUp ? authStrings.registerTitle : authStrings.loginTitle}</Label>
-          <LabelInput
+          <StyledLabelInput
             icon={<FontAwesome name='user-o' size={24} color={colors.greenMint} />}
             placeholder='Email'
             keyboardType='email-address'
@@ -60,7 +60,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
             autoCapitalize='none'
           />
           <InputErrorLabel text={errors.email} isVisible={!!errors.email} />
-          <LabelInput
+          <StyledLabelInput
             style={styles.input}
             icon={<Ionicons name='ios-key-outline' size={24} color={colors.greenMint} />}
             placeholder='Password'
@@ -72,7 +72,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
           <InputErrorLabel text={errors.password} isVisible={!!errors.password} />
           {signUp && (
             <>
-              <LabelInput
+              <StyledLabelInput
                 style={styles.input}
                 icon={<Ionicons name='ios-key-outline' size={24} color={colors.greenMint} />}
                 placeholder='Confirm password'
