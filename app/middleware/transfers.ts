@@ -1,7 +1,7 @@
 import { apiSlice } from "./apiSlice";
 import { TransactionType } from "store/reducers/monthlyBalance/monthlyBalanceSlice";
 
-type CreateTransferRes = {
+type GenericResponse = {
   message: string;
 };
 
@@ -14,13 +14,26 @@ type CreateTransferReq = {
   walletIdFrom: number;
 };
 
-type GetTransferByTransactionReq = {
+type EditTransactionReq = {
+  id: number;
   userId: number;
+  date: string;
+  amountTo: number;
+  amountFrom: number;
+  walletIdTo: number;
+  walletIdFrom: number;
+  transactionIdTo: number;
+  transactionIdFrom: number;
+};
+
+type GetTransferReq = {
+  userId: number;
+  id?: number;
   transactionIdTo?: number;
   transactionIdFrom?: number;
 };
 
-type GetTransferByTransactionRes = {
+type GetTransferRes = {
   id: number;
   date: string;
   fromWalletId: number;
@@ -31,7 +44,7 @@ type GetTransferByTransactionRes = {
 
 export const transfersApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    createNewTransfer: builder.mutation<CreateTransferRes, CreateTransferReq>({
+    createNewTransfer: builder.mutation<GenericResponse, CreateTransferReq>({
       query: (body: CreateTransferReq) => ({
         url: "/transfer/addTransfer",
         method: "POST",
@@ -40,16 +53,36 @@ export const transfersApi = apiSlice.injectEndpoints({
       // TODO: Currently, this will fetch all wallets, make it so it only refetches wallet that had changed transaction
       invalidatesTags: ["Transactions", "Wallets"],
     }),
-    getTransferByTransaction: builder.query<
-      GetTransferByTransactionRes,
-      GetTransferByTransactionReq
-    >({
-      query: (body: GetTransferByTransactionReq) => ({
-        url: "/transfer/getByTransaction",
+    getTransferByTransaction: builder.query<GetTransferRes, GetTransferReq>({
+      query: (body: GetTransferReq) => ({
+        url: "/transfer/getTransfer",
         method: "POST",
         body,
       }),
     }),
+    editTransfer: builder.mutation<GenericResponse, EditTransactionReq>({
+      query: (body: EditTransactionReq) => ({
+        url: "/transfer/setTransfer",
+        method: "PUT",
+        body,
+      }),
+      // TODO: Currently, this will fetch all wallets, make it so it only refetches wallet that had changed transaction
+      invalidatesTags: ["Transactions", "Wallets"],
+    }),
+    deleteTransfer: builder.mutation<GenericResponse, { id: number; userId: number }>({
+      query: (body: { id: number; userId: number }) => ({
+        url: "/transfer/deleteTransfer",
+        method: "DELETE",
+        body,
+      }),
+      // TODO: Currently, this will fetch all wallets, make it so it only refetches wallet that had changed transaction
+      invalidatesTags: ["Transactions", "Wallets"],
+    }),
   }),
 });
-export const { useCreateNewTransferMutation, useGetTransferByTransactionQuery } = transfersApi;
+export const {
+  useCreateNewTransferMutation,
+  useGetTransferByTransactionQuery,
+  useEditTransferMutation,
+  useDeleteTransferMutation,
+} = transfersApi;

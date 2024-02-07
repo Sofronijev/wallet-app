@@ -2,6 +2,7 @@ export const errorStrings = {
   unknown: "Unknown error occurred",
   general: "An error occurred while getting data",
   tryAgain: "Please try again",
+  problem: "There was a problem with fulfilling request",
 };
 
 export const userAuthErrorStrings = {
@@ -48,4 +49,4 @@ export const logoutAlertStrings = {
 export const deleteUserDataStrings = {
   title: "Are you sure you want to delete your account?",
   subtitle: "All your data will permanently be deleted. This action cannot be undone.",
-}
+};

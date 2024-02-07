@@ -1,4 +1,4 @@
-import { Keyboard, StyleSheet, View } from "react-native";
+import { Alert, Keyboard, StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -14,6 +14,8 @@ import colors from "constants/colors";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import {
   useCreateNewTransferMutation,
+  useDeleteTransferMutation,
+  useEditTransferMutation,
   useGetTransferByTransactionQuery,
 } from "app/middleware/transfers";
 import { getUserId } from "store/reducers/userSlice";
@@ -23,6 +25,7 @@ import { AppStackParamList } from "navigation/routes";
 import Label from "components/Label";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import HeaderIcon from "components/HeaderIcon";
+import { errorStrings } from "constants/strings";
 
 export type TransferFromInputs = {
   date: string;
@@ -89,6 +92,8 @@ const TransferForm: React.FC = () => {
     { refetchOnMountOrArgChange: true }
   );
   const [tryCreateNewTransfer, { isLoading }] = useCreateNewTransferMutation();
+  const [tryEditTransfer, { isLoading: isEditTransferLoading }] = useEditTransferMutation();
+  const [tryDeleteTransfer, { isLoading: isDeleteTransferLoading }] = useDeleteTransferMutation();
 
   const onTransferSubmit = async (values: TransferFromInputs) => {
     Keyboard.dismiss();
@@ -102,16 +107,33 @@ const TransferForm: React.FC = () => {
         userId,
       };
 
-      if (editData) {
-      } else {
+      if (editData && data) {
+        await tryEditTransfer({
+          ...transferData,
+          id: data.id,
+          transactionIdFrom: data.fromTransaction.id,
+          transactionIdTo: data.toTransaction.id,
+        });
+        // fix for issue that appeared sometimes where editData exists but data does not
+        // This will not try to create a new one in that case (possible database problem, check it)
+      } else if (!editData) {
         await tryCreateNewTransfer(transferData);
       }
 
       navigation.goBack();
-    } catch (error) {}
+    } catch (error) {
+      Alert.alert(errorStrings.problem, errorStrings.tryAgain);
+    }
   };
 
-  const onDelete = () => {};
+  const onDelete = async () => {
+    try {
+      if (data) await tryDeleteTransfer({ id: data?.id, userId }).unwrap();
+      navigation.goBack();
+    } catch (error) {
+      Alert.alert(errorStrings.problem, errorStrings.tryAgain);
+    }
+  };
 
   useEffect(() => {
     if (editData && data) {
@@ -234,7 +256,15 @@ const TransferForm: React.FC = () => {
         isVisible={!!formik.errors.walletIdFrom || !!formik.errors.walletIdTo}
       />
       <CustomButton title='Submit' onPress={onSubmit} style={styles.submitBtn} />
-      <AppActivityIndicator isLoading={isLoading || isLoadingTransfer || isFetching} />
+      <AppActivityIndicator
+        isLoading={
+          isLoading ||
+          isLoadingTransfer ||
+          isFetching ||
+          isEditTransferLoading ||
+          isDeleteTransferLoading
+        }
+      />
     </View>
   );
 };

@@ -44,7 +44,6 @@ export const walletsSlice = createSlice({
   initialState: initialWalletsState,
   reducers: {
     setUserWallets: (state, action: SliceAction<GetWalletResponse>) => {
-      console.log(action.payload);
       state.walletsById = transformWallets(action.payload.wallets);
       state.count = action.payload.count;
       state.activeWalletId = state.activeWalletId || action.payload.wallets[0].walletId;
