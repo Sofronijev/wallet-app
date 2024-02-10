@@ -19,12 +19,3 @@ export const getMonthlyBalance = (date: Date | string) =>
       };
     }
   );
-
-export const getMonthlyTransactions = (date: Date | string) =>
-  createSelector(
-    (state: RootStateType) => state.monthlyBalance.balanceByMonth,
-    (balanceByMonth) => {
-      const formattedDate = formatDataForStore(date);
-      return balanceByMonth[formattedDate]?.transactions ?? [];
-    }
-  );

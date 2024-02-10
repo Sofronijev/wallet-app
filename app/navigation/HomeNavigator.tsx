@@ -2,9 +2,8 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import colors from "constants/colors";
 import { HomeStackParamList } from "./routes";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import SettingsScreen from "feature/settingsScreen";
-import MonthlyScreen from "feature/monthlyScreen/ui";
 import BalanceScreen from "feature/balaceScreen/ui/BalanceScreen";
 
 const Tab = createBottomTabNavigator<HomeStackParamList>();
@@ -27,15 +26,6 @@ const HomeNavigator = () => (
       options={{
         tabBarIcon: ({ color, size }) => (
           <Ionicons name='wallet' size={size} color={color} />
-        ),
-      }}
-    />
-    <Tab.Screen
-      name='Monthly'
-      component={MonthlyScreen}
-      options={{
-        tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="calendar-month" size={size} color={color} />
         ),
       }}
     />

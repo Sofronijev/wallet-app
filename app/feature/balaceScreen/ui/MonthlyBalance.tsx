@@ -29,6 +29,7 @@ const MonthlyBalance: React.FC = () => {
   const formattedMonth = getMonthAndYear(selectedDate);
   const disableNextMonthBtn = monthDifference === 0;
 
+  // TODO - Change endpoint to get only balance not transactions
   const { isLoading, isError, isFetching } = useGetMonthlyUserTransactionsQuery(
     userId && walletId
       ? {
