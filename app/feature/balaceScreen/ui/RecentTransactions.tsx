@@ -2,7 +2,7 @@ import { StyleSheet, View } from "react-native";
 import React from "react";
 import Label from "components/Label";
 import colors from "constants/colors";
-import TransactionsRow from "./TransactionsRow";
+import TransactionsRow from "../../../components/TransactionRow";
 import { TransactionType } from "store/reducers/monthlyBalance/monthlyBalanceSlice";
 import AppActivityIndicator from "components/AppActivityIndicator";
 import ButtonText from "components/ButtonText";

@@ -6,7 +6,7 @@ import {
   useSearchTransactionsMoreMutation,
   useSearchTransactionsQuery,
 } from "app/middleware/transactions";
-import TransactionsRow from "feature/monthlyScreen/ui/TransactionsRow";
+import TransactionsRow from "components/TransactionRow";
 import { TransactionType } from "store/reducers/monthlyBalance/monthlyBalanceSlice";
 import {
   getSearchedTransactions,

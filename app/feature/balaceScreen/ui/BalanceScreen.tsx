@@ -10,7 +10,7 @@ import AddButton from "components/AddButton";
 import { getActiveWallet } from "store/reducers/wallets/selectors";
 import WalletList from "feature/wallet/ui/WalletList";
 import { ScrollView } from "react-native-gesture-handler";
-import RecentTransactions from "feature/monthlyScreen/ui/RecentTransactions";
+import RecentTransactions from "feature/balaceScreen/ui/RecentTransactions";
 import NullScreen from "components/NullScreen";
 import { useSetWalletStartingBalanceMutation } from "app/middleware/wallets";
 import { showStartingBalancePrompt } from "feature/settingsScreen/modules";
