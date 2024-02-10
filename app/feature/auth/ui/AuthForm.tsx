@@ -62,7 +62,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
           <InputErrorLabel text={errors.email} isVisible={!!errors.email} />
           <StyledLabelInput
             style={styles.input}
-            icon={<Ionicons name='ios-key-outline' size={24} color={colors.greenMint} />}
+            icon={<Ionicons name='key-outline' size={24} color={colors.greenMint} />}
             placeholder='Password'
             secureTextEntry
             value={values.password}
@@ -74,7 +74,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
             <>
               <StyledLabelInput
                 style={styles.input}
-                icon={<Ionicons name='ios-key-outline' size={24} color={colors.greenMint} />}
+                icon={<Ionicons name='key-outline' size={24} color={colors.greenMint} />}
                 placeholder='Confirm password'
                 secureTextEntry
                 value={values.passwordConfirm}

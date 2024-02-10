@@ -26,7 +26,7 @@ const HomeNavigator = () => (
       component={BalanceScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
-          <Ionicons name='md-wallet-sharp' size={size} color={color} />
+          <Ionicons name='wallet' size={size} color={color} />
         ),
       }}
     />

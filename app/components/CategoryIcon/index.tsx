@@ -37,7 +37,7 @@ const getIcon = (type: string, iconSize?: number) => {
       };
     case "housing":
       return {
-        icon: <Ionicons name='ios-home-sharp' size={iconSize ?? ICON_SIZE} color={colors.white} />,
+        icon: <Ionicons name='home' size={iconSize ?? ICON_SIZE} color={colors.white} />,
         backgroundColor: colors.housing,
       };
     case "utilities":
