@@ -21,7 +21,7 @@ const MonthlyScreen: React.FC = () => {
   const transactions = useAppSelector(getMonthlyTransactions(selectedDate));
   const walletId = useAppSelector(getActiveWallet)?.walletId;
 
-  const { isLoading, isError, isFetching, refetch } = useGetMonthlyUserTransactionsQuery(
+  const { isLoading, isError, isFetching } = useGetMonthlyUserTransactionsQuery(
     userId && walletId
       ? {
           userId,
@@ -30,13 +30,10 @@ const MonthlyScreen: React.FC = () => {
           date: formatIsoDate(selectedDate),
           walletIds: [walletId],
         }
-      : skipToken
+      : skipToken,
+    { refetchOnMountOrArgChange: true }
   );
   const transactionLoading = isLoading || isFetching;
-
-  useEffect(() => {
-    refetch();
-  }, [monthDifference]);
 
   if (isError) {
     Alert.alert(errorStrings.general, errorStrings.tryAgain);

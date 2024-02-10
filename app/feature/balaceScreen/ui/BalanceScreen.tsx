@@ -14,6 +14,7 @@ import RecentTransactions from "feature/monthlyScreen/ui/RecentTransactions";
 import NullScreen from "components/NullScreen";
 import { useSetWalletStartingBalanceMutation } from "app/middleware/wallets";
 import { showStartingBalancePrompt } from "feature/settingsScreen/modules";
+import MonthlyBalance from "./MonthlyBalance";
 
 const BalanceScreen: React.FC = () => {
   const userId = useAppSelector(getUserId);
@@ -57,7 +58,10 @@ const BalanceScreen: React.FC = () => {
     <>
       <ScrollView style={styles.container}>
         <WalletList />
-        <View style={styles.transactionsContainer}>
+        <View style={styles.itemContainer}>
+          <MonthlyBalance />
+        </View>
+        <View style={styles.itemContainer}>
           <RecentTransactions
             transactions={transactions}
             isLoading={isTransactionLoading}
@@ -86,7 +90,7 @@ const styles = StyleSheet.create({
   container: {
     paddingBottom: 100,
   },
-  transactionsContainer: {
+  itemContainer: {
     marginHorizontal: 16,
   },
 });
