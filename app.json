@@ -37,6 +37,7 @@
       }
     },
     "plugins": [
+      "@prisma/react-native",
       "expo-secure-store"
     ]
   }
