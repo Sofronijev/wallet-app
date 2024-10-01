@@ -19,7 +19,7 @@
     "@react-navigation/stack": "^6.2.1",
     "@reduxjs/toolkit": "^1.8.1",
     "date-fns": "^2.28.0",
-    "expo": "^51.0.34",
+    "expo": "51.0.35",
     "expo-secure-store": "~13.0.2",
     "expo-splash-screen": "~0.27.6",
     "expo-status-bar": "~1.12.1",
