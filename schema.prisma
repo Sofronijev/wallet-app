@@ -1,0 +1,13 @@
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["reactNative"]
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = "file:./budget.db"
+}
+
+// Your data model
+
+
