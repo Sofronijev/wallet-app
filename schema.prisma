@@ -8,6 +8,85 @@ datasource db {
     url      = "file:./budget.db"
 }
 
-// Your data model
+model Users {
+    id           Int            @id @default(autoincrement())
+    username     String?        @default("")
+    password     String?
+    email        String?        @unique
+    createdAt    DateTime       @default(now())
+    transactions Transactions[]
+    transfers    Transfer[]
+    wallet       Wallet[]
+}
 
+model Types {
+    id           Int            @id @default(autoincrement())
+    name         String
+    category     Categories     @relation(fields: [categoryId], references: [id], onUpdate: Cascade)
+    categoryId  Int
+    transactions Transactions[]
 
+    @@index([categoryId])
+}
+
+model Categories {
+    id           Int            @id @default(autoincrement())
+    name         String
+    types        Types[]
+    transactions Transactions[]
+}
+
+model Wallet {
+    walletId        Int            @id @default(autoincrement())
+    userId          Int
+    user            Users          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    startingBalance Decimal
+    walletName      String         @default("My custom wallet")
+    currencyCode    String         @default("EUR")
+    currencySymbol  String         @default("€")
+    type            String         @default("custom")
+    color           String         @default("#3EB489")
+    createdAt       DateTime       @default(now())
+    transactions    Transactions[]
+    transfersFrom   Transfer[]     @relation("transferFromWallet")
+    transfersTo     Transfer[]     @relation("transferToWallet")
+}
+
+model Transactions {
+    id            Int        @id @default(autoincrement())
+    amount        Decimal
+    description   String
+    date          DateTime
+    user_id       Int
+    user          Users      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    type_id       Int
+    type          Types      @relation(fields: [type_id], references: [id], onUpdate: Cascade)
+    categoryId   Int
+    category      Categories @relation(fields: [categoryId], references: [id], onUpdate: Cascade)
+    wallet_id     Int
+    wallet        Wallet     @relation(fields: [wallet_id], references: [walletId], onDelete: Cascade, onUpdate: Cascade)
+    transfersFrom Transfer[] @relation("incomingTransaction")
+    transfersTo   Transfer[] @relation("receivingTransaction")
+
+    @@index([wallet_id])
+}
+
+model Transfer {
+    id                Int          @id @default(autoincrement())
+    date              DateTime
+    userId            Int
+    user              Users        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    fromWalletId      Int
+    fromWallet        Wallet       @relation("transferFromWallet", fields: [fromWalletId], references: [walletId], onDelete: Cascade, onUpdate: Cascade)
+    toWalletId        Int
+    toWallet          Wallet       @relation("transferToWallet", fields: [toWalletId], references: [walletId], onDelete: Cascade, onUpdate: Cascade)
+    fromTransactionId Int
+    fromTransaction   Transactions @relation("incomingTransaction", fields: [fromTransactionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    toTransactionId   Int
+    toTransaction     Transactions @relation("receivingTransaction", fields: [toTransactionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+    @@index([fromWalletId])
+    @@index([toWalletId])
+    @@index([fromTransactionId])
+    @@index([toTransactionId])
+}
