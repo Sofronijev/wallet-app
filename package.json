@@ -11,7 +11,8 @@
     "apk": "eas build -p android --profile preview",
     "createMigrate": "npx prisma@latest migrate dev --create-only",
     "migrate": "npx prisma@latest migrate dev",
-    "prismaGenerate": "npx prisma@latest generate"
+    "prismaGenerate": "npx prisma@latest generate",
+    "prebuild": "npx expo prebuild --clean"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^4",
