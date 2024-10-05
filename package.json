@@ -8,7 +8,10 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "apk": "eas build -p android --profile preview"
+    "apk": "eas build -p android --profile preview",
+    "createMigrate": "npx prisma@latest migrate dev --create-only",
+    "migrate": "npx prisma@latest migrate dev",
+    "prismaGenerate": "npx prisma@latest generate"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^4",
