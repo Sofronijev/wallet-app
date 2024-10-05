@@ -6,28 +6,47 @@ import AuthNavigator from "./AuthNavigator";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { getUserData, setUserData } from "store/reducers/userSlice";
 import { View } from "react-native";
+import { extendedClient, initializeDb } from "dbClient";
+import Label from "components/Label";
 
 SplashScreen.preventAutoHideAsync();
 
-const RootNavigator = () => {
-  const user = useAppSelector(getUserData);
+const RootNavigator: React.FC = () => {
+  // const user = useAppSelector(getUserData);
   const dispatch = useAppDispatch();
   const [isReady, setIsReady] = useState(false);
+  const users = extendedClient.users.useFindFirst();
+  const cateogry = extendedClient.categories.useFindFirst();
+  console.log(cateogry);
 
-  const restoreUser = async () => {
-    try {
-      const user = await authStorage.getUser();
-      if (user) dispatch(setUserData(user.userData));
-    } catch (e) {
-      // TODO - fix this
-      console.warn(e);
-    } finally {
-      setIsReady(true);
-    }
-  };
+  // const restoreUser = async () => {
+  //   try {
+  //     const user = await authStorage.getUser();
+  //     if (user) dispatch(setUserData(user.userData));
+  //   } catch (e) {
+  //     // TODO - fix this
+  //     console.warn(e);
+  //   } finally {
+  //     setIsReady(true);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   restoreUser();
+  // }, []);
 
   useEffect(() => {
-    restoreUser();
+    const setup = async () => {
+      try {
+        await initializeDb();
+      } catch (error) {
+        // TODO - handle errors
+        console.log(error);
+      } finally {
+        setIsReady(true);
+      }
+    };
+    setup();
   }, []);
 
   const onLayoutRootView = useCallback(async () => {
@@ -36,11 +55,15 @@ const RootNavigator = () => {
     }
   }, [isReady]);
 
-  if (!isReady) return null;
+  if (!isReady) {
+    return null;
+  }
 
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      {user.id ? <AppNavigator /> : <AuthNavigator />}
+      <Label>{cateogry?.name || "Ne radi baza :/"}</Label>
+      <AppNavigator />
+      {/* {user.id ? <AppNavigator /> : <AuthNavigator />} */}
     </View>
   );
 };
