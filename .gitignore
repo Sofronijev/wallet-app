@@ -16,5 +16,5 @@ web-build/
 # macOS
 .DS_Store
 
-/andorid
-/ios
+andorid/
+ios/
