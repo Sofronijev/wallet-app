@@ -3,7 +3,6 @@ import React from "react";
 import Label from "components/Label";
 import colors from "constants/colors";
 import TransactionsRow from "../../../components/TransactionRow";
-import { TransactionType } from "store/reducers/monthlyBalance/monthlyBalanceSlice";
 import AppActivityIndicator from "components/AppActivityIndicator";
 import ButtonText from "components/ButtonText";
 import { useNavigation } from "@react-navigation/native";
@@ -12,7 +11,8 @@ import { AppStackParamList } from "navigation/routes";
 
 type RecentTransactionsProps = {
   isLoading: boolean;
-  transactions: TransactionType[];
+  // TODO
+  transactions: [];
   title?: string;
   nullScreen?: JSX.Element;
 };

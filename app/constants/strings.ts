@@ -22,13 +22,6 @@ export const dateAndTimeStrings = {
   yesterday: "Yesterday",
 };
 
-export const authStrings = {
-  loginTitle: "Welcome",
-  registerTitle: "Create a new account",
-  logIn: "Log in",
-  signUp: "Sign up",
-};
-
 export const transactionStrings = {
   available: "Available:",
   income: "Income:",

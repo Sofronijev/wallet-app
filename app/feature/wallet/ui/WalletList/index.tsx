@@ -1,20 +1,15 @@
 import { ListRenderItem, StyleSheet, View, useWindowDimensions } from "react-native";
 import React from "react";
-import { useAppSelector } from "store/hooks";
-import { getAllWallets } from "store/reducers/wallets/selectors";
-import { Wallet, setActiveWallet } from "store/reducers/wallets/walletsSlice";
 import Label from "components/Label";
 import { formatDecimalDigits } from "modules/numbers";
 import colors from "constants/colors";
-import { useDispatch } from "react-redux";
+
 import AppActivityIndicator from "components/AppActivityIndicator";
-import { getUserId } from "store/reducers/userSlice";
-import { useGetUserWalletsQuery, useSetWalletBalanceMutation } from "app/middleware/wallets";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
+
 import Carousel from "components/Carousel";
 import ButtonText from "components/ButtonText";
 import { showBalancePrompt } from "feature/settingsScreen/modules";
-import { formatIsoDate } from "modules/timeAndDate";
+
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { AppStackParamList } from "navigation/routes";
@@ -22,47 +17,26 @@ import { AppStackParamList } from "navigation/routes";
 const WALLET_SPACING = 8;
 const HORIZONTAL_PADDING = 16;
 
-const walletKeyExtractor = (item: Wallet) => `${item.walletId}`;
+const walletKeyExtractor = (item: unknown) => `${item.walletId}`;
 
 const WalletList: React.FC = () => {
   const { width } = useWindowDimensions();
-  const dispatch = useDispatch();
   const navigation = useNavigation<StackNavigationProp<AppStackParamList>>();
 
-  const userId = useAppSelector(getUserId);
+  const userId = 1;
 
-  const { isLoading, isFetching } = useGetUserWalletsQuery(
-    userId
-      ? {
-          userId,
-        }
-      : skipToken
-  );
-  const [tryAdjustBalance] = useSetWalletBalanceMutation();
-
-  const wallets = useAppSelector(getAllWallets);
+  const wallets = {};
   const walletsArray = Object.values(wallets);
 
-  const onWalletChange = (item: Wallet) => {
-    dispatch(setActiveWallet(item.walletId));
-  };
+  const onWalletChange = (item: unknown) => {};
 
   const onBalancePress = (walletId: number) => {
-    showBalancePrompt((value: string) => {
-      // TODO - don't call endpoint if value is same as current balance
-      return tryAdjustBalance({
-        walletId,
-        userId,
-        // TODO - format, validate number
-        value: parseFloat(value),
-        date: formatIsoDate(new Date()),
-      });
-    });
+    showBalancePrompt((value: string) => {});
   };
 
   const walletWidth = width - HORIZONTAL_PADDING * 2;
 
-  const renderWallet: ListRenderItem<Wallet> = ({ item }) => {
+  const renderWallet: ListRenderItem<unknown> = ({ item }) => {
     return (
       <View style={[styles.walletContainer, { borderColor: item.color }]}>
         <Label style={styles.walletName}>{item.walletName}</Label>
@@ -99,7 +73,7 @@ const WalletList: React.FC = () => {
           onSnapToItem={onWalletChange}
         />
       )}
-      <AppActivityIndicator isLoading={isLoading || isFetching} />
+      <AppActivityIndicator isLoading={false} />
     </>
   );
 };

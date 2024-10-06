@@ -11,11 +11,7 @@ import colors from "constants/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { formatIsoDate } from "modules/timeAndDate";
 import AppActivityIndicator from "components/AppActivityIndicator";
-import {
-  useCreateNewTransactionMutation,
-  useDeleteTransactionMutation,
-  useEditTransactionMutation,
-} from "app/middleware/transactions";
+
 import { StackNavigationProp } from "@react-navigation/stack";
 import { AppStackParamList } from "navigation/routes";
 import {
@@ -27,10 +23,7 @@ import { RouteProp } from "@react-navigation/native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import HeaderIcon from "components/HeaderIcon";
 import { deleteTransactionAlert, formatFormAmountValue, handleTransactionError } from "../modules";
-import { useAppSelector } from "store/hooks";
-import { getUserId } from "store/reducers/userSlice";
 import { transactionStrings } from "constants/strings";
-import { getActiveWallet, getAllWallets } from "store/reducers/wallets/selectors";
 import CustomButton from "components/CustomButton";
 import WalletPicker from "./WalletPicker";
 
@@ -43,12 +36,7 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
   const editData = route.params?.editData;
   const sheetRef = useRef<TransactionBottomSheetType>(null);
   const [hasSubmittedForm, setHasSubmittedForm] = useState(false);
-  const [tryCreateNewTransaction, { isLoading }] = useCreateNewTransactionMutation();
-  const [tryEditNewTransaction, { isLoading: editLoading }] = useEditTransactionMutation();
-  const [tryDeleteNewTransaction, { isLoading: deleteLoading }] = useDeleteTransactionMutation();
-  const userId = useAppSelector(getUserId);
-  const walletId = useAppSelector(getActiveWallet)?.walletId;
-  const wallets = useAppSelector(getAllWallets);
+  const walletId = 1;
 
   const onTransactionSubmit = async (values: TransactionFromInputs) => {
     Keyboard.dismiss();
@@ -63,15 +51,7 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
           walletId: Number(values.walletId),
         };
         if (editData) {
-          await tryEditNewTransaction({
-            id: editData.id,
-            ...transactionData,
-          }).unwrap();
         } else {
-          await tryCreateNewTransaction({
-            userId,
-            ...transactionData,
-          }).unwrap();
         }
         navigation.goBack();
       }
@@ -82,7 +62,8 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
 
   const onDeleteTransaction = async () => {
     try {
-      if (editData) await tryDeleteNewTransaction({ id: editData.id }).unwrap();
+      if (editData) {
+      }
       navigation.goBack();
     } catch (error) {
       handleTransactionError(error);
@@ -108,8 +89,8 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
     onSubmit: (values) => onTransactionSubmit(values),
   });
 
-  const walletName = wallets[formik.values.walletId]?.walletName;
-  const walletCurrency = wallets[formik.values.walletId]?.currencySymbol || wallets[formik.values.walletId]?.currencyCode;
+  const walletName = '';
+  const walletCurrency =" currencySymbol || currencyCode";
 
   useEffect(() => {
     if (editData) {
@@ -206,7 +187,7 @@ const TransactionForm: React.FC<Props> = ({ navigation, route }) => {
         <CustomButton title='Submit' onPress={onSubmit} style={styles.button} />
       </View>
       <TransactionBottomSheet ref={sheetRef} onSelect={onSelectCategory} />
-      <AppActivityIndicator isLoading={isLoading || editLoading || deleteLoading} />
+      <AppActivityIndicator isLoading={false} />
     </View>
   );
 };

@@ -7,24 +7,15 @@ import { formatIsoDate } from "modules/timeAndDate";
 import StyledLabelInput from "components/StyledLabelInput";
 import InputErrorLabel from "components/InputErrorLabel";
 import WalletPicker from "feature/transaction/ui/WalletPicker";
-import { useAppSelector } from "store/hooks";
-import { getAllWallets } from "store/reducers/wallets/selectors";
 import CustomButton from "components/CustomButton";
 import colors from "constants/colors";
-import { FontAwesome5, Ionicons } from "@expo/vector-icons";
-import {
-  useCreateNewTransferMutation,
-  useDeleteTransferMutation,
-  useEditTransferMutation,
-  useGetTransferByTransactionQuery,
-} from "app/middleware/transfers";
-import { getUserId } from "store/reducers/userSlice";
+import { FontAwesome5 } from "@expo/vector-icons";
+
 import AppActivityIndicator from "components/AppActivityIndicator";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { AppStackParamList } from "navigation/routes";
 import Label from "components/Label";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
-import HeaderIcon from "components/HeaderIcon";
+
 import { errorStrings } from "constants/strings";
 
 export type TransferFromInputs = {
@@ -75,25 +66,8 @@ const TransferForm: React.FC = () => {
   const walletIdFromParam = params.walletId;
   const editData = params.editData;
   const navigation = useNavigation();
-  const wallets = useAppSelector(getAllWallets);
-  const userId = useAppSelector(getUserId);
-  const {
-    data,
-    isLoading: isLoadingTransfer,
-    isFetching,
-  } = useGetTransferByTransactionQuery(
-    userId && walletIdFromParam && editData
-      ? {
-          userId,
-          transactionIdFrom: editData.transactionIdFrom,
-          transactionIdTo: editData.transactionIdTo,
-        }
-      : skipToken,
-    { refetchOnMountOrArgChange: true }
-  );
-  const [tryCreateNewTransfer, { isLoading }] = useCreateNewTransferMutation();
-  const [tryEditTransfer, { isLoading: isEditTransferLoading }] = useEditTransferMutation();
-  const [tryDeleteTransfer, { isLoading: isDeleteTransferLoading }] = useDeleteTransferMutation();
+  const wallets = {};
+  const userId = 1;
 
   const onTransferSubmit = async (values: TransferFromInputs) => {
     Keyboard.dismiss();
@@ -107,17 +81,8 @@ const TransferForm: React.FC = () => {
         userId,
       };
 
-      if (editData && data) {
-        await tryEditTransfer({
-          ...transferData,
-          id: data.id,
-          transactionIdFrom: data.fromTransaction.id,
-          transactionIdTo: data.toTransaction.id,
-        });
-        // fix for issue that appeared sometimes where editData exists but data does not
-        // This will not try to create a new one in that case (possible database problem, check it)
-      } else if (!editData) {
-        await tryCreateNewTransfer(transferData);
+      if (editData) {
+      } else {
       }
 
       navigation.goBack();
@@ -128,33 +93,11 @@ const TransferForm: React.FC = () => {
 
   const onDelete = async () => {
     try {
-      if (data) await tryDeleteTransfer({ id: data?.id, userId }).unwrap();
       navigation.goBack();
     } catch (error) {
       Alert.alert(errorStrings.problem, errorStrings.tryAgain);
     }
   };
-
-  useEffect(() => {
-    if (editData && data) {
-      formik.setValues({
-        ...initialTransferFormValues,
-        walletIdFrom: `${data.fromWalletId}`,
-        walletIdTo: `${data.toWalletId}`,
-        amountFrom: `${Math.abs(data.fromTransaction.amount)}`,
-        amountTo: `${data.toTransaction.amount}`,
-        date: data.date,
-      });
-      navigation.setOptions({
-        title: "Edit transfer",
-        headerRight: () => (
-          <HeaderIcon onPress={onDelete}>
-            <Ionicons name='trash-sharp' size={24} color={colors.white} />
-          </HeaderIcon>
-        ),
-      });
-    }
-  }, [editData, data]);
 
   const formik = useFormik<TransferFromInputs>({
     initialValues: { ...initialTransferFormValues, walletIdFrom: `${walletIdFromParam}` },
@@ -164,8 +107,8 @@ const TransferForm: React.FC = () => {
   });
 
   useEffect(() => {
-    const walletFrom = wallets[formik.values.walletIdFrom];
-    const walletTo = wallets[formik.values.walletIdTo];
+    const walletFrom = {};
+    const walletTo = {};
     if (walletFrom && walletTo) {
       setIsSameCurrency(walletFrom?.currencyCode === walletTo?.currencyCode);
     }
@@ -178,9 +121,8 @@ const TransferForm: React.FC = () => {
   // TODO - add validation while typing
   const formattedAmount = (amount: string) => amount.replace("-", "");
 
-  const walletName = (walledValue: string) => wallets[walledValue]?.walletName;
-  const walletCurrency = (walledValue: string) =>
-    wallets[walledValue]?.currencySymbol || wallets[walledValue]?.currencyCode;
+  const walletName = (walledValue: string) => "wallets[walledValue]?.walletName";
+  const walletCurrency = (walledValue: string) => "currencySymbol ||currencyCode";
 
   const onWalletSelect = (fieldName: string) => (walletId: number) => {
     formik.setFieldValue(fieldName, walletId);
@@ -256,15 +198,7 @@ const TransferForm: React.FC = () => {
         isVisible={!!formik.errors.walletIdFrom || !!formik.errors.walletIdTo}
       />
       <CustomButton title='Submit' onPress={onSubmit} style={styles.submitBtn} />
-      <AppActivityIndicator
-        isLoading={
-          isLoading ||
-          isLoadingTransfer ||
-          isFetching ||
-          isEditTransferLoading ||
-          isDeleteTransferLoading
-        }
-      />
+      <AppActivityIndicator isLoading={false} />
     </View>
   );
 };

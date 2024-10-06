@@ -2,47 +2,26 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import Label from "components/Label";
 import colors from "constants/colors";
-import { addOrDeductMonth, formatIsoDate, getMonthAndYear } from "modules/timeAndDate";
+import { addOrDeductMonth, getMonthAndYear } from "modules/timeAndDate";
 import { formatDecimalDigits } from "modules/numbers";
-import { useAppSelector } from "store/hooks";
 import AppActivityIndicator from "components/AppActivityIndicator";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { transactionStrings } from "constants/strings";
-import { getMonthlyBalance } from "store/reducers/monthlyBalance/selectors";
-import { getActiveWallet } from "store/reducers/wallets/selectors";
-import { useGetMonthlyUserTransactionsQuery } from "app/middleware/transactions";
-import { getUserId } from "store/reducers/userSlice";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
+
 
 const TODAY = new Date();
 
 const MonthlyBalance: React.FC = () => {
   const [monthDifference, setMonthDifference] = useState(0);
 
-  const walletId = useAppSelector(getActiveWallet)?.walletId;
-  const userId = useAppSelector(getUserId);
+  const walletId = 1;
+  const userId = {};
 
   const selectedDate = addOrDeductMonth(TODAY, monthDifference);
-  const { income, expense, balance } = useAppSelector(getMonthlyBalance(selectedDate));
 
   const formattedMonth = getMonthAndYear(selectedDate);
   const disableNextMonthBtn = monthDifference === 0;
-
-  // TODO - Change endpoint to get only balance not transactions
-  const { isLoading, isError, isFetching } = useGetMonthlyUserTransactionsQuery(
-    userId && walletId
-      ? {
-          userId,
-          start: 0,
-          count: 10,
-          date: formatIsoDate(selectedDate),
-          walletIds: [walletId],
-        }
-      : skipToken,
-    { refetchOnMountOrArgChange: true }
-  );
-  const isMonthlyLoading = isLoading || isFetching;
 
   const addMonth = () => {
     if (monthDifference === 0) return;
@@ -78,19 +57,19 @@ const MonthlyBalance: React.FC = () => {
       <View>
         <View style={styles.row}>
           <Label style={styles.label}>{transactionStrings.available}</Label>
-          <Label style={[styles.balance, balance < 0 && styles.redBalance]}>
-            {formatDecimalDigits(balance)}
+          <Label style={[styles.balance, 1 < 0 && styles.redBalance]}>
+            {formatDecimalDigits(1)}
           </Label>
         </View>
         <View style={styles.row}>
           <Label style={styles.label}>{transactionStrings.income}</Label>
-          <Label style={styles.transactions}>{formatDecimalDigits(income)}</Label>
+          <Label style={styles.transactions}>{formatDecimalDigits(1)}</Label>
         </View>
         <View style={styles.row}>
           <Label style={styles.label}>{transactionStrings.expenses}</Label>
-          <Label style={styles.transactions}>{formatDecimalDigits(expense)}</Label>
+          <Label style={styles.transactions}>{formatDecimalDigits(1)}</Label>
         </View>
-        <AppActivityIndicator isLoading={isMonthlyLoading} />
+        <AppActivityIndicator isLoading={false} />
       </View>
     </View>
   );

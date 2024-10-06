@@ -1,56 +1,21 @@
-import { Alert, FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import React from "react";
-import { getUserId } from "store/reducers/userSlice";
-import { useAppSelector } from "store/hooks";
-import {
-  useSearchTransactionsMoreMutation,
-  useSearchTransactionsQuery,
-} from "app/middleware/transactions";
 import TransactionsRow from "components/TransactionRow";
-import { TransactionType } from "store/reducers/monthlyBalance/monthlyBalanceSlice";
-import {
-  getSearchedTransactions,
-  getSearchedTransactionsCount,
-} from "store/reducers/transactionSearch/selectors";
 import AppActivityIndicator from "components/AppActivityIndicator";
-import { errorStrings } from "constants/strings";
 import colors from "constants/colors";
 import NullScreen from "components/NullScreen";
-import { getActiveWallet } from "store/reducers/wallets/selectors";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
 
 const TransactionSearch = () => {
-  const userId = useAppSelector(getUserId);
-  const activeWallet = useAppSelector(getActiveWallet);
-  const walletId = activeWallet?.walletId;
+  const userId = 1;
+  const activeWallet = {};
+  const walletId = 1;
 
-  const { isLoading, isError, isFetching } = useSearchTransactionsQuery(
-    userId && walletId
-      ? {
-          userId,
-          walletIds: [walletId],
-        }
-      : skipToken
-  );
-
-  const [tryTransactionSearchMore, { isLoading: isLoadingMore }] =
-    useSearchTransactionsMoreMutation();
-
-  const transactions = useAppSelector(getSearchedTransactions);
-  const count = useAppSelector(getSearchedTransactionsCount);
-  const transactionNumber = transactions.length;
-
-  if (isError) {
-    Alert.alert(errorStrings.general, errorStrings.tryAgain);
-  }
+  const transactions = [];
+  const count = 1;
+  const transactionNumber = 1;
 
   const searchMoreTransactions = () => {
     if (transactionNumber < count && walletId) {
-      tryTransactionSearchMore({
-        userId,
-        walletIds: [walletId],
-        start: transactionNumber,
-      });
     }
   };
 
@@ -58,14 +23,14 @@ const TransactionSearch = () => {
     return (
       <NullScreen
         icon='wallet'
-        isLoading={isFetching || isLoading}
+        isLoading={false}
         title='No transactions added'
         subtitle='Start tracking your expenses and incomes to gain better control of your finances'
       />
     );
   }
 
-  const renderItem = ({ item }: { item: TransactionType }) => (
+  const renderItem = ({ item }: { item: unknown }) => (
     <TransactionsRow key={item.id} transaction={item} />
   );
 
@@ -78,7 +43,7 @@ const TransactionSearch = () => {
         onEndReached={searchMoreTransactions}
         onEndReachedThreshold={0.1}
       />
-      <AppActivityIndicator isLoading={isFetching || isLoading || isLoadingMore} />
+      <AppActivityIndicator isLoading={false} />
     </View>
   );
 };

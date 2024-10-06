@@ -1,53 +1,28 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
-import { useAppSelector } from "store/hooks";
-import { getWalletById } from "store/reducers/wallets/selectors";
 import colors from "constants/colors";
 import { formatDecimalDigits } from "modules/numbers";
 import ButtonText from "components/ButtonText";
-import {
-  useSetWalletBalanceMutation,
-  useSetWalletStartingBalanceMutation,
-} from "app/middleware/wallets";
-import { getUserId } from "store/reducers/userSlice";
 import { showBalancePrompt, showStartingBalancePrompt } from "feature/settingsScreen/modules";
-import { formatIsoDate } from "modules/timeAndDate";
 
 type Props = {
   walletId: number;
 };
 
 const WalletSettingsItem: React.FC<Props> = ({ walletId }) => {
-  const wallet = useAppSelector(getWalletById(walletId));
-  const userId = useAppSelector(getUserId);
+  const wallet = {};
+  const userId = 1;
+
   if (!wallet) return null;
-  const [trySetStartingBalance, { isLoading }] = useSetWalletStartingBalanceMutation();
-  const [tryAdjustBalance] = useSetWalletBalanceMutation();
 
   const onStartingBalancePress = () => {
-    showStartingBalancePrompt((value: string) =>
-      trySetStartingBalance({
-        walletId,
-        userId,
-        // TODO - format, validate number
-        value: parseFloat(value),
-      })
-    );
+    showStartingBalancePrompt((value: string) => console.log(value));
   };
 
   const onBalancePress = () => {
-    showBalancePrompt((value: string) =>
-      {
-        // TODO - don't call endpoint if value is same as current balance
-        return tryAdjustBalance({
-          walletId,
-          userId,
-          // TODO - format, validate number
-          value: parseFloat(value),
-          date: formatIsoDate(new Date()),
-        });
-      }
-    );
+    showBalancePrompt((value: string) => {
+      console.log(value);
+    });
   };
 
   return (
